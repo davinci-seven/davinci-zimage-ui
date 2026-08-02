@@ -5,10 +5,18 @@
       "name": "霓虹惊悚片",
       "kind": "prompt",
       "cover": "dv_neon_thriller.png",
-      "tags": ["霓虹", "惊悚", "电影"],
+      "tags": [
+        "霓虹",
+        "惊悚",
+        "电影"
+      ],
       "featured": true,
       "category": "达芬七精选",
-      "categories": ["达芬七精选", "电影", "封面"],
+      "categories": [
+        "达芬七精选",
+        "电影",
+        "封面"
+      ],
       "prompt_prefix": "neon noir thriller still, wet asphalt reflections, magenta and cyan rim light, tense atmosphere, cinematic grain, high contrast night city",
       "prompt_suffix": "movie frame, anamorphic bokeh, dramatic shadows",
       "tip": "达芬七精选气质 · 本地适配提示词，非云端同款",
@@ -24,10 +32,17 @@
       "name": "月光剪影",
       "kind": "prompt",
       "cover": "dv_moonlight_silhouette.png",
-      "tags": ["月光", "剪影", "安静"],
+      "tags": [
+        "月光",
+        "剪影",
+        "安静"
+      ],
       "featured": true,
       "category": "达芬七精选",
-      "categories": ["达芬七精选", "电影"],
+      "categories": [
+        "达芬七精选",
+        "电影"
+      ],
       "prompt_prefix": "moonlight silhouette, single figure against pale moon, soft blue night sky, quiet narrative mood, elegant negative space",
       "prompt_suffix": "film still, gentle haze, minimal color palette",
       "tip": "安静叙事向 · 适合人物/情绪场景",
@@ -43,10 +58,17 @@
       "name": "新艺术彩窗",
       "kind": "prompt",
       "cover": "dv_art_nouveau_glass.png",
-      "tags": ["新艺术", "彩窗", "装饰"],
+      "tags": [
+        "新艺术",
+        "彩窗",
+        "装饰"
+      ],
       "featured": true,
       "category": "达芬七精选",
-      "categories": ["达芬七精选", "插画"],
+      "categories": [
+        "达芬七精选",
+        "插画"
+      ],
       "prompt_prefix": "art nouveau stained glass, flowing botanical lines, jewel-tone panes, decorative border, elegant illustration",
       "prompt_suffix": "ornate frames, luminous glass texture",
       "tip": "装饰线与彩窗质感",
@@ -62,10 +84,17 @@
       "name": "裂纹漆金",
       "kind": "prompt",
       "cover": "dv_crackled_gold.png",
-      "tags": ["裂纹", "烫金", "质感"],
+      "tags": [
+        "裂纹",
+        "烫金",
+        "质感"
+      ],
       "featured": true,
       "category": "达芬七精选",
-      "categories": ["达芬七精选", "质感"],
+      "categories": [
+        "达芬七精选",
+        "质感"
+      ],
       "prompt_prefix": "crackle lacquer and gold leaf texture, aged varnish, luxurious still-life lighting, museum object feel",
       "prompt_suffix": "macro detail, rich material contrast",
       "tip": "静物/人像质感向",
@@ -81,10 +110,17 @@
       "name": "早期网页 UI",
       "kind": "prompt",
       "cover": "dv_early_web_ui.png",
-      "tags": ["复古网页", "像素", "UI"],
+      "tags": [
+        "复古网页",
+        "像素",
+        "UI"
+      ],
       "featured": true,
       "category": "达芬七精选",
-      "categories": ["达芬七精选", "复古"],
+      "categories": [
+        "达芬七精选",
+        "复古"
+      ],
       "prompt_prefix": "early 2000s web UI aesthetic, chunky pixels, beveled buttons, limited web-safe colors, nostalgic desktop screenshot vibe",
       "prompt_suffix": "retro interface, low-res charm, not modern flat UI",
       "tip": "复古界面感 · 文字细节勿指望完美",
@@ -100,10 +136,18 @@
       "name": "80 年代赛璐璐",
       "kind": "prompt",
       "cover": "dv_cel_80s.png",
-      "tags": ["80s", "赛璐璐", "动画"],
+      "tags": [
+        "80s",
+        "赛璐璐",
+        "动画"
+      ],
       "featured": true,
       "category": "达芬七精选",
-      "categories": ["达芬七精选", "二次元", "复古"],
+      "categories": [
+        "达芬七精选",
+        "二次元",
+        "复古"
+      ],
       "prompt_prefix": "1980s anime cel animation look, hand-painted cels, soft airbrush gradients, vintage film scan, classic OVAs palette",
       "prompt_suffix": "cel shading, slight dust on scan",
       "tip": "怀旧动画气质",
@@ -119,10 +163,17 @@
       "name": "PS1 低多边形",
       "kind": "prompt",
       "cover": "dv_ps1_lowpoly.png",
-      "tags": ["PS1", "low poly", "复古游戏"],
+      "tags": [
+        "PS1",
+        "low poly",
+        "复古游戏"
+      ],
       "featured": true,
       "category": "达芬七精选",
-      "categories": ["达芬七精选", "复古"],
+      "categories": [
+        "达芬七精选",
+        "复古"
+      ],
       "prompt_prefix": "PS1 era low-poly 3D, affine texture warping, limited palette, crunchy pixels, nostalgic PlayStation 1 game screenshot",
       "prompt_suffix": "jagged edges, retro 3D, 240p vibe",
       "tip": "低多边形复古 3D",
@@ -138,10 +189,17 @@
       "name": "黏土定格",
       "kind": "prompt",
       "cover": "dv_clay_stopmotion.png",
-      "tags": ["黏土", "定格", "手作"],
+      "tags": [
+        "黏土",
+        "定格",
+        "手作"
+      ],
       "featured": true,
       "category": "达芬七精选",
-      "categories": ["达芬七精选", "插画"],
+      "categories": [
+        "达芬七精选",
+        "插画"
+      ],
       "prompt_prefix": "clay stop-motion puppet, handmade clay texture, studio softbox, tactile fingerprints in clay, charming miniature set",
       "prompt_suffix": "stop-motion frame, practical miniature lighting",
       "tip": "手作黏土质感",
@@ -156,11 +214,18 @@
       "id": "friend_bw_minimal",
       "name": "黑白极简概念",
       "kind": "prompt",
-      "cover": "default_card.jpg",
-      "tags": ["极简", "黑白", "封面"],
+      "cover": "friend_bw_minimal.jpg",
+      "tags": [
+        "极简",
+        "黑白",
+        "封面"
+      ],
       "featured": true,
       "category": "好友开源",
-      "categories": ["好友开源", "封面"],
+      "categories": [
+        "好友开源",
+        "封面"
+      ],
       "prompt_prefix": "black and white minimal concept cover, bold negative space, abstract geometric metaphor, editorial poster, high contrast monochrome",
       "prompt_suffix": "clean composition, conceptual art direction",
       "tip": "本地适配 · 灵感自 Punk-Skill 封面风格，非云端同款",
@@ -176,11 +241,18 @@
       "id": "friend_biz_magazine",
       "name": "商业杂志头版",
       "kind": "prompt",
-      "cover": "default_card.jpg",
-      "tags": ["杂志", "商业", "封面"],
+      "cover": "friend_biz_magazine.jpg",
+      "tags": [
+        "杂志",
+        "商业",
+        "封面"
+      ],
       "featured": true,
       "category": "好友开源",
-      "categories": ["好友开源", "封面"],
+      "categories": [
+        "好友开源",
+        "封面"
+      ],
       "prompt_prefix": "business magazine front cover, premium editorial portrait or object, sharp studio lighting, sophisticated layout feel, tech and startup mood",
       "prompt_suffix": "glossy print, cover story energy",
       "tip": "本地适配 · 灵感自 Punk-Skill",
@@ -196,11 +268,18 @@
       "id": "friend_block_world",
       "name": "方块世界",
       "kind": "prompt",
-      "cover": "default_card.jpg",
-      "tags": ["方块", "教程", "系统"],
+      "cover": "friend_block_world.jpg",
+      "tags": [
+        "方块",
+        "教程",
+        "系统"
+      ],
       "featured": false,
       "category": "好友开源",
-      "categories": ["好友开源", "封面"],
+      "categories": [
+        "好友开源",
+        "封面"
+      ],
       "prompt_prefix": "isometric block world, toy-like cubes, playful system diagram vibe, clean tutorial cover aesthetic, soft pastel blocks",
       "prompt_suffix": "friendly tech illustration, modular building metaphor",
       "tip": "本地适配 · 灵感自 Punk-Skill 方块世界",
@@ -216,11 +295,19 @@
       "id": "friend_torn_collage",
       "name": "复古手撕拼贴",
       "kind": "prompt",
-      "cover": "default_card.jpg",
-      "tags": ["拼贴", "复古", "街头"],
+      "cover": "friend_torn_collage.jpg",
+      "tags": [
+        "拼贴",
+        "复古",
+        "街头"
+      ],
       "featured": false,
       "category": "好友开源",
-      "categories": ["好友开源", "封面", "复古"],
+      "categories": [
+        "好友开源",
+        "封面",
+        "复古"
+      ],
       "prompt_prefix": "retro torn paper collage, ripped magazine edges, halftone dots, street zine energy, mixed media layers",
       "prompt_suffix": "analog cut-and-paste, vintage print texture",
       "tip": "本地适配 · 灵感自 Punk-Skill",
@@ -236,11 +323,18 @@
       "id": "friend_bw_geometry",
       "name": "黑白灰先锋几何",
       "kind": "prompt",
-      "cover": "default_card.jpg",
-      "tags": ["几何", "先锋", "封面"],
+      "cover": "friend_bw_geometry.jpg",
+      "tags": [
+        "几何",
+        "先锋",
+        "封面"
+      ],
       "featured": false,
       "category": "好友开源",
-      "categories": ["好友开源", "封面"],
+      "categories": [
+        "好友开源",
+        "封面"
+      ],
       "prompt_prefix": "avant-garde black white gray geometry poster, bold shapes, modernist composition, experimental editorial design",
       "prompt_suffix": "strong contrast, abstract structure",
       "tip": "本地适配 · 灵感自 Punk-Skill",
@@ -256,11 +350,18 @@
       "id": "friend_red_silhouette",
       "name": "黑红剪影",
       "kind": "prompt",
-      "cover": "default_card.jpg",
-      "tags": ["剪影", "黑红", "速度感"],
+      "cover": "friend_red_silhouette.jpg",
+      "tags": [
+        "剪影",
+        "黑红",
+        "速度感"
+      ],
       "featured": false,
       "category": "好友开源",
-      "categories": ["好友开源", "封面"],
+      "categories": [
+        "好友开源",
+        "封面"
+      ],
       "prompt_prefix": "black and red silhouette cover, sharp cutout figure, kinetic energy, cinematic poster, limited two-color palette",
       "prompt_suffix": "bold graphic design, high impact",
       "tip": "本地适配 · 灵感自 Punk-Skill",
@@ -276,11 +377,18 @@
       "id": "friend_research_minimal",
       "name": "研究风极简编辑",
       "kind": "prompt",
-      "cover": "default_card.jpg",
-      "tags": ["研究", "极简", "AI"],
+      "cover": "friend_research_minimal.jpg",
+      "tags": [
+        "研究",
+        "极简",
+        "AI"
+      ],
       "featured": false,
       "category": "好友开源",
-      "categories": ["好友开源", "封面"],
+      "categories": [
+        "好友开源",
+        "封面"
+      ],
       "prompt_prefix": "minimal research editorial cover, soft paper texture, quiet academic modern layout, restrained palette, knowledge system metaphor",
       "prompt_suffix": "clean typography feel, thoughtful whitespace",
       "tip": "本地适配 · 灵感自 Punk-Skill Anthropic Research 向",
@@ -296,11 +404,18 @@
       "id": "friend_formula_craft",
       "name": "配方工作室 工艺感",
       "kind": "prompt",
-      "cover": "default_card.jpg",
-      "tags": ["配方", "工艺", "系统"],
+      "cover": "friend_formula_craft.jpg",
+      "tags": [
+        "配方",
+        "工艺",
+        "系统"
+      ],
       "featured": false,
       "category": "好友开源",
-      "categories": ["好友开源", "封面"],
+      "categories": [
+        "好友开源",
+        "封面"
+      ],
       "prompt_prefix": "crafted visual formula board, annotated process steps as abstract diagrams, maker bench lighting, systematic creative workflow mood",
       "prompt_suffix": "clear modules, thoughtful craft aesthetic",
       "tip": "本地适配 · 灵感自开源配方/长文作者生态，非原文复制",
@@ -316,11 +431,18 @@
       "id": "friend_open_source_warm",
       "name": "开源暖调桌面",
       "kind": "prompt",
-      "cover": "default_card.jpg",
-      "tags": ["开源", "桌面", "协作"],
+      "cover": "friend_open_source_warm.jpg",
+      "tags": [
+        "开源",
+        "桌面",
+        "协作"
+      ],
       "featured": false,
       "category": "好友开源",
-      "categories": ["好友开源", "封面"],
+      "categories": [
+        "好友开源",
+        "封面"
+      ],
       "prompt_prefix": "warm open-source creator desk, soft window light, laptop and sticky notes, collaborative indie hacker mood, honest documentary photo style",
       "prompt_suffix": "lived-in workspace, friendly community energy",
       "tip": "好友墙占位气质 · 欢迎更多开源作者投稿署名风格",
