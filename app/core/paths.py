@@ -10,7 +10,8 @@ WORKFLOWS_DIR = APP_DIR / "workflows"
 BRAND_FILE = APP_DIR / "brand" / "links.yaml"
 DEFAULTS_FILE = APP_DIR / "config" / "defaults.yaml"
 STYLES_FILE = PACK_ROOT / "assets" / "styles" / "styles.json"
-PROMPT_STYLES_FILE = PACK_ROOT / "assets" / "styles" / "prompt_styles.json"
+PROMPT_STYLES_FILE = PACK_ROOT / "assets" / "styles" / "prompt_styles.json"  # legacy
+INSPIRATIONS_FILE = PACK_ROOT / "assets" / "prompts" / "inspirations.json"
 COVERS_DIR = PACK_ROOT / "assets" / "styles" / "covers"
 PROMPTS_FILE = PACK_ROOT / "assets" / "prompts" / "presets.json"
 # legacy fallback

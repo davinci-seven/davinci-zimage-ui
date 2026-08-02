@@ -3,7 +3,7 @@ from __future__ import annotations
 import yaml
 
 from core.paths import BRAND_FILE
-from core.styles import catalog_summary, friend_credits_markdown
+from core.styles import catalog_summary
 
 
 def load_brand() -> dict:
@@ -38,7 +38,6 @@ def about_markdown() -> str:
     cat = catalog_summary()
     by = cat.get("by_category") or {}
     cat_lines = "\n".join(f"- **{k}**：{v} 个" for k, v in by.items()) or "- （暂无）"
-    friends = friend_credits_markdown()
     return f"""
 ## {b.get('product_name')}
 
@@ -50,9 +49,9 @@ def about_markdown() -> str:
 ### 它能做什么
 
 1. **文生图**：中文提示词直接画，可选预设与收藏  
-2. **LoRA · 模型风格**：加载风格文件，占显存（顶栏独立页可浏览）  
-3. **风格灵感**：纯文本中文引导出图，不加载模型；页面会显示将注入的提示词  
-4. **收藏 / 自建**：收藏；把当前提示词存成自己的风格灵感  
+2. **提示词灵感**：图卡选中文完整提示词（可分类/收藏/自建），写入输入框  
+3. **LoRA · 模型风格**：加载风格文件，占显存；可与提示词灵感同开  
+4. **收藏 / 自建**：提示词与 LoRA 均可收藏；可把当前提示词存成灵感  
 5. **模型档位**：标准 FP8 / 极低显存 GGUF / 高质量 BF16  
 6. **图库**：自动保存参数，支持一键回填  
 7. **设置**：界面皮肤会记住  
@@ -68,31 +67,26 @@ def about_markdown() -> str:
 
 ### 风格库（当前）
 
-- LoRA：**{cat.get('lora_count', 0)}** · 提示词：**{cat.get('prompt_count', 0)}** · 合计可用 **{cat.get('available', 0)}**
+- LoRA：**{cat.get('lora_count', 0)}** · 提示词灵感见「文生图」图卡（达芬七中文预设）
 
 {cat_lines}
 
-成人向默认隐藏，可在文生图勾选显示。风格灵感为**本地中文适配**，不保证与云端 Image 模型同款。
-
-### 好友 / 开源致谢（风格灵感）
-
-{friends}
-
-署名仅表示风格方向灵感与宣传致谢；样张与提示词已在本地 Z-Image 重适配。欢迎开源作者联系共建皮肤与风格。
+成人向默认隐藏，可在文生图勾选显示。提示词灵感为达芬七中文预设（含精选气质），点选即填入。
 
 ### 怎么用
 
 1. 双击 `启动.bat`  
 2. 等顶部 **引擎 在线**  
-3. 写提示词 → 选「风格灵感」和/或 LoRA → 右侧点生成  
+3. 写提示词或点「提示词灵感」填入 → 可选 LoRA → 右侧生成  
 4. 到「图库」回看、一键回填  
 
 ### 你的数据在哪
 
 - 图库：`userdata/gallery/`
 - 提示词收藏：`userdata/favorites.json`  
-- 风格收藏：`userdata/style_favorites.json`  
-- 自建风格：`userdata/styles_user.json`  
+- 提示词灵感收藏：`userdata/inspiration_favorites.json`  
+- 自建灵感：`userdata/inspirations_user.json`  
+- LoRA 收藏：`userdata/style_favorites.json`  
 - 设置：`userdata/settings.yaml`  
 
 ### 开源与第三方

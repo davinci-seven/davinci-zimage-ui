@@ -48,13 +48,22 @@ from core.settings import (
     set_filename_prefix,
     set_theme,
 )
+from core.inspirations import (
+    delete_user_inspiration,
+    inspiration_categories,
+    inspiration_gallery_data,
+    is_favorite as inspo_is_favorite,
+    list_favorite_ids as inspo_list_favorite_ids,
+    load_inspirations,
+    resolve_inspiration,
+    save_user_inspiration,
+    toggle_favorite as inspo_toggle_favorite,
+)
 from core.styles import (
-    delete_user_style,
     is_favorite,
     list_favorite_ids,
     load_styles,
     resolve_style_name,
-    save_user_prompt_style,
     style_categories,
     style_choices,
     toggle_favorite,
@@ -403,35 +412,32 @@ def _hist_gallery_data(limit: int = 48):
         ids.append(r.id)
     return items, ids
 
-def load_prompt_presets() -> list[dict]:
-    from core.paths import PROMPTS_FILE_LEGACY
-
-    path = PROMPTS_FILE if PROMPTS_FILE.exists() else PROMPTS_FILE_LEGACY
-    if not path.exists():
-        return []
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-        return list(data.get("presets") or [])
-    except Exception:
-        return []
-
-
-def prompt_preset_choices() -> list[str]:
-    items = ["（不使用预设）"]
-    for p in load_prompt_presets():
-        cat = p.get("category") or "通用"
-        items.append(f"[{cat}] {p.get('title', p.get('id'))} · {p.get('id')}")
-    return items
-
-
-def resolve_preset_prompt(label: str) -> str:
-    if not label or label.startswith("（不"):
-        return ""
-    pid = label.rsplit("·", 1)[-1].strip()
-    for p in load_prompt_presets():
-        if p.get("id") == pid:
-            return p.get("prompt") or ""
-    return ""
+def inspo_preview_html(label: str) -> str:
+    """Selected 提示词灵感: show full Chinese prompt that will fill the box."""
+    ins = resolve_inspiration(label)
+    if not ins:
+        return (
+            '<div class="dv-style-empty">尚未选择提示词灵感。点选图卡后，'
+            "整段中文提示词会写入上方输入框，可再改；可与下方 LoRA 同开。</div>"
+        )
+    src = _thumb_uri(ins.cover_path, (200, 260))
+    image = (
+        f'<img src="{src}" alt="{html_lib.escape(ins.name)}"/>'
+        if src
+        else '<div style="width:88px;height:110px;background:var(--bg-deep);border-radius:10px"></div>'
+    )
+    prompt_esc = html_lib.escape(ins.prompt or "").replace("\n", "<br/>")
+    star = " ★" if inspo_is_favorite(ins.id) else ""
+    return (
+        f'<div class="dv-style-preview-card">{image}<div>'
+        f"<div><strong>{html_lib.escape(ins.name)}</strong> · 提示词灵感{star}</div>"
+        f"<span>{html_lib.escape(' / '.join(ins.cats()))}</span>"
+        f"<p>{html_lib.escape(ins.tip or '')}</p>"
+        f'<div class="dv-prompt-inject">'
+        f'<div class="dv-prompt-inject-label">将写入提示词框（中文全文）</div>'
+        f'<div class="dv-prompt-inject-block">{prompt_esc}</div>'
+        f"</div></div></div>"
+    )
 
 
 def theme_style_html(theme_key: str = "editorial") -> str:
@@ -501,28 +507,17 @@ def build_demo() -> gr.Blocks:
                             "<h2>写提示词 · 出图</h2></div>"
                         )
                         with gr.Column(elem_id="dv-prompt-panel"):
-                            preset = gr.Dropdown(
-                                choices=prompt_preset_choices(),
-                                value="（不使用预设）",
-                                label="灵感预设",
-                            )
                             prompt = gr.Textbox(
                                 label="提示词",
                                 lines=5,
                                 max_lines=12,
-                                placeholder="人物、场景、光影、镜头、氛围…",
+                                placeholder="人物、场景、光影、镜头、氛围… 或从下方「提示词灵感」点选填入",
                                 value=(
                                     "真实手机随拍，侧窗柔光，25–30岁东亚女性坐在窗边微侧脸，"
                                     "肩线放松看向镜头外，棉质上衣碎发，生活感自然皮肤质感，"
                                     "室内暗部保留，轻微颗粒，写实照片"
                                 ),
                             )
-
-                        def _apply_preset(lab):
-                            t = resolve_preset_prompt(lab)
-                            return t if t else gr.update()
-
-                        preset.change(fn=_apply_preset, inputs=preset, outputs=prompt)
 
                         with gr.Accordion("提示词收藏（可选）", open=False, elem_id="dv-fav-box"):
                             with gr.Row(elem_id="dv-fav-row", equal_height=True):
@@ -574,109 +569,104 @@ def build_demo() -> gr.Blocks:
                         lora_card_items, _ = _style_gallery_data(
                             show_nsfw0, "全部", "LoRA"
                         )
-                        prompt_card_items, _ = _style_gallery_data(
-                            True, "全部", "提示词"
-                        )
-                        fav_card_items, _ = _style_gallery_data(
-                            show_nsfw0, "全部", "收藏"
-                        )
+                        inspo_cats = inspiration_categories()
+                        inspo_items, _ = inspiration_gallery_data("全部", False)
+                        inspo_fav_items, _ = inspiration_gallery_data("全部", True)
 
-                        # LoRA 与提示词风格：双轨独立，可同时开
-                        style1_state = gr.State("（无风格）")  # LoRA only
-                        prompt_style_state = gr.State("（无）")  # prompt only
+                        # LoRA 槽
+                        style1_state = gr.State("（无风格）")
                         style1 = gr.Dropdown(
                             choices=styles0,
                             value="（无风格）",
                             visible=False,
                             elem_id="dv-style1",
                         )
-                        prompt_style_dd = gr.Dropdown(
-                            choices=["（无）"]
-                            + [
-                                s.label()
-                                for s in load_styles(kind="prompt")
-                            ],
-                            value="（无）",
-                            visible=False,
-                            elem_id="dv-prompt-style-dd",
-                        )
+                        # 提示词灵感槽（点选 → 写入 prompt 框，不注入 generate）
+                        inspo_state = gr.State("（无）")
 
-                        # —— 提示词风格：紧挨灵感/提示词（上方）——
+                        # —— 提示词灵感（原预设 + 精选合并）——
                         with gr.Column(
-                            elem_id="dv-prompt-style-block",
-                            elem_classes=["dv-style-block"],
+                            elem_id="dv-inspo-block", elem_classes=["dv-style-block"]
                         ):
                             gr.HTML(
-                                '<div class="dv-group-label">风格灵感 · 纯文本引导</div>'
+                                '<div class="dv-group-label">提示词灵感</div>'
                                 '<p class="dv-help" style="margin:0 0 8px">'
-                                "和「灵感预设」同类：注入<strong>中文</strong>风格话术，"
-                                "<b>不加载模型、几乎不占显存</b>。选中后会显示「将拼进提示词的前缀/后缀」。"
-                                "可与下方 LoRA <b>同时开启</b>。</p>"
+                                "点选图卡 → <b>整段中文提示词写入上方输入框</b>（可再改）。"
+                                "可分类、收藏、自建。与下方 LoRA <b>可同时用</b>，不加载模型。</p>"
                             )
                             with gr.Row():
-                                prompt_style_preview = gr.HTML(
-                                    style_preview_html("（无）"),
-                                    elem_id="dv-prompt-style-preview",
+                                inspo_preview = gr.HTML(
+                                    inspo_preview_html("（无）"),
+                                    elem_id="dv-inspo-preview",
                                 )
-                                prompt_style_clear = gr.Button(
-                                    "清除风格灵感",
-                                    variant="secondary",
-                                    scale=0,
-                                    min_width=120,
-                                    elem_id="dv-prompt-style-clear",
+                                with gr.Column(scale=0, min_width=120):
+                                    inspo_fav_btn = gr.Button(
+                                        "收藏/取消",
+                                        variant="secondary",
+                                        elem_id="dv-inspo-fav",
+                                    )
+                                    inspo_clear_btn = gr.Button(
+                                        "清除选用",
+                                        variant="secondary",
+                                        elem_id="dv-inspo-clear",
+                                    )
+                            with gr.Row():
+                                inspo_cat = gr.Dropdown(
+                                    choices=inspo_cats,
+                                    value="全部",
+                                    label="分类",
+                                    scale=2,
+                                    elem_id="dv-inspo-cat",
                                 )
-                            prompt_cat = gr.Dropdown(
-                                choices=cats,
-                                value="全部",
-                                label="分类",
-                                elem_id="dv-prompt-cat",
-                            )
-                            style_cards_prompt = gr.Gallery(
-                                value=prompt_card_items,
-                                label="风格灵感 · 点选（可与 LoRA 同开）",
+                                inspo_show_fav = gr.Checkbox(
+                                    value=False,
+                                    label="只看收藏",
+                                    elem_id="dv-inspo-only-fav",
+                                )
+                            style_cards_inspo = gr.Gallery(
+                                value=inspo_items,
+                                label="提示词灵感 · 点选填入",
                                 columns=6,
                                 rows=2,
-                                height=200,
+                                height=220,
                                 object_fit="cover",
                                 allow_preview=False,
                                 interactive=True,
                                 selected_index=0,
-                                elem_id="dv-style-cards-prompt",
+                                elem_id="dv-inspo-cards",
                             )
-                            with gr.Row(elem_id="dv-style-manage-row"):
-                                style_save_name = gr.Textbox(
+                            with gr.Row(elem_id="dv-inspo-manage-row"):
+                                inspo_save_name = gr.Textbox(
                                     value="",
                                     label="另存名称",
-                                    placeholder="我的风格灵感名",
+                                    placeholder="我的灵感名",
                                     max_lines=1,
                                     scale=2,
-                                    elem_id="dv-style-save-name",
+                                    elem_id="dv-inspo-save-name",
                                 )
-                                style_save_btn = gr.Button(
+                                inspo_save_btn = gr.Button(
                                     "把当前提示词存为灵感",
                                     variant="secondary",
                                     scale=2,
-                                    elem_id="dv-style-save",
+                                    elem_id="dv-inspo-save",
                                 )
-                                style_del_btn = gr.Button(
+                                inspo_del_btn = gr.Button(
                                     "删除用户灵感",
                                     variant="secondary",
                                     scale=1,
-                                    elem_id="dv-style-del",
+                                    elem_id="dv-inspo-del",
                                 )
-                            style_manage_status = gr.HTML(
-                                "", elem_id="dv-style-manage-status"
-                            )
+                            inspo_status = gr.HTML("", elem_id="dv-inspo-status")
 
-                        # —— LoRA：模型风格（下方，独立）——
+                        # —— LoRA：模型风格 ——
                         with gr.Column(
                             elem_id="dv-lora-block", elem_classes=["dv-style-block"]
                         ):
                             gr.HTML(
                                 '<div class="dv-group-label">LoRA · 模型风格</div>'
                                 '<p class="dv-help" style="margin:0 0 8px">'
-                                "加载风格模型文件，<b>会占显存</b>。与上方「风格灵感」分开选，可叠加。"
-                                "8G 建议只挂 1 个 LoRA。</p>"
+                                "加载风格模型文件，<b>会占显存</b>。"
+                                "与上方提示词灵感分开选，可叠加。8G 建议只挂 1 个。</p>"
                             )
                             with gr.Row():
                                 style1_preview = gr.HTML(
@@ -725,22 +715,8 @@ def build_demo() -> gr.Blocks:
                                 selected_index=0,
                                 elem_id="dv-style-cards-lora",
                             )
-
-                        with gr.Accordion(
-                            "我的风格收藏（可选）",
-                            open=False,
-                            elem_id="dv-style-fav-box",
-                        ):
-                            style_cards_fav = gr.Gallery(
-                                value=fav_card_items,
-                                label="收藏 · 点选回用（按类型填入对应槽）",
-                                columns=6,
-                                rows=1,
-                                height=140,
-                                object_fit="cover",
-                                allow_preview=False,
-                                interactive=True,
-                                elem_id="dv-style-cards-fav",
+                            style_manage_status = gr.HTML(
+                                "", elem_id="dv-style-manage-status"
                             )
 
                         # 兼容图库回填
@@ -750,6 +726,8 @@ def build_demo() -> gr.Blocks:
                         w2 = gr.Dropdown(
                             choices=weights, value=default_w_light, visible=False
                         )
+                        # 兼容旧接线占位（已废弃 prompt_style 槽）
+                        prompt_style_state = gr.State("（无）")
 
                     # 右 40%：预览在上 + 生成参数
                     with gr.Column(scale=4, elem_id="dv-canvas", min_width=320, elem_classes=["dv-canvas"]):
@@ -1042,14 +1020,6 @@ def build_demo() -> gr.Blocks:
                     inputs=style1,
                     outputs=[style1_state, style1_preview],
                 )
-                prompt_style_dd.change(
-                    fn=lambda lab: (
-                        lab or "（无）",
-                        style_preview_html(lab or "（无）"),
-                    ),
-                    inputs=prompt_style_dd,
-                    outputs=[prompt_style_state, prompt_style_preview],
-                )
 
                 def _gallery_idx(evt: gr.SelectData) -> int:
                     idx = evt.index
@@ -1061,6 +1031,30 @@ def build_demo() -> gr.Blocks:
                         return int(idx)
                     except Exception:
                         return -1
+
+                def _on_pick_inspo(evt: gr.SelectData, cat_f, only_fav):
+                    """点选提示词灵感 → 预览 + 写入提示词框。"""
+                    empty = "（无）"
+                    idx = _gallery_idx(evt)
+                    _, labels = inspiration_gallery_data(
+                        cat_f or "全部", bool(only_fav)
+                    )
+                    if idx < 0 or idx >= len(labels):
+                        return empty, inspo_preview_html(empty), gr.skip()
+                    chosen = labels[idx]
+                    if str(chosen).startswith("（无"):
+                        return empty, inspo_preview_html(empty), gr.skip()
+                    ins = resolve_inspiration(chosen)
+                    print(f"[inspo] idx={idx} -> {chosen!r}", flush=True)
+                    if ins and (ins.prompt or "").strip():
+                        return chosen, inspo_preview_html(chosen), ins.prompt
+                    return chosen, inspo_preview_html(chosen), gr.skip()
+
+                def _refresh_inspo_gal(cat_f, only_fav):
+                    items, _ = inspiration_gallery_data(
+                        cat_f or "全部", bool(only_fav)
+                    )
+                    return gr.update(value=items)
 
                 def _on_pick_lora(evt: gr.SelectData, cat_f, nsfw_f):
                     empty = "（无风格）"
@@ -1076,10 +1070,8 @@ def build_demo() -> gr.Blocks:
                             gr.update(value=default_w),
                         )
                     chosen = labels[idx]
-                    # 点「无风格」
                     st = resolve_style_name(chosen)
                     if st and st.is_prompt():
-                        # 不应出现在 LoRA 墙
                         return (
                             empty,
                             gr.update(value=empty),
@@ -1094,87 +1086,27 @@ def build_demo() -> gr.Blocks:
                         gr.update(value=_weight_label_for_style(chosen)),
                     )
 
-                def _on_pick_prompt(evt: gr.SelectData, cat_f):
-                    empty = "（无）"
-                    idx = _gallery_idx(evt)
-                    _, labels = _style_gallery_data(True, cat_f or "全部", "提示词")
-                    if idx < 0 or idx >= len(labels):
-                        return (
-                            empty,
-                            gr.update(value=empty),
-                            style_preview_html(empty),
-                        )
-                    chosen = labels[idx]
-                    # labels[0] is （无风格） for empty
-                    if str(chosen).startswith("（无"):
-                        chosen = empty
-                    print(f"[style] prompt idx={idx} -> {chosen!r}", flush=True)
-                    return (
-                        chosen,
-                        gr.update(value=chosen),
-                        style_preview_html(chosen),
-                    )
-
-                def _on_pick_fav(evt: gr.SelectData, nsfw_f):
-                    """收藏点选：按 kind 填入对应槽，不覆盖另一轨。"""
-                    idx = _gallery_idx(evt)
-                    _, labels = _style_gallery_data(
-                        bool(nsfw_f), "全部", "收藏"
-                    )
-                    empty_l, empty_p = "（无风格）", "（无）"
-                    if idx < 0 or idx >= len(labels):
-                        return (
-                            gr.skip(),
-                            gr.skip(),
-                            gr.skip(),
-                            gr.skip(),
-                            gr.skip(),
-                            gr.skip(),
-                            gr.skip(),
-                        )
-                    chosen = labels[idx]
-                    st = resolve_style_name(chosen)
-                    if not st or str(chosen).startswith("（无"):
-                        return (
-                            gr.skip(),
-                            gr.skip(),
-                            gr.skip(),
-                            gr.skip(),
-                            gr.skip(),
-                            gr.skip(),
-                            gr.skip(),
-                        )
-                    if st.is_prompt():
-                        print(f"[style] fav->prompt {chosen!r}", flush=True)
-                        return (
-                            gr.skip(),
-                            gr.skip(),
-                            gr.skip(),
-                            gr.skip(),
-                            chosen,
-                            gr.update(value=chosen),
-                            style_preview_html(chosen),
-                        )
-                    print(f"[style] fav->lora {chosen!r}", flush=True)
-                    return (
-                        chosen,
-                        gr.update(value=chosen),
-                        style_preview_html(chosen),
-                        gr.update(value=_weight_label_for_style(chosen)),
-                        gr.skip(),
-                        gr.skip(),
-                        gr.skip(),
-                    )
-
                 def _refresh_lora_gal(cat_f, nsfw_f):
                     items, _ = _style_gallery_data(
                         bool(nsfw_f), cat_f or "全部", "LoRA"
                     )
                     return gr.update(value=items)
 
-                def _refresh_prompt_gal(cat_f):
-                    items, _ = _style_gallery_data(True, cat_f or "全部", "提示词")
-                    return gr.update(value=items)
+                inspo_cat.change(
+                    fn=_refresh_inspo_gal,
+                    inputs=[inspo_cat, inspo_show_fav],
+                    outputs=style_cards_inspo,
+                )
+                inspo_show_fav.change(
+                    fn=_refresh_inspo_gal,
+                    inputs=[inspo_cat, inspo_show_fav],
+                    outputs=style_cards_inspo,
+                )
+                style_cards_inspo.select(
+                    fn=_on_pick_inspo,
+                    inputs=[inspo_cat, inspo_show_fav],
+                    outputs=[inspo_state, inspo_preview, prompt],
+                )
 
                 lora_cat.change(
                     fn=_refresh_lora_gal,
@@ -1186,145 +1118,136 @@ def build_demo() -> gr.Blocks:
                     inputs=[lora_cat, lora_nsfw],
                     outputs=style_cards_lora,
                 )
-                prompt_cat.change(
-                    fn=_refresh_prompt_gal,
-                    inputs=prompt_cat,
-                    outputs=style_cards_prompt,
-                )
-
                 style_cards_lora.select(
                     fn=_on_pick_lora,
                     inputs=[lora_cat, lora_nsfw],
                     outputs=[style1_state, style1, style1_preview, w1],
                 )
-                style_cards_prompt.select(
-                    fn=_on_pick_prompt,
-                    inputs=[prompt_cat],
-                    outputs=[
-                        prompt_style_state,
-                        prompt_style_dd,
-                        prompt_style_preview,
-                    ],
-                )
-                style_cards_fav.select(
-                    fn=_on_pick_fav,
-                    inputs=[lora_nsfw],
-                    outputs=[
-                        style1_state,
-                        style1,
-                        style1_preview,
-                        w1,
-                        prompt_style_state,
-                        prompt_style_dd,
-                        prompt_style_preview,
-                    ],
-                )
 
-                def _on_style_fav(lab: str, nsfw_f):
-                    st = resolve_style_name(lab)
-                    if not st:
+                def _on_inspo_fav(lab: str, cat_f, only_fav):
+                    ins = resolve_inspiration(lab)
+                    if not ins:
                         return (
-                            '<div class="dv-status err">请先点选一个 LoRA</div>',
+                            '<div class="dv-status err">请先点选一条灵感</div>',
                             gr.skip(),
-                            style_preview_html(lab or "（无风格）"),
+                            inspo_preview_html(lab or "（无）"),
                         )
-                    _now, msg = toggle_favorite(st.id)
-                    fav_items, _ = _style_gallery_data(
-                        bool(nsfw_f), "全部", "收藏"
+                    _now, msg = inspo_toggle_favorite(ins.id)
+                    items, _ = inspiration_gallery_data(
+                        cat_f or "全部", bool(only_fav)
                     )
                     return (
                         f'<div class="dv-status ok">{html_lib.escape(msg)}</div>',
-                        gr.update(value=fav_items),
-                        style_preview_html(lab),
+                        gr.update(value=items),
+                        inspo_preview_html(lab),
                     )
 
-                def _on_style_save(name: str, prompt_text: str, cat_f):
-                    ok, msg, st = save_user_prompt_style(
+                def _on_inspo_save(name: str, prompt_text: str, cat_f, only_fav):
+                    ok, msg, ins = save_user_inspiration(
                         name=name or "",
-                        prompt_prefix=prompt_text or "",
+                        prompt=prompt_text or "",
                     )
                     cls = "ok" if ok else "err"
-                    p_items, _ = _style_gallery_data(True, cat_f or "全部", "提示词")
-                    if ok and st:
-                        lab = st.label()
+                    items, _ = inspiration_gallery_data(
+                        cat_f or "全部", bool(only_fav)
+                    )
+                    if ok and ins:
+                        lab = ins.label()
                         return (
                             f'<div class="dv-status {cls}">{html_lib.escape(msg)}</div>',
-                            gr.update(value=p_items),
+                            gr.update(value=items),
                             lab,
-                            gr.update(value=lab),
-                            style_preview_html(lab),
+                            inspo_preview_html(lab),
                             gr.update(value=""),
                         )
                     return (
                         f'<div class="dv-status {cls}">{html_lib.escape(msg)}</div>',
-                        gr.update(value=p_items),
-                        gr.skip(),
+                        gr.update(value=items),
                         gr.skip(),
                         gr.skip(),
                         gr.skip(),
                     )
 
-                def _on_style_del(lab: str, cat_f):
-                    st = resolve_style_name(lab)
-                    if not st:
+                def _on_inspo_del(lab: str, cat_f, only_fav):
+                    ins = resolve_inspiration(lab)
+                    if not ins:
                         return (
-                            '<div class="dv-status err">请先选择要删除的用户风格灵感</div>',
-                            gr.skip(),
+                            '<div class="dv-status err">请先选择要删除的用户灵感</div>',
                             gr.skip(),
                             gr.skip(),
                             gr.skip(),
                         )
-                    ok, msg = delete_user_style(st.id)
+                    ok, msg = delete_user_inspiration(ins.id)
                     cls = "ok" if ok else "err"
-                    p_items, _ = _style_gallery_data(True, cat_f or "全部", "提示词")
+                    items, _ = inspiration_gallery_data(
+                        cat_f or "全部", bool(only_fav)
+                    )
                     if ok:
                         empty = "（无）"
                         return (
                             f'<div class="dv-status {cls}">{html_lib.escape(msg)}</div>',
-                            gr.update(value=p_items),
+                            gr.update(value=items),
                             empty,
-                            gr.update(value=empty),
-                            style_preview_html(empty),
+                            inspo_preview_html(empty),
                         )
                     return (
                         f'<div class="dv-status {cls}">{html_lib.escape(msg)}</div>',
-                        gr.update(value=p_items),
-                        gr.skip(),
+                        gr.update(value=items),
                         gr.skip(),
                         gr.skip(),
                     )
 
+                def _on_lora_fav(lab: str):
+                    st = resolve_style_name(lab)
+                    if not st:
+                        return (
+                            '<div class="dv-status err">请先点选一个 LoRA</div>',
+                            style_preview_html(lab or "（无风格）"),
+                        )
+                    _now, msg = toggle_favorite(st.id)
+                    return (
+                        f'<div class="dv-status ok">{html_lib.escape(msg)}</div>',
+                        style_preview_html(lab),
+                    )
+
+                inspo_fav_btn.click(
+                    fn=_on_inspo_fav,
+                    inputs=[inspo_state, inspo_cat, inspo_show_fav],
+                    outputs=[inspo_status, style_cards_inspo, inspo_preview],
+                )
+                inspo_save_btn.click(
+                    fn=_on_inspo_save,
+                    inputs=[inspo_save_name, prompt, inspo_cat, inspo_show_fav],
+                    outputs=[
+                        inspo_status,
+                        style_cards_inspo,
+                        inspo_state,
+                        inspo_preview,
+                        inspo_save_name,
+                    ],
+                )
+                inspo_del_btn.click(
+                    fn=_on_inspo_del,
+                    inputs=[inspo_state, inspo_cat, inspo_show_fav],
+                    outputs=[
+                        inspo_status,
+                        style_cards_inspo,
+                        inspo_state,
+                        inspo_preview,
+                    ],
+                )
+                inspo_clear_btn.click(
+                    fn=lambda: (
+                        "（无）",
+                        inspo_preview_html("（无）"),
+                        '<div class="dv-status">已清除提示词灵感选用</div>',
+                    ),
+                    outputs=[inspo_state, inspo_preview, inspo_status],
+                )
                 style_fav_btn.click(
-                    fn=_on_style_fav,
-                    inputs=[style1_state, lora_nsfw],
-                    outputs=[
-                        style_manage_status,
-                        style_cards_fav,
-                        style1_preview,
-                    ],
-                )
-                style_save_btn.click(
-                    fn=_on_style_save,
-                    inputs=[style_save_name, prompt, prompt_cat],
-                    outputs=[
-                        style_manage_status,
-                        style_cards_prompt,
-                        prompt_style_state,
-                        prompt_style_dd,
-                        prompt_style_preview,
-                        style_save_name,
-                    ],
-                )
-                style_del_btn.click(
-                    fn=_on_style_del,
-                    inputs=[prompt_style_state, prompt_cat],
-                    outputs=[
-                        style_manage_status,
-                        style_cards_prompt,
-                        prompt_style_state,
-                        prompt_style_dd,
-                        prompt_style_preview,
-                    ],
+                    fn=_on_lora_fav,
+                    inputs=[style1_state],
+                    outputs=[style_manage_status, style1_preview],
                 )
                 style_clear_btn.click(
                     fn=lambda: (
@@ -1339,20 +1262,6 @@ def build_demo() -> gr.Blocks:
                         style1,
                         style1_preview,
                         w1,
-                        style_manage_status,
-                    ],
-                )
-                prompt_style_clear.click(
-                    fn=lambda: (
-                        "（无）",
-                        gr.update(value="（无）"),
-                        style_preview_html("（无）"),
-                        '<div class="dv-status">已清除风格灵感</div>',
-                    ),
-                    outputs=[
-                        prompt_style_state,
-                        prompt_style_dd,
-                        prompt_style_preview,
                         style_manage_status,
                     ],
                 )
@@ -1400,13 +1309,13 @@ def build_demo() -> gr.Blocks:
 
                 def _run_t2i(
                     p, mm, ar, q, s1, ww1, s2, ww2, sd, creat, n_img,
-                    c_on, cw, ch, ps_lab,
+                    c_on, cw, ch,
                 ):
                     import threading
                     import time as _time
 
                     stop_flag["stop"] = False
-                    # 8GB：只挂 1 个风格 LoRA；s2 不再用
+                    # 8GB：只挂 1 个风格 LoRA；提示词灵感已在 UI 写入 prompt 框
                     s2 = "（无风格）"
                     ww2 = "轻 (0.6)"
                     empty_dims = image_dims_html(None)
@@ -1419,17 +1328,13 @@ def build_demo() -> gr.Blocks:
                     else:
                         cw_i, ch_i = None, None
                     st = resolve_style_name(s1)
-                    # style1 只接受 LoRA；若误选提示词则忽略
                     if st and st.is_prompt():
                         st = None
-                    pst = resolve_style_name(ps_lab) if ps_lab else None
-                    if pst and not pst.is_prompt():
-                        pst = None
+                    pst = None  # 灵感不在 generate 注入，已在文本框
                     size_note = f" custom={cw_i}x{ch_i}" if use_custom else ""
                     print(
                         f"\n[gen] start  model={mm}  {ar}  {q}  n={n_img}  "
                         f"lora={s1!r}->{st.name if st else None}  "
-                        f"prompt_style={ps_lab!r}->{pst.name if pst else None}  "
                         f"w={ww1}{size_note}",
                         flush=True,
                     )
@@ -1505,8 +1410,6 @@ def build_demo() -> gr.Blocks:
                                         custom_size=use_custom,
                                         custom_width=cw_i,
                                         custom_height=ch_i,
-                                        prompt_style=pst,
-                                        prompt_style_label=ps_lab or "（无）",
                                     )
                                 )
                             except Exception as e:
@@ -1864,23 +1767,46 @@ def build_demo() -> gr.Blocks:
                     outputs=gal_lora,
                 )
 
-            # ========== 风格灵感（浏览）==========
-            with gr.Tab("风格灵感"):
+            # ========== 提示词灵感（浏览）==========
+            with gr.Tab("提示词灵感"):
                 gr.HTML(
-                    '<div class="dv-section-head"><span class="eyebrow">STYLE INSPO</span>'
-                    "<h2>风格灵感 · 纯文本引导</h2>"
-                    "<p><b>性质：</b>不加载任何 LoRA，只把中文风格话术拼进提示词，几乎不额外占显存。"
-                    "页面会明示「将注入的前缀/后缀」。含达芬七精选与开源好友墙（均注明出处）。"
-                    "在「文生图」里点卡选用；本页浏览说明与来源。</p></div>"
+                    '<div class="dv-section-head"><span class="eyebrow">PROMPT INSPO</span>'
+                    "<h2>提示词灵感</h2>"
+                    "<p>达芬七精选 + 各分类完整中文提示词。点选后<strong>写入文生图提示词框</strong>，"
+                    "可再改，可与 LoRA 同开。本页仅浏览；收藏/自建在文生图操作。</p></div>"
                 )
-                cat_prompt_browse = gr.Dropdown(
-                    choices=cats, value="全部", label="分类"
+                inspo_browse_cat = gr.Dropdown(
+                    choices=inspiration_categories(), value="全部", label="分类"
                 )
-                gal_prompt = gr.HTML(gallery_html(True, "全部", "提示词"))
-                cat_prompt_browse.change(
-                    fn=lambda c: gallery_html(True, c, "提示词"),
-                    inputs=cat_prompt_browse,
-                    outputs=gal_prompt,
+
+                def _inspo_browse_html(cat_f: str) -> str:
+                    cards = []
+                    for ins in load_inspirations():
+                        if not ins.in_category(cat_f or "全部"):
+                            continue
+                        src = _thumb_uri(ins.cover_path)
+                        img = (
+                            f'<img src="{src}" alt="{html_lib.escape(ins.name)}" loading="lazy"/>'
+                            if src
+                            else '<div style="aspect-ratio:3/4;opacity:.5">无封面</div>'
+                        )
+                        head = (ins.prompt or "")[:80]
+                        cards.append(
+                            f'<div class="dv-card">{img}<div class="body">'
+                            f'<p class="title">{html_lib.escape(ins.name)}</p>'
+                            f'<p class="meta">{html_lib.escape(" / ".join(ins.cats()[:2]))}<br/>'
+                            f"{html_lib.escape(head)}{'…' if len(ins.prompt or '') > 80 else ''}</p>"
+                            f"</div></div>"
+                        )
+                    return (
+                        f'<div class="dv-gallery">{"".join(cards) or "<p>该分类暂无灵感</p>"}</div>'
+                    )
+
+                gal_inspo = gr.HTML(_inspo_browse_html("全部"))
+                inspo_browse_cat.change(
+                    fn=_inspo_browse_html,
+                    inputs=inspo_browse_cat,
+                    outputs=gal_inspo,
                 )
 
             # ========== 设置 ==========
@@ -1956,7 +1882,6 @@ def build_demo() -> gr.Blocks:
                 custom_size_ck,
                 custom_w,
                 custom_h,
-                prompt_style_state,  # 提示词风格槽（可与 LoRA 同开）
             ],
             outputs=[out, dims_box, prog, status, hist_dd, hist_gallery, hist_id_map],
         )
