@@ -32,8 +32,6 @@ def main():
     parser.add_argument("--share", action="store_true")
     args, _unknown = parser.parse_known_args()
 
-    demo = build_demo()
-    demo.queue(default_concurrency_limit=1)
     from core.paths import (  # noqa: E402
         COMFY_OUTPUT,
         COVERS_DIR,
@@ -41,7 +39,24 @@ def main():
         PACK_OUTPUT,
         PACK_ROOT,
         USERDATA,
+        BRAND_FILE,
     )
+    try:
+        import yaml
+
+        brand = yaml.safe_load(BRAND_FILE.read_text(encoding="utf-8")) or {}
+        ver = brand.get("version", "?")
+    except Exception:
+        ver = "?"
+    print("=" * 56, flush=True)
+    print(f"  达芬七 · Z-Image  UI  v{ver}", flush=True)
+    print(f"  PACK_ROOT = {PACK_ROOT}", flush=True)
+    print(f"  app_ui    = {APP_DIR / 'ui' / 'app_ui.py'}", flush=True)
+    print(f"  端口      = {args.server_name}:{args.server_port}", flush=True)
+    print("=" * 56, flush=True)
+
+    demo = build_demo()
+    demo.queue(default_concurrency_limit=1)
 
     fs_js = _load_fs_js()
     head_snip = f"<script id='dv-fs-js'>\n{fs_js}\n</script>"
