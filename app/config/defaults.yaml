@@ -1,0 +1,80 @@
+# 8GB 友好默认
+model:
+  unet_name: "z-image\\z-image-turbo-fp8-e4m3fn_量化版_低显加速.safetensors"
+  weight_dtype: "fp8_e4m3fn_fast"
+  clip_name: "z-image\\qwen_3_4b.safetensors"
+  vae_name: "z-image-qwen.safetensors"
+
+model_modes:
+  标准 FP8（推荐）:
+    backend: fp8
+    workflow: txt2img.json
+    unet_name: "z-image\\z-image-turbo-fp8-e4m3fn_量化版_低显加速.safetensors"
+    weight_dtype: "fp8_e4m3fn_fast"
+    clip_name: "z-image\\qwen_3_4b.safetensors"
+    tip: "日常首选，速度和效果较均衡"
+  极低显存 GGUF:
+    backend: gguf
+    workflow: txt2img_gguf.json
+    unet_name: "z_image_turbo-Q4_K_M.gguf"
+    # 文本编码器用 safetensors：当前 ComfyUI-GGUF 不支持 qwen3 架构的 CLIP GGUF
+    clip_name: "z-image\\qwen_3_4b.safetensors"
+    tip: "更省显存，电脑吃力时用"
+  高质量 BF16:
+    backend: bf16
+    workflow: txt2img.json
+    unet_name: "z-image\\z_image_turbo_bf16_完整版_效果更好.safetensors"
+    weight_dtype: "default"
+    clip_name: "z-image\\qwen_3_4b.safetensors"
+    tip: "细节更好，需要更大显存"
+
+# 分辨率档：数字一眼懂（长边像素），对标原版 720/1080 思路，比「均衡」更直观
+quality_presets:
+  720 · 快:
+    long_edge: 720
+    steps: 8
+    cfg: 1.0
+    tip: "更快，更省资源"
+  1024 · 推荐:
+    long_edge: 1024
+    steps: 9
+    cfg: 1.0
+    tip: "默认推荐"
+  1280 · 高清:
+    long_edge: 1280
+    steps: 9
+    cfg: 1.0
+    tip: "更清晰"
+  1440 · 更高清:
+    long_edge: 1440
+    steps: 9
+    cfg: 1.0
+    tip: "更细，更慢、更吃资源"
+
+# 旧标签兼容（图库回填）
+quality_legacy_map:
+  省显存: 720 · 快
+  均衡: 1024 · 推荐
+  高清: 1280 · 高清
+
+aspect_ratios:
+  正方形 1:1: "1:1"
+  竖屏 3:4: "3:4"
+  竖屏 9:16: "9:16"
+  宽屏 4:3: "4:3"
+  宽屏 16:9: "16:9"
+
+weight_presets:
+  轻 (0.6): 0.6
+  中 (0.85): 0.85
+  重 (1.0): 1.0
+
+comfy:
+  host: "127.0.0.1"
+  # 7777 = 本包引擎；8888 = 界面。避开 8188/7860 这类常见占用端口
+  port: 7777
+  timeout_sec: 300
+
+sampler:
+  name: "euler"
+  scheduler: "simple"

@@ -1,0 +1,106 @@
+{
+  "1": {
+    "inputs": {
+      "unet_name": "z-image\\z-image-turbo-fp8-e4m3fn_量化版_低显加速.safetensors",
+      "weight_dtype": "fp8_e4m3fn_fast"
+    },
+    "class_type": "UNETLoader",
+    "_meta": { "title": "UNet" }
+  },
+  "2": {
+    "inputs": {
+      "clip_name": "z-image\\qwen_3_4b.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": { "title": "CLIP" }
+  },
+  "3": {
+    "inputs": {
+      "vae_name": "z-image-qwen.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": { "title": "VAE" }
+  },
+  "4": {
+    "inputs": {
+      "seed": 1,
+      "steps": 9,
+      "cfg": 1,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": ["23", 0],
+      "positive": ["24", 0],
+      "negative": ["6", 0],
+      "latent_image": ["7", 0]
+    },
+    "class_type": "KSampler",
+    "_meta": { "title": "KSampler" }
+  },
+  "5": {
+    "inputs": {
+      "text": "a girl, soft light",
+      "clip": ["23", 1]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": { "title": "Prompt" }
+  },
+  "6": {
+    "inputs": {
+      "conditioning": ["5", 0]
+    },
+    "class_type": "ConditioningZeroOut",
+    "_meta": { "title": "NegZero" }
+  },
+  "7": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": { "title": "Latent" }
+  },
+  "8": {
+    "inputs": {
+      "samples": ["4", 0],
+      "vae": ["3", 0]
+    },
+    "class_type": "VAEDecode",
+    "_meta": { "title": "Decode" }
+  },
+  "22": {
+    "inputs": {
+      "filename_prefix": "davincilab",
+      "images": ["8", 0]
+    },
+    "class_type": "SaveImage",
+    "_meta": { "title": "Save" }
+  },
+  "23": {
+    "inputs": {
+      "lora_name": "zimage\\ToLoveRu_Style_ZIT_v2.safetensors",
+      "strength_model": 1,
+      "strength_clip": 1,
+      "model": ["1", 0],
+      "clip": ["2", 0]
+    },
+    "class_type": "LoraLoader",
+    "_meta": { "title": "LoRA" }
+  },
+  "24": {
+    "inputs": {
+      "randomize_percent": 0,
+      "strength": 0,
+      "noise_insert": "noise on beginning steps",
+      "steps_switchover_percent": 20,
+      "seed": 1,
+      "conditioning": ["5", 0]
+    },
+    "class_type": "SeedVarianceEnhancer",
+    "_meta": { "title": "Creativity" }
+  }
+}
+
