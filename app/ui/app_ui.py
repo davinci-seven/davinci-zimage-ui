@@ -262,9 +262,20 @@ def style_preview_html(label: str) -> str:
     )
 
 
-def gallery_html(show_nsfw: bool = True, category: str = "全部") -> str:
+def gallery_html(
+    show_nsfw: bool = True,
+    category: str = "全部",
+    kind_filter: str = "全部",
+) -> str:
+    """Browse-only catalog cards. kind_filter: 全部 | LoRA | 提示词"""
     cards = []
-    for s in load_styles():
+    kf = (kind_filter or "全部").strip()
+    kind_arg = None
+    if kf == "LoRA":
+        kind_arg = "lora"
+    elif kf == "提示词":
+        kind_arg = "prompt"
+    for s in load_styles(kind=kind_arg):
         if s.nsfw and not show_nsfw:
             continue
         if not s.in_category(category):
@@ -482,7 +493,7 @@ def build_demo() -> gr.Blocks:
                     with gr.Column(scale=6, elem_id="dv-controls", min_width=340, elem_classes=["dv-controls"]):
                         gr.HTML(
                             '<div class="dv-section-head compact">'
-                            "<h2>写提示词 · 选风格</h2></div>"
+                            "<h2>写提示词 · 选加料</h2></div>"
                         )
                         with gr.Column(elem_id="dv-prompt-panel"):
                             preset = gr.Dropdown(
@@ -578,8 +589,10 @@ def build_demo() -> gr.Blocks:
                             gr.HTML(
                                 '<div class="dv-group-label">当前加料（二选一）</div>'
                                 '<p class="dv-help" style="margin:0 0 8px">'
-                                "下面有两套独立图库：<b>LoRA</b> 与 <b>提示词风格</b>。"
-                                "点哪个用哪个；会互相替换。点卡里「无风格」或下方清除。</p>"
+                                "下面两套库完全独立。"
+                                "<b>LoRA = 模型风格</b>（加载文件、占显存）；"
+                                "<b>提示词风格 = 纯文本引导</b>（不加载模型）。"
+                                "点哪个用哪个，会互相替换。</p>"
                             )
                             with gr.Row(elem_id="dv-style-selected-row"):
                                 with gr.Column(scale=2, min_width=160):
@@ -602,18 +615,19 @@ def build_demo() -> gr.Blocks:
                                 "", elem_id="dv-style-manage-status"
                             )
 
-                        # —— ① LoRA：独立分类 + 独立图库 + 强度 ——
+                        # —— ① LoRA：模型风格 ——
                         with gr.Column(elem_id="dv-lora-block", elem_classes=["dv-style-block"]):
                             gr.HTML(
-                                '<div class="dv-group-label">① LoRA 风格</div>'
+                                '<div class="dv-group-label">① LoRA · 模型风格</div>'
                                 '<p class="dv-help" style="margin:0 0 8px">'
-                                "会加载模型文件，吃一点显存。与下方提示词风格不是同一套库。</p>"
+                                "额外加载风格模型文件，会占用显存、略慢一点。"
+                                "适合「整张画风换成某作者/某质感」。强度可调。</p>"
                             )
                             with gr.Row(elem_id="dv-lora-filters"):
                                 lora_cat = gr.Dropdown(
                                     choices=cats,
                                     value="全部",
-                                    label="LoRA 分类",
+                                    label="分类",
                                     scale=2,
                                     elem_id="dv-lora-cat",
                                 )
@@ -630,7 +644,7 @@ def build_demo() -> gr.Blocks:
                             )
                             style_cards_lora = gr.Gallery(
                                 value=lora_card_items,
-                                label="LoRA 图库 · 点选",
+                                label="模型风格图库 · 点选即用",
                                 columns=6,
                                 rows=2,
                                 height=240,
@@ -641,22 +655,23 @@ def build_demo() -> gr.Blocks:
                                 elem_id="dv-style-cards-lora",
                             )
 
-                        # —— ② 提示词风格：独立分类 + 独立图库 ——
+                        # —— ② 提示词风格：纯文本 ——
                         with gr.Column(elem_id="dv-prompt-style-block", elem_classes=["dv-style-block"]):
                             gr.HTML(
-                                '<div class="dv-group-label">② 提示词风格</div>'
+                                '<div class="dv-group-label">② 提示词风格 · 纯文本引导</div>'
                                 '<p class="dv-help" style="margin:0 0 8px">'
-                                "只改写提示词，不加载 LoRA。达芬七精选 + 好友墙。另存只进这里。</p>"
+                                "不加载任何 LoRA，只把风格话术拼进你的提示词。"
+                                "几乎不额外占显存。达芬七精选 + 开源好友墙；可另存自己的。</p>"
                             )
                             prompt_cat = gr.Dropdown(
                                 choices=cats,
                                 value="全部",
-                                label="提示词分类",
+                                label="分类",
                                 elem_id="dv-prompt-cat",
                             )
                             style_cards_prompt = gr.Gallery(
                                 value=prompt_card_items,
-                                label="提示词风格图库 · 点选",
+                                label="提示词风格图库 · 点选即用",
                                 columns=6,
                                 rows=2,
                                 height=240,
@@ -688,7 +703,7 @@ def build_demo() -> gr.Blocks:
                                     elem_id="dv-style-del",
                                 )
 
-                        # —— 收藏：折叠，不占主导航 ——
+                        # —— 收藏：折叠 ——
                         with gr.Accordion(
                             "我的风格收藏（可选）",
                             open=False,
@@ -1717,26 +1732,49 @@ def build_demo() -> gr.Blocks:
 
                 open_gal.click(fn=_open_gal, outputs=[hist_gallery, hist_id_map])
 
-            # ========== 风格 ==========
-            with gr.Tab("风格"):
+            # ========== LoRA 模型风格（浏览）==========
+            with gr.Tab("LoRA 风格"):
                 gr.HTML(
-                    '<div class="dv-section-head"><span class="eyebrow">STYLES</span>'
-                    "<h2>风格库</h2>"
-                    "<p>分类、触发词、商用备注与 Civitai 链接。</p></div>"
+                    '<div class="dv-section-head"><span class="eyebrow">MODEL STYLE</span>'
+                    "<h2>LoRA · 模型风格</h2>"
+                    "<p><b>性质：</b>额外加载风格模型文件，会占用显存、略增加出图时间。"
+                    "适合把整张图换成某种画风/质感。"
+                    "在「文生图」里点卡选用；本页仅浏览详情与来源。</p></div>"
                 )
                 with gr.Row():
-                    nsfw_gal = gr.Checkbox(value=False, label="显示成人向")
-                    cat_gal = gr.Dropdown(choices=cats, value="全部", label="分类")
-                gal = gr.HTML(gallery_html(False, "全部"))
-                nsfw_gal.change(
-                    fn=lambda s, c: gallery_html(s, c),
-                    inputs=[nsfw_gal, cat_gal],
-                    outputs=gal,
+                    nsfw_lora_browse = gr.Checkbox(value=False, label="显示成人向")
+                    cat_lora_browse = gr.Dropdown(
+                        choices=cats, value="全部", label="分类"
+                    )
+                gal_lora = gr.HTML(gallery_html(False, "全部", "LoRA"))
+                nsfw_lora_browse.change(
+                    fn=lambda s, c: gallery_html(s, c, "LoRA"),
+                    inputs=[nsfw_lora_browse, cat_lora_browse],
+                    outputs=gal_lora,
                 )
-                cat_gal.change(
-                    fn=lambda s, c: gallery_html(s, c),
-                    inputs=[nsfw_gal, cat_gal],
-                    outputs=gal,
+                cat_lora_browse.change(
+                    fn=lambda s, c: gallery_html(s, c, "LoRA"),
+                    inputs=[nsfw_lora_browse, cat_lora_browse],
+                    outputs=gal_lora,
+                )
+
+            # ========== 提示词风格（浏览）==========
+            with gr.Tab("提示词风格"):
+                gr.HTML(
+                    '<div class="dv-section-head"><span class="eyebrow">PROMPT STYLE</span>'
+                    "<h2>提示词风格 · 纯文本引导</h2>"
+                    "<p><b>性质：</b>不加载任何 LoRA，只把风格话术拼进提示词，几乎不额外占显存。"
+                    "含达芬七精选与开源好友墙（均注明出处）。"
+                    "在「文生图」里点卡选用；本页浏览说明与来源。</p></div>"
+                )
+                cat_prompt_browse = gr.Dropdown(
+                    choices=cats, value="全部", label="分类"
+                )
+                gal_prompt = gr.HTML(gallery_html(True, "全部", "提示词"))
+                cat_prompt_browse.change(
+                    fn=lambda c: gallery_html(True, c, "提示词"),
+                    inputs=cat_prompt_browse,
+                    outputs=gal_prompt,
                 )
 
             # ========== 设置 ==========
