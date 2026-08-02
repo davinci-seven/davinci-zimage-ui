@@ -6,5 +6,5 @@ x_url: "https://x.com/davinci_seven"
 x_handle: "@davinci_seven"
 website: ""
 # 每次可见改动 +1 末位，方便确认是否加载到新 UI
-# 1.4.5-dev.7 = 提示词灵感=预设+精选合并；清好友墙；分类收藏自建
-version: "1.4.5-dev.7"
+# 1.4.5-dev.8 = 去多余收藏；512 省显存；OOM/超时明确报错+释放；灵感封面脚本
+version: "1.4.5-dev.8"

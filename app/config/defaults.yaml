@@ -28,8 +28,13 @@ model_modes:
     clip_name: "z-image\\qwen_3_4b.safetensors"
     tip: "细节更好，需要更大显存"
 
-# 分辨率档：数字一眼懂（长边像素），对标原版 720/1080 思路，比「均衡」更直观
+# 分辨率档：数字一眼懂（长边像素）；512 面向 6G 边缘卡
 quality_presets:
+  512 · 省显存:
+    long_edge: 512
+    steps: 8
+    cfg: 1.0
+    tip: "6G 友好，不易 OOM"
   720 · 快:
     long_edge: 720
     steps: 8
@@ -39,7 +44,7 @@ quality_presets:
     long_edge: 1024
     steps: 9
     cfg: 1.0
-    tip: "默认推荐"
+    tip: "默认推荐（8G）"
   1280 · 高清:
     long_edge: 1280
     steps: 9
@@ -53,7 +58,7 @@ quality_presets:
 
 # 旧标签兼容（图库回填）
 quality_legacy_map:
-  省显存: 720 · 快
+  省显存: 512 · 省显存
   均衡: 1024 · 推荐
   高清: 1280 · 高清
 
@@ -92,7 +97,7 @@ custom_size:
 vram_long_edge:
   # 阈值按「检测显存 GB ≤ 该档」匹配，从低到高
   tiers:
-    - { max_vram_gb: 6, soft: 768, hard: 1024 }
+    - { max_vram_gb: 6, soft: 512, hard: 768 }
     - { max_vram_gb: 8, soft: 1024, hard: 1280 }
     - { max_vram_gb: 12, soft: 1280, hard: 1440 }
     - { max_vram_gb: 16, soft: 1440, hard: 1600 }

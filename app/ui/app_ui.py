@@ -12,13 +12,7 @@ import gradio as gr
 from PIL import Image
 
 from brand.header import about_markdown, header_html, load_brand
-from core.favorites import (
-    delete_favorite,
-    fav_choices,
-    parse_fav_id,
-    resolve_fav_prompt,
-    save_favorite,
-)
+
 from core.generate import (
     clamp_custom_size,
     custom_size_limits,
@@ -53,11 +47,9 @@ from core.inspirations import (
     inspiration_categories,
     inspiration_gallery_data,
     is_favorite as inspo_is_favorite,
-    list_favorite_ids as inspo_list_favorite_ids,
     load_inspirations,
     resolve_inspiration,
     save_user_inspiration,
-    toggle_favorite as inspo_toggle_favorite,
 )
 from core.styles import (
     is_favorite,
@@ -519,59 +511,11 @@ def build_demo() -> gr.Blocks:
                                 ),
                             )
 
-                        with gr.Accordion("提示词收藏（可选）", open=False, elem_id="dv-fav-box"):
-                            with gr.Row(elem_id="dv-fav-row", equal_height=True):
-                                fav_dd = gr.Dropdown(
-                                    choices=fav_choices(),
-                                    value="（未选收藏）",
-                                    label="收藏提示词",
-                                    show_label=False,
-                                    scale=4,
-                                    container=True,
-                                    elem_id="dv-fav-dd",
-                                )
-                                fav_save_btn = gr.Button(
-                                    "收藏当前", scale=1, min_width=88, elem_id="dv-fav-save"
-                                )
-                                fav_del_btn = gr.Button(
-                                    "删除所选", scale=1, min_width=88, elem_id="dv-fav-del"
-                                )
-                            fav_status = gr.HTML("")
-
-                        def _fav_save(p):
-                            ok, msg = save_favorite(p or "")
-                            cls = "ok" if ok else "err"
-                            return (
-                                gr.update(choices=fav_choices()),
-                                f'<div class="dv-status {cls}">{html_lib.escape(msg)}</div>',
-                            )
-
-                        def _fav_load(lab):
-                            t = resolve_fav_prompt(lab)
-                            return t if t else gr.update()
-
-                        def _fav_del(lab):
-                            ok, msg = delete_favorite(parse_fav_id(lab or "") or "")
-                            cls = "ok" if ok else "err"
-                            return (
-                                gr.update(choices=fav_choices(), value="（未选收藏）"),
-                                f'<div class="dv-status {cls}">{html_lib.escape(msg)}</div>',
-                            )
-
-                        fav_save_btn.click(
-                            fn=_fav_save, inputs=prompt, outputs=[fav_dd, fav_status]
-                        )
-                        fav_dd.change(fn=_fav_load, inputs=fav_dd, outputs=prompt)
-                        fav_del_btn.click(
-                            fn=_fav_del, inputs=fav_dd, outputs=[fav_dd, fav_status]
-                        )
-
                         lora_card_items, _ = _style_gallery_data(
                             show_nsfw0, "全部", "LoRA"
                         )
                         inspo_cats = inspiration_categories()
                         inspo_items, _ = inspiration_gallery_data("全部", False)
-                        inspo_fav_items, _ = inspiration_gallery_data("全部", True)
 
                         # LoRA 槽
                         style1_state = gr.State("（无风格）")
@@ -581,10 +525,10 @@ def build_demo() -> gr.Blocks:
                             visible=False,
                             elem_id="dv-style1",
                         )
-                        # 提示词灵感槽（点选 → 写入 prompt 框，不注入 generate）
+                        # 提示词灵感槽（点选 → 写入 prompt 框）
                         inspo_state = gr.State("（无）")
 
-                        # —— 提示词灵感（原预设 + 精选合并）——
+                        # —— 提示词灵感（原预设 + 精选合并；无单独「收藏」）——
                         with gr.Column(
                             elem_id="dv-inspo-block", elem_classes=["dv-style-block"]
                         ):
@@ -592,37 +536,26 @@ def build_demo() -> gr.Blocks:
                                 '<div class="dv-group-label">提示词灵感</div>'
                                 '<p class="dv-help" style="margin:0 0 8px">'
                                 "点选图卡 → <b>整段中文提示词写入上方输入框</b>（可再改）。"
-                                "可分类、收藏、自建。与下方 LoRA <b>可同时用</b>，不加载模型。</p>"
+                                "可分类、自建。与下方 LoRA <b>可同时用</b>，不加载模型。</p>"
                             )
                             with gr.Row():
                                 inspo_preview = gr.HTML(
                                     inspo_preview_html("（无）"),
                                     elem_id="dv-inspo-preview",
                                 )
-                                with gr.Column(scale=0, min_width=120):
-                                    inspo_fav_btn = gr.Button(
-                                        "收藏/取消",
-                                        variant="secondary",
-                                        elem_id="dv-inspo-fav",
-                                    )
-                                    inspo_clear_btn = gr.Button(
-                                        "清除选用",
-                                        variant="secondary",
-                                        elem_id="dv-inspo-clear",
-                                    )
-                            with gr.Row():
-                                inspo_cat = gr.Dropdown(
-                                    choices=inspo_cats,
-                                    value="全部",
-                                    label="分类",
-                                    scale=2,
-                                    elem_id="dv-inspo-cat",
+                                inspo_clear_btn = gr.Button(
+                                    "清除选用",
+                                    variant="secondary",
+                                    scale=0,
+                                    min_width=120,
+                                    elem_id="dv-inspo-clear",
                                 )
-                                inspo_show_fav = gr.Checkbox(
-                                    value=False,
-                                    label="只看收藏",
-                                    elem_id="dv-inspo-only-fav",
-                                )
+                            inspo_cat = gr.Dropdown(
+                                choices=inspo_cats,
+                                value="全部",
+                                label="分类",
+                                elem_id="dv-inspo-cat",
+                            )
                             style_cards_inspo = gr.Gallery(
                                 value=inspo_items,
                                 label="提示词灵感 · 点选填入",
@@ -1032,13 +965,11 @@ def build_demo() -> gr.Blocks:
                     except Exception:
                         return -1
 
-                def _on_pick_inspo(evt: gr.SelectData, cat_f, only_fav):
+                def _on_pick_inspo(evt: gr.SelectData, cat_f):
                     """点选提示词灵感 → 预览 + 写入提示词框。"""
                     empty = "（无）"
                     idx = _gallery_idx(evt)
-                    _, labels = inspiration_gallery_data(
-                        cat_f or "全部", bool(only_fav)
-                    )
+                    _, labels = inspiration_gallery_data(cat_f or "全部", False)
                     if idx < 0 or idx >= len(labels):
                         return empty, inspo_preview_html(empty), gr.skip()
                     chosen = labels[idx]
@@ -1050,10 +981,8 @@ def build_demo() -> gr.Blocks:
                         return chosen, inspo_preview_html(chosen), ins.prompt
                     return chosen, inspo_preview_html(chosen), gr.skip()
 
-                def _refresh_inspo_gal(cat_f, only_fav):
-                    items, _ = inspiration_gallery_data(
-                        cat_f or "全部", bool(only_fav)
-                    )
+                def _refresh_inspo_gal(cat_f):
+                    items, _ = inspiration_gallery_data(cat_f or "全部", False)
                     return gr.update(value=items)
 
                 def _on_pick_lora(evt: gr.SelectData, cat_f, nsfw_f):
@@ -1094,17 +1023,12 @@ def build_demo() -> gr.Blocks:
 
                 inspo_cat.change(
                     fn=_refresh_inspo_gal,
-                    inputs=[inspo_cat, inspo_show_fav],
-                    outputs=style_cards_inspo,
-                )
-                inspo_show_fav.change(
-                    fn=_refresh_inspo_gal,
-                    inputs=[inspo_cat, inspo_show_fav],
+                    inputs=inspo_cat,
                     outputs=style_cards_inspo,
                 )
                 style_cards_inspo.select(
                     fn=_on_pick_inspo,
-                    inputs=[inspo_cat, inspo_show_fav],
+                    inputs=inspo_cat,
                     outputs=[inspo_state, inspo_preview, prompt],
                 )
 
@@ -1124,33 +1048,13 @@ def build_demo() -> gr.Blocks:
                     outputs=[style1_state, style1, style1_preview, w1],
                 )
 
-                def _on_inspo_fav(lab: str, cat_f, only_fav):
-                    ins = resolve_inspiration(lab)
-                    if not ins:
-                        return (
-                            '<div class="dv-status err">请先点选一条灵感</div>',
-                            gr.skip(),
-                            inspo_preview_html(lab or "（无）"),
-                        )
-                    _now, msg = inspo_toggle_favorite(ins.id)
-                    items, _ = inspiration_gallery_data(
-                        cat_f or "全部", bool(only_fav)
-                    )
-                    return (
-                        f'<div class="dv-status ok">{html_lib.escape(msg)}</div>',
-                        gr.update(value=items),
-                        inspo_preview_html(lab),
-                    )
-
-                def _on_inspo_save(name: str, prompt_text: str, cat_f, only_fav):
+                def _on_inspo_save(name: str, prompt_text: str, cat_f):
                     ok, msg, ins = save_user_inspiration(
                         name=name or "",
                         prompt=prompt_text or "",
                     )
                     cls = "ok" if ok else "err"
-                    items, _ = inspiration_gallery_data(
-                        cat_f or "全部", bool(only_fav)
-                    )
+                    items, _ = inspiration_gallery_data(cat_f or "全部", False)
                     if ok and ins:
                         lab = ins.label()
                         return (
@@ -1168,7 +1072,7 @@ def build_demo() -> gr.Blocks:
                         gr.skip(),
                     )
 
-                def _on_inspo_del(lab: str, cat_f, only_fav):
+                def _on_inspo_del(lab: str, cat_f):
                     ins = resolve_inspiration(lab)
                     if not ins:
                         return (
@@ -1179,9 +1083,7 @@ def build_demo() -> gr.Blocks:
                         )
                     ok, msg = delete_user_inspiration(ins.id)
                     cls = "ok" if ok else "err"
-                    items, _ = inspiration_gallery_data(
-                        cat_f or "全部", bool(only_fav)
-                    )
+                    items, _ = inspiration_gallery_data(cat_f or "全部", False)
                     if ok:
                         empty = "（无）"
                         return (
@@ -1210,14 +1112,9 @@ def build_demo() -> gr.Blocks:
                         style_preview_html(lab),
                     )
 
-                inspo_fav_btn.click(
-                    fn=_on_inspo_fav,
-                    inputs=[inspo_state, inspo_cat, inspo_show_fav],
-                    outputs=[inspo_status, style_cards_inspo, inspo_preview],
-                )
                 inspo_save_btn.click(
                     fn=_on_inspo_save,
-                    inputs=[inspo_save_name, prompt, inspo_cat, inspo_show_fav],
+                    inputs=[inspo_save_name, prompt, inspo_cat],
                     outputs=[
                         inspo_status,
                         style_cards_inspo,
@@ -1228,7 +1125,7 @@ def build_demo() -> gr.Blocks:
                 )
                 inspo_del_btn.click(
                     fn=_on_inspo_del,
-                    inputs=[inspo_state, inspo_cat, inspo_show_fav],
+                    inputs=[inspo_state, inspo_cat],
                     outputs=[
                         inspo_status,
                         style_cards_inspo,
@@ -1458,18 +1355,33 @@ def build_demo() -> gr.Blocks:
                             if stop_flag["stop"]:
                                 break
                             err_text = str(state["err"])
-                            if "显存不足" in err_text or "oom" in err_text.lower():
+                            low = err_text.lower()
+                            is_oom = (
+                                "显存不足" in err_text
+                                or "oom" in low
+                                or "out of memory" in low
+                            )
+                            is_timeout = "超时" in err_text or "timeout" in low
+                            if is_oom or is_timeout:
                                 d = load_defaults().get("comfy") or {}
                                 free_comfy_memory(
                                     host=d.get("host", "127.0.0.1"),
                                     port=int(d.get("port", 7777)),
                                 )
+                            tip = ""
+                            if is_oom:
+                                tip = (
+                                    " · 已请求释放显存。6G 请用「512 · 省显存」+ GGUF + 无 LoRA"
+                                )
+                            elif is_timeout:
+                                tip = " · 已尝试停止任务。可改 512/720 再试"
                             show = paths[-1] if paths else None
                             yield (
                                 show,
                                 image_dims_html(show) if show else empty_dims,
                                 progress_html(0, "失败"),
-                                f'<div class="dv-status err">第 {i+1} 张失败：{html_lib.escape(err_text)}</div>',
+                                f'<div class="dv-status err">第 {i+1} 张失败：'
+                                f"{html_lib.escape(err_text)}{html_lib.escape(tip)}</div>",
                                 gr.skip(),
                                 gr.skip(),
                                 gr.skip(),

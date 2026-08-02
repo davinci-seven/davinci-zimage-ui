@@ -22,7 +22,7 @@ DEFAULT_COMFY_PORT = 7777
 
 # Fallback if defaults.yaml missing tiers
 _DEFAULT_VRAM_TIERS = [
-    {"max_vram_gb": 6, "soft": 768, "hard": 1024},
+    {"max_vram_gb": 6, "soft": 512, "hard": 768},
     {"max_vram_gb": 8, "soft": 1024, "hard": 1280},
     {"max_vram_gb": 12, "soft": 1280, "hard": 1440},
     {"max_vram_gb": 16, "soft": 1440, "hard": 1600},

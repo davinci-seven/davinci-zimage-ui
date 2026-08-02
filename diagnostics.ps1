@@ -46,7 +46,7 @@ function Add-CommandOutput([object[]]$Output) {
 
 Add-Line "达芬七 · Z-Image 诊断信息"
 Add-Line "生成时间: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss K')"
-Add-Line "版本: v1.4.5-dev.7"
+Add-Line "版本: v1.4.5-dev.8"
 Add-Line ""
 Add-Line "可以把本文件拖给AI分析。用户名、电脑名和用户目录已自动遮挡。"
 Add-Line "分享前仍建议快速浏览一次；本报告不收集提示词、生成图片或网络密码。"

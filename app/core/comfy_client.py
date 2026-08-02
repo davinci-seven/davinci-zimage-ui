@@ -32,10 +32,26 @@ def is_comfy_ready(host: str = "127.0.0.1", port: int = DEFAULT_COMFY_PORT, time
 
 
 def _friendly_error(raw: str) -> str:
-    low = raw.lower()
-    if "out of memory" in low or "cuda oom" in low:
-        return "显存不足（OOM）。请改用「720 · 快」或 GGUF 档，并只选一个风格。"
-    if "lora" in low and ("not" in low or "exist" in low):
+    low = (raw or "").lower()
+    if (
+        "out of memory" in low
+        or "cuda oom" in low
+        or "cuda error: out of memory" in low
+        or "allocation on device" in low
+        or "not enough memory" in low
+        or "oom" in low and "cuda" in low
+    ):
+        return (
+            "显存不足（OOM），出图已中止，并非卡死。"
+            "请改用「512 · 省显存」或「720 · 快」、模型选「极低显存 GGUF」、"
+            "先不选 LoRA，并点「释放显存」后再试。6G 卡请固定 512。"
+        )
+    if "timeout" in low or "timed out" in low:
+        return (
+            "等待超时（可能假死或机器过慢）。请改 512/720、GGUF、关其它占显存程序，"
+            "或点「停止」后「释放显存」再开一张。"
+        )
+    if "lora" in low and ("not" in low or "exist" in low or "找不到" in raw):
         return f"风格文件没找到，请确认 LoRA 还在 models/loras 里。\n原始信息：{raw[:300]}"
     return f"ComfyUI 生成失败：{raw[:400]}"
 
@@ -343,7 +359,15 @@ def run_workflow(
         sock.close()
 
     if result is None:
+        # 超时后尽量打断队列，避免引擎一直占显存像卡死
+        try:
+            interrupt_comfy(host, port)
+            free_comfy_memory(host, port)
+        except Exception:
+            pass
         raise TimeoutError(
-            f"等待出图超时（{timeout_sec}s）。可改用「720 · 快」档，并关闭占显存的程序。"
+            f"等待出图超时（{timeout_sec}s），已请求停止并释放显存。"
+            "请改用「512 · 省显存」或「720 · 快」、GGUF、关闭占显存程序后重试。"
+            "若进度长时间不动，点「停止」再导出诊断信息。"
         )
     return result
