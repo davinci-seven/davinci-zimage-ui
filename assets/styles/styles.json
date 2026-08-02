@@ -1,0 +1,915 @@
+{
+  "styles": [
+    {
+      "id": "snap",
+      "name": "Realistic Snapshot",
+      "file": "zimage/RealisticSnapshot_v5.safetensors",
+      "cover": "snap.jpg",
+      "tags": [
+        "写实",
+        "抓拍",
+        "手机"
+      ],
+      "default_weight": 0.65,
+      "trigger": "amateur digital snapshot, candid, smartphone capture",
+      "nsfw": false,
+      "tip": "抓拍/手机感写实，强度建议 0.6–0.7",
+      "featured": true,
+      "category": "真实",
+      "civitai_url": "https://civitai.com/models/2268008",
+      "commercial": "允许出图商用（以页面许可为准）",
+      "categories": [
+        "真实"
+      ]
+    },
+    {
+      "id": "skin",
+      "name": "皮肤质感",
+      "file": "zimage/skin_texture_v45.safetensors",
+      "cover": "skin.jpg",
+      "tags": [
+        "写实",
+        "皮肤",
+        "细节"
+      ],
+      "default_weight": 0.7,
+      "trigger": "detailed skin texture, photorealistic, incredibly lifelike",
+      "nsfw": false,
+      "tip": "皮肤纹理增强，可叠在写实上",
+      "featured": true,
+      "category": "质感",
+      "civitai_url": "https://civitai.com/models/580857",
+      "commercial": "限制较多，建议仅个人/非商用",
+      "categories": [
+        "质感",
+        "真实"
+      ]
+    },
+    {
+      "id": "aesthetic",
+      "name": "Aesthetic",
+      "file": "zimage/Aesthetic_turbo.safetensors",
+      "cover": "aesthetic.jpg",
+      "tags": [
+        "审美",
+        "杂志"
+      ],
+      "default_weight": 0.8,
+      "trigger": "aesthetic, magazine editorial",
+      "nsfw": false,
+      "tip": "杂志审美向综合风格",
+      "featured": true,
+      "category": "真实",
+      "civitai_url": "https://civitai.com/models/2214707",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "真实",
+        "电影"
+      ]
+    },
+    {
+      "id": "luneva",
+      "name": "Luneva 电影感",
+      "file": "zimage/ZIT_Midjourney_Luneva_Cinematic_v1_r128.safetensors",
+      "cover": "luneva.jpg",
+      "tags": [
+        "电影",
+        "审美"
+      ],
+      "default_weight": 0.75,
+      "trigger": "cinematic lighting, film still",
+      "nsfw": false,
+      "tip": "电影感光影与构图，强度建议 0.6–0.85",
+      "featured": true,
+      "category": "电影",
+      "civitai_url": "https://civitai.com/models/2185167",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "电影",
+        "真实"
+      ]
+    },
+    {
+      "id": "cyberhd",
+      "name": "Cyber HD 增强",
+      "file": "zimage/ZIT_Luneva_CyberHD.safetensors",
+      "cover": "cyberhd.jpg",
+      "tags": [
+        "增强",
+        "清晰"
+      ],
+      "default_weight": 0.65,
+      "trigger": "ultra detailed, sharp focus",
+      "nsfw": false,
+      "tip": "清晰度/赛博质感增强，建议轻到中",
+      "featured": true,
+      "category": "质感",
+      "civitai_url": "https://civitai.com/models/2215818",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "质感",
+        "真实"
+      ]
+    },
+    {
+      "id": "detail_slider",
+      "name": "细节滑条",
+      "file": "zimage/Z-Detail-Slider.safetensors",
+      "cover": "detail_slider.jpg",
+      "tags": [
+        "细节",
+        "增强"
+      ],
+      "default_weight": 0.7,
+      "trigger": "detailed, enhanced details",
+      "nsfw": false,
+      "tip": "轻量细节增强，可叠用",
+      "featured": true,
+      "category": "质感",
+      "civitai_url": "https://civitai.com/models/2234266",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "质感"
+      ]
+    },
+    {
+      "id": "detail_daemon",
+      "name": "Detail Daemon",
+      "file": "zimage/REDZ15_DetailDaemonZ_lora_v1.1.safetensors",
+      "cover": "detail_daemon.jpg",
+      "tags": [
+        "细节",
+        "增强"
+      ],
+      "default_weight": 0.65,
+      "trigger": "extreme detail, intricate",
+      "nsfw": false,
+      "tip": "细节增强器，强度不宜过高",
+      "featured": false,
+      "category": "质感",
+      "civitai_url": "https://civitai.com/models/2209262",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "质感"
+      ]
+    },
+    {
+      "id": "melancholy",
+      "name": "Melancholy 忧郁",
+      "file": "zimage/zImageT_zidiusArt_melancholy.safetensors",
+      "cover": "melancholy.jpg",
+      "tags": [
+        "氛围",
+        "艺术"
+      ],
+      "default_weight": 0.85,
+      "trigger": "melancholy mood, muted colors",
+      "nsfw": false,
+      "tip": "忧郁氛围艺术向",
+      "featured": true,
+      "category": "电影",
+      "civitai_url": "https://civitai.com/models/2334593",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "电影",
+        "真实"
+      ]
+    },
+    {
+      "id": "detail",
+      "name": "细节增强",
+      "file": "zimage/z-image-细节增强v2.safetensors",
+      "cover": "detail.jpg",
+      "tags": [
+        "增强",
+        "细节"
+      ],
+      "default_weight": 0.7,
+      "trigger": "highly detailed, sharp details",
+      "nsfw": false,
+      "tip": "叠在其他风格上，强度用「轻」",
+      "featured": true,
+      "category": "质感",
+      "civitai_url": "https://civitai.com/models/2174081",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "质感"
+      ]
+    },
+    {
+      "id": "disney",
+      "name": "迪士尼感",
+      "file": "zimage/Disney_IZT_ATK_V1_000000750.safetensors",
+      "cover": "disney.jpg",
+      "tags": [
+        "卡通",
+        "迪士尼"
+      ],
+      "default_weight": 0.95,
+      "trigger": "DisneyIZT, This image is a Disney-Pixar 3D animation style, featuring a stylized cartoon character, high detailed, ultra 4k, masterpiece",
+      "nsfw": false,
+      "tip": "迪士尼动画角色感",
+      "featured": true,
+      "category": "二次元",
+      "civitai_url": "https://civitai.com/models/404277",
+      "commercial": "允许 Image/Rent/Sell（作者页，请再确认）",
+      "categories": [
+        "二次元",
+        "插画"
+      ]
+    },
+    {
+      "id": "instant",
+      "name": "拍立得人像",
+      "file": "zimage/OB拍立得人像摄影Instant camera portrait photography V4.0.safetensors",
+      "cover": "instant.jpg",
+      "tags": [
+        "摄影",
+        "拍立得"
+      ],
+      "default_weight": 0.85,
+      "trigger": "polaroid photo, instant camera",
+      "nsfw": false,
+      "tip": "即影即有 / 生活感人像",
+      "featured": true,
+      "category": "真实",
+      "civitai_url": "https://civitai.com/models/785013",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "真实",
+        "复古"
+      ]
+    },
+    {
+      "id": "nice",
+      "name": "Nice Asians",
+      "file": "zimage/NIceAsians_Zimage.safetensors",
+      "cover": "nice.jpg",
+      "tags": [
+        "人像",
+        "东亚"
+      ],
+      "default_weight": 0.75,
+      "trigger": "beautiful east asian face, natural portrait",
+      "nsfw": false,
+      "tip": "东亚人脸友好（文件较大）",
+      "featured": true,
+      "category": "真实",
+      "civitai_url": "https://civitai.com/models/1862761",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "真实"
+      ]
+    },
+    {
+      "id": "toloveru",
+      "name": "ToLoveRu 风",
+      "file": "zimage/ToLoveRu_Style_ZIT_v2.safetensors",
+      "cover": "toloveru.jpg",
+      "tags": [
+        "二次元"
+      ],
+      "default_weight": 0.85,
+      "trigger": "to love ru style, anime, vibrant colors, clean lineart",
+      "nsfw": false,
+      "tip": "角色触发词写在提示词里，例如 momo velia deviluke / konjiki no yami / yuuki mikan",
+      "featured": true,
+      "category": "二次元",
+      "civitai_url": "https://civitai.com/models/1046784",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "二次元"
+      ]
+    },
+    {
+      "id": "anime",
+      "name": "动漫精细",
+      "file": "zimage/ZiTD3tailed4nime.safetensors",
+      "cover": "anime.jpg",
+      "tags": [
+        "二次元",
+        "细节"
+      ],
+      "default_weight": 0.85,
+      "trigger": "anime style, detailed illustration",
+      "nsfw": false,
+      "tip": "二次元细节向",
+      "featured": false,
+      "category": "二次元",
+      "civitai_url": "https://civitai.com/models/599757",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "二次元"
+      ]
+    },
+    {
+      "id": "ink",
+      "name": "水墨",
+      "file": "zimage/zyd232_InkStyle_Z-Image_v1.2.safetensors",
+      "cover": "ink.jpg",
+      "tags": [
+        "水墨",
+        "国风"
+      ],
+      "default_weight": 0.85,
+      "trigger": "chinese ink painting, sumi-e",
+      "nsfw": false,
+      "tip": "水墨国风",
+      "featured": false,
+      "category": "插画",
+      "civitai_url": "https://civitai.com/models/73305",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "插画",
+        "风景"
+      ]
+    },
+    {
+      "id": "linework",
+      "name": "干净线稿",
+      "file": "zimage/Z-CleanLinework.safetensors",
+      "cover": "linework.jpg",
+      "tags": [
+        "线稿",
+        "二次元"
+      ],
+      "default_weight": 0.8,
+      "trigger": "clean lineart, black and white",
+      "nsfw": false,
+      "tip": "干净线条",
+      "featured": false,
+      "category": "插画",
+      "civitai_url": "https://civitai.com/models/1175632",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "插画",
+        "二次元"
+      ]
+    },
+    {
+      "id": "couture",
+      "name": "高定时尚",
+      "file": "zimage/CoutureCraze_ZIT.safetensors",
+      "cover": "couture.jpg",
+      "tags": [
+        "时尚",
+        "服装"
+      ],
+      "default_weight": 0.85,
+      "trigger": "haute couture fashion, runway",
+      "nsfw": false,
+      "tip": "时装高定造型",
+      "featured": false,
+      "category": "真实",
+      "civitai_url": "https://civitai.com/models/362745",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "真实"
+      ]
+    },
+    {
+      "id": "oot",
+      "name": "OOT 穿搭",
+      "file": "zimage/OOT64.safetensors",
+      "cover": "oot.jpg",
+      "tags": [
+        "穿搭"
+      ],
+      "default_weight": 0.85,
+      "trigger": "street style outfit, fashion lookbook",
+      "nsfw": false,
+      "tip": "穿搭展示",
+      "featured": false,
+      "category": "真实",
+      "civitai_url": "https://civitai.com/models/573101",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "真实"
+      ]
+    },
+    {
+      "id": "fantasy80",
+      "name": "80s 奇幻",
+      "file": "zimage/80sFantasyZ_000003000.safetensors",
+      "cover": "fantasy80.jpg",
+      "tags": [
+        "奇幻",
+        "复古"
+      ],
+      "default_weight": 0.85,
+      "trigger": "1980s fantasy illustration, retro poster",
+      "nsfw": false,
+      "tip": "复古奇幻海报",
+      "featured": false,
+      "category": "复古",
+      "civitai_url": "https://civitai.com/models/789313",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "复古",
+        "插画",
+        "电影"
+      ]
+    },
+    {
+      "id": "moonlight",
+      "name": "月光猫",
+      "file": "zimage/MoonlightCAT_ZIT.safetensors",
+      "cover": "moonlight.jpg",
+      "tags": [
+        "风格"
+      ],
+      "default_weight": 0.85,
+      "trigger": "moonlight, cool blue lighting",
+      "nsfw": false,
+      "tip": "月光氛围",
+      "featured": false,
+      "category": "插画",
+      "civitai_url": "https://civitai.com/models/362745",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "插画",
+        "二次元"
+      ]
+    },
+    {
+      "id": "glowing",
+      "name": "Glowing Nightmare",
+      "file": "zimage/GlowingNightmare_ZIT.safetensors",
+      "cover": "glowing.jpg",
+      "tags": [
+        "暗黑",
+        "光效"
+      ],
+      "default_weight": 0.85,
+      "trigger": "glowing neon, dark fantasy",
+      "nsfw": false,
+      "tip": "暗黑发光特效",
+      "featured": false,
+      "category": "电影",
+      "civitai_url": "https://civitai.com/models/127551",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "电影",
+        "二次元"
+      ]
+    },
+    {
+      "id": "granblue",
+      "name": "Granblue 风",
+      "file": "zimage/granblue-Z.safetensors",
+      "cover": "granblue.jpg",
+      "tags": [
+        "二次元",
+        "游戏"
+      ],
+      "default_weight": 0.85,
+      "trigger": "anime game art style",
+      "nsfw": false,
+      "tip": "骑空士类画风",
+      "featured": false,
+      "category": "二次元",
+      "civitai_url": "https://civitai.com/models/22800",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "二次元"
+      ]
+    },
+    {
+      "id": "moriime",
+      "name": "Moriime",
+      "file": "zimage/MoriimeZ.safetensors",
+      "cover": "moriime.jpg",
+      "tags": [
+        "风格"
+      ],
+      "default_weight": 0.85,
+      "trigger": "artist:moriimee",
+      "nsfw": false,
+      "tip": "Moriime 画风",
+      "featured": false,
+      "category": "二次元",
+      "civitai_url": "https://civitai.com/models/915918",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "二次元",
+        "插画"
+      ]
+    },
+    {
+      "id": "lenovo",
+      "name": "Lenovo",
+      "file": "zimage/lenovo_z.safetensors",
+      "cover": "lenovo.jpg",
+      "tags": [
+        "增强"
+      ],
+      "default_weight": 0.7,
+      "trigger": "l3n0v0",
+      "nsfw": false,
+      "tip": "轻量增强，可叠用",
+      "featured": false,
+      "category": "质感",
+      "civitai_url": "https://civitai.com/models/1662740",
+      "commercial": "以 Civitai 页面为准",
+      "categories": [
+        "质感",
+        "真实"
+      ]
+    },
+    {
+      "id": "nsfw_core",
+      "name": "NSFW 核心",
+      "file": "zimage/z-image - nsfw - vulva10000.safetensors",
+      "cover": "nsfw.jpg",
+      "tags": [
+        "NSFW"
+      ],
+      "default_weight": 0.9,
+      "trigger": "nsfw",
+      "nsfw": true,
+      "tip": "成人向，仅本地",
+      "featured": true,
+      "category": "成人向",
+      "civitai_url": "https://civitai.com/models/2183555",
+      "commercial": "成人内容，仅本地合法使用",
+      "categories": [
+        "成人向"
+      ]
+    },
+    {
+      "id": "nsfwmaster",
+      "name": "NSFW Master",
+      "file": "zimage/NSFW_master_ZIT_v2.safetensors",
+      "cover": "nsfwmaster.jpg",
+      "tags": [
+        "NSFW"
+      ],
+      "default_weight": 0.8,
+      "trigger": "nsfw, sensual",
+      "nsfw": true,
+      "tip": "CivitAI NSFW Master ZIT v2，强度约 0.8",
+      "featured": true,
+      "category": "成人向",
+      "civitai_url": "https://civitai.com/models/667086",
+      "commercial": "以 Civitai 页面为准；成人向",
+      "categories": [
+        "成人向",
+        "真实"
+      ]
+    },
+    {
+      "id": "oiled",
+      "name": "油光皮肤",
+      "file": "zimage/OiledSkin_Zit_Turbo_V1.safetensors",
+      "cover": "oiled.jpg",
+      "tags": [
+        "NSFW",
+        "材质"
+      ],
+      "default_weight": 0.8,
+      "trigger": "oiled skin",
+      "nsfw": true,
+      "tip": "皮肤油光",
+      "featured": false,
+      "category": "成人向",
+      "civitai_url": "https://civitai.com/models/87685",
+      "commercial": "成人向，仅本地合法使用",
+      "categories": [
+        "成人向",
+        "质感"
+      ]
+    },
+    {
+      "id": "b3tter",
+      "name": "b3tternud3s",
+      "file": "zimage/b3tternud3s_v3.safetensors",
+      "cover": "b3tter.jpg",
+      "tags": [
+        "NSFW"
+      ],
+      "default_weight": 0.85,
+      "trigger": "b3tter, sensual figure",
+      "nsfw": true,
+      "tip": "成人向人体",
+      "featured": false,
+      "category": "成人向",
+      "civitai_url": "https://civitai.com/models/2174081",
+      "commercial": "成人向，仅本地合法使用",
+      "categories": [
+        "成人向"
+      ]
+    },
+    {
+      "id": "steep",
+      "name": "SteepSlope",
+      "file": "zimage/SteepSlopeTiddies_XXL_ZIT.safetensors",
+      "cover": "steep.jpg",
+      "tags": [
+        "NSFW"
+      ],
+      "default_weight": 0.8,
+      "trigger": "SteepSlopeTiddies",
+      "nsfw": true,
+      "tip": "成人向身材夸张",
+      "featured": false,
+      "category": "成人向",
+      "civitai_url": "https://civitai.com/models/942483",
+      "commercial": "成人向，仅本地合法使用",
+      "categories": [
+        "成人向"
+      ]
+    },
+    {
+      "id": "analog2000",
+      "name": "2000s Analog",
+      "file": "zimage/HI8.safetensors",
+      "cover": "analog2000.jpg",
+      "tags": [
+        "复古",
+        "胶片",
+        "真实"
+      ],
+      "default_weight": 0.8,
+      "trigger": "v8s",
+      "nsfw": false,
+      "tip": "2000 年代模拟录像/胶片感",
+      "featured": true,
+      "categories": [
+        "复古",
+        "真实"
+      ],
+      "civitai_url": "https://civitai.com/models/1134895",
+      "commercial": "以 Civitai 页面为准",
+      "category": "复古"
+    },
+    {
+      "id": "grainscape",
+      "name": "GrainScape",
+      "file": "zimage/grainscape_zimage.safetensors",
+      "cover": "grainscape.jpg",
+      "tags": [
+        "胶片",
+        "颗粒",
+        "真实"
+      ],
+      "default_weight": 0.75,
+      "trigger": "8n8log",
+      "nsfw": false,
+      "tip": "胶片颗粒与写实质感",
+      "featured": false,
+      "categories": [
+        "真实",
+        "复古",
+        "质感"
+      ],
+      "civitai_url": "https://civitai.com/models/1332651",
+      "commercial": "以 Civitai 页面为准",
+      "category": "真实"
+    },
+    {
+      "id": "amateur_aes",
+      "name": "Aesthetic Amateur",
+      "file": "zimage/aesthetic_exp1.safetensors",
+      "cover": "amateur_aes.jpg",
+      "tags": [
+        "抓拍",
+        "审美",
+        "真实"
+      ],
+      "default_weight": 0.8,
+      "trigger": "43stet1c",
+      "nsfw": false,
+      "tip": "有审美的业余抓拍感",
+      "featured": true,
+      "categories": [
+        "真实",
+        "复古"
+      ],
+      "civitai_url": "https://civitai.com/models/689192",
+      "commercial": "以 Civitai 页面为准",
+      "category": "真实"
+    },
+    {
+      "id": "cinematic",
+      "name": "Cinematic Shot",
+      "file": "zimage/zy_CinematicShot_zit.safetensors",
+      "cover": "cinematic.jpg",
+      "tags": [
+        "电影",
+        "真实"
+      ],
+      "default_weight": 0.8,
+      "trigger": "zy_cinematic",
+      "nsfw": false,
+      "tip": "电影调色与构图",
+      "featured": true,
+      "categories": [
+        "电影",
+        "真实"
+      ],
+      "category": "电影",
+      "civitai_url": "https://civitai.com/models/432586",
+      "commercial": "以 Civitai 页面为准"
+    },
+    {
+      "id": "charsheet",
+      "name": "角色设定表",
+      "file": "zimage/CharacterDesign-IZT-V1.safetensors",
+      "cover": "charsheet.jpg",
+      "tags": [
+        "设定",
+        "二次元"
+      ],
+      "default_weight": 0.9,
+      "trigger": "CharacterDesignIZT",
+      "nsfw": false,
+      "tip": "角色设计三视图",
+      "featured": true,
+      "categories": [
+        "角色设定",
+        "二次元"
+      ],
+      "category": "角色设定",
+      "civitai_url": "https://civitai.com/models/100435",
+      "commercial": "以 Civitai 页面为准"
+    },
+    {
+      "id": "neurocore",
+      "name": "Neurocore Anime",
+      "file": "zimage/ck-NeurocoreShadowCircuit-ZIT_000003000.safetensors",
+      "cover": "neurocore.jpg",
+      "tags": [
+        "二次元",
+        "科幻"
+      ],
+      "default_weight": 0.85,
+      "trigger": "in the style of cksc",
+      "nsfw": false,
+      "tip": "科幻暗调二次元",
+      "featured": true,
+      "categories": [
+        "二次元",
+        "插画",
+        "电影"
+      ],
+      "category": "二次元",
+      "civitai_url": "https://civitai.com/models/938811",
+      "commercial": "以 Civitai 页面为准"
+    },
+    {
+      "id": "comic_tome",
+      "name": "Comic Book",
+      "file": "zimage/Romain_Bonnet_E10.safetensors",
+      "cover": "comic_tome.jpg",
+      "tags": [
+        "漫画",
+        "插画"
+      ],
+      "default_weight": 0.85,
+      "trigger": "Bradhamel art style",
+      "nsfw": false,
+      "tip": "欧美漫画封面感",
+      "featured": false,
+      "categories": [
+        "插画",
+        "二次元"
+      ],
+      "category": "插画",
+      "civitai_url": "https://civitai.com/models/830230",
+      "commercial": "以 Civitai 页面为准"
+    },
+    {
+      "id": "anime_art",
+      "name": "Anime Art",
+      "file": "zimage/Anime_art_v7_E10.safetensors",
+      "cover": "anime_art.jpg",
+      "tags": [
+        "二次元",
+        "插画"
+      ],
+      "default_weight": 0.85,
+      "trigger": "Bradhamel art style",
+      "nsfw": false,
+      "tip": "精致动漫插画",
+      "featured": true,
+      "categories": [
+        "二次元",
+        "插画"
+      ],
+      "category": "二次元",
+      "civitai_url": "https://civitai.com/models/832858",
+      "commercial": "以 Civitai 页面为准"
+    },
+    {
+      "id": "watercolor",
+      "name": "Watercolor",
+      "file": "zimage/Watercolor_V7_E10.safetensors",
+      "cover": "watercolor.jpg",
+      "tags": [
+        "水彩",
+        "风景"
+      ],
+      "default_weight": 0.85,
+      "trigger": "VarcoterolV7 art style",
+      "nsfw": false,
+      "tip": "水彩，人物或风景",
+      "featured": true,
+      "categories": [
+        "插画",
+        "风景"
+      ],
+      "category": "插画",
+      "civitai_url": "https://civitai.com/models/749060",
+      "commercial": "以 Civitai 页面为准"
+    },
+    {
+      "id": "midjz",
+      "name": "Midjourney Z",
+      "file": "zimage/midj-z-1.safetensors",
+      "cover": "midjz.jpg",
+      "tags": [
+        "审美"
+      ],
+      "default_weight": 0.75,
+      "trigger": "midjourney style, cinematic aesthetic",
+      "nsfw": false,
+      "tip": "MJ 气质综合",
+      "featured": true,
+      "categories": [
+        "真实",
+        "电影",
+        "插画"
+      ],
+      "category": "真实",
+      "civitai_url": "https://civitai.com/models/2485292",
+      "commercial": "以 Civitai 页面为准"
+    },
+    {
+      "id": "retro90",
+      "name": "90s 复古科幻动画",
+      "file": "zimage/retro_scifi-90s_anime_style_Z_image_turbo.safetensors",
+      "cover": "retro90.jpg",
+      "tags": [
+        "复古",
+        "科幻"
+      ],
+      "default_weight": 0.85,
+      "trigger": "retro_scifi_90s, retro_artstyle, retro, cyberpunk",
+      "nsfw": false,
+      "tip": "90年代复古科幻动画",
+      "featured": true,
+      "categories": [
+        "二次元",
+        "复古",
+        "电影"
+      ],
+      "category": "二次元",
+      "civitai_url": "https://civitai.com/models/912942",
+      "commercial": "以 Civitai 页面为准"
+    },
+    {
+      "id": "nudeart",
+      "name": "Nude Art",
+      "file": "zimage/Nude_Art_6_E10.safetensors",
+      "cover": "nudeart.jpg",
+      "tags": [
+        "NSFW",
+        "艺术"
+      ],
+      "default_weight": 0.8,
+      "trigger": "NudeArt4 style",
+      "nsfw": true,
+      "tip": "艺术人体，偏美感",
+      "featured": true,
+      "categories": [
+        "成人向",
+        "真实"
+      ],
+      "category": "成人向",
+      "civitai_url": "https://civitai.com/models/1344651",
+      "commercial": "成人向，仅本地合法使用"
+    },
+    {
+      "id": "teenymood",
+      "name": "Teeny Moody 小情绪",
+      "file": "zimage/REDZ15_teenymooddy_lora_v1.1.safetensors",
+      "cover": "teenymood.jpg",
+      "tags": [
+        "情绪",
+        "真实"
+      ],
+      "default_weight": 0.8,
+      "trigger": "teenymood, soft moody expression",
+      "nsfw": false,
+      "tip": "小情绪氛围",
+      "featured": true,
+      "categories": [
+        "真实",
+        "电影"
+      ],
+      "category": "真实",
+      "civitai_url": "https://civitai.com/models/2205459",
+      "commercial": "以 Civitai 页面为准"
+    }
+  ]
+}

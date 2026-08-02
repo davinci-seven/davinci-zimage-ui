@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# User runtime (never ship secrets / personal gens)
+userdata/gallery/
+userdata/exports/
+userdata/logs/
+userdata/civitai_api_token.txt
+userdata/styles_user.json
+userdata/style_favorites.json
+userdata/favorites.json
+userdata/settings.yaml
+userdata/covers/
+
+# Local outputs
+output/
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Engine & weights (if someone nests them)
+engine/
+**/models/**/*.safetensors
+**/models/**/*.gguf
+**/models/**/*.ckpt
+**/models/**/*.pt
+**/models/**/*.bin
+
+# Dev scratch
+_dev_scratch/
+*.7z
+*.zip
+!assets/**/*.png
+!assets/**/*.jpg
