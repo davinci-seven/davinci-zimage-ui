@@ -255,12 +255,10 @@ div:has(> #dv-stats-pills) {
   animation: none !important;
 }
 
-/* ===== 分页固定：贴在状态条下，高度紧凑 ===== */
-.gradio-container [role="tablist"],
-#dv-main-tabs [role="tablist"],
+/* ===== 仅主导航固定（勿写全局 .tabs / [role=tablist]，嵌套 Tabs 会抢顶栏）===== */
 #dv-main-tabs > .tab-nav,
-#dv-main-tabs .tab-nav,
-.tabs > .tab-nav {
+#dv-main-tabs > div:first-child > .tab-nav,
+#dv-main-tabs [role="tablist"]:first-of-type {
   position: fixed !important;
   top: calc(var(--title-h) + var(--stats-h)) !important;
   left: 0 !important;
@@ -282,9 +280,9 @@ div:has(> #dv-stats-pills) {
   gap: 6px !important;
   align-items: center !important;
 }
-.gradio-container [role="tablist"] button,
-.tabs > .tab-nav button,
-[role="tab"] {
+#dv-main-tabs > .tab-nav button,
+#dv-main-tabs [role="tablist"]:first-of-type button,
+#dv-main-tabs > .tab-nav [role="tab"] {
   border-radius: 999px !important;
   padding: 5px 14px !important;
   font-weight: 750 !important;
@@ -294,31 +292,39 @@ div:has(> #dv-stats-pills) {
   border: 1px solid transparent !important;
   min-height: 30px !important;
 }
-.gradio-container [role="tablist"] button.selected,
-.gradio-container [role="tablist"] button[aria-selected="true"],
-.tabs > .tab-nav button.selected,
-[role="tab"][aria-selected="true"] {
+#dv-main-tabs > .tab-nav button.selected,
+#dv-main-tabs > .tab-nav button[aria-selected="true"],
+#dv-main-tabs [role="tablist"]:first-of-type button.selected,
+#dv-main-tabs [role="tablist"]:first-of-type button[aria-selected="true"] {
   background: var(--ink) !important;
   color: var(--bg) !important;
   border-color: var(--ink) !important;
 }
-/* 去掉 tab 占位 / 内容二次顶距 */
+/* 主 tab 内容顶距清零 */
 #dv-main-tabs,
 #dv-main-tabs > div,
 #dv-main-tabs > .tab-nav + *,
-#dv-main-tabs .tabitem,
-.tabitem,
-[role="tabpanel"],
-.gradio-container .tabitem,
-.gradio-container [role="tabpanel"] {
+#dv-main-tabs > .tabitem {
   margin-top: 0 !important;
   padding-top: 0 !important;
 }
-/* fixed 的 tablist 不在流里留高；保险再压一次 */
 #dv-main-tabs > .tab-nav,
-#dv-main-tabs [role="tablist"],
-.gradio-container [role="tablist"] {
+#dv-main-tabs [role="tablist"]:first-of-type {
   margin-bottom: 0 !important;
+}
+
+/* 文生图内：两套风格库分块 */
+.dv-style-block,
+#dv-lora-block,
+#dv-prompt-style-block {
+  margin-top: 12px !important;
+  padding: 12px 12px 8px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 14px !important;
+  background: var(--card) !important;
+}
+#dv-style-selected-panel {
+  margin-bottom: 4px !important;
 }
 
 /* 兼容旧 id（若某处仍注入） */

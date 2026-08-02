@@ -559,7 +559,7 @@ def build_demo() -> gr.Blocks:
                             show_nsfw0, "全部", "LoRA"
                         )
                         prompt_card_items, _ = _style_gallery_data(
-                            show_nsfw0, "全部", "提示词"
+                            True, "全部", "提示词"
                         )
                         fav_card_items, _ = _style_gallery_data(
                             show_nsfw0, "全部", "收藏"
@@ -573,138 +573,138 @@ def build_demo() -> gr.Blocks:
                             elem_id="dv-style1",
                         )
 
-                        with gr.Column(elem_id="dv-style-panel"):
+                        # —— 当前选用（共用）——
+                        with gr.Column(elem_id="dv-style-selected-panel"):
                             gr.HTML(
-                                '<div class="dv-group-label">加料（可选 · 二选一）</div>'
-                                '<p class="dv-help" style="margin:0 0 10px">'
-                                "<b>LoRA 风格</b>会加载小模型，吃一点显存；"
-                                "<b>提示词风格</b>只改写提示词，不加载模型。"
-                                "两边独立分页，不会混在一起。8GB 一次只选 1 个；点图卡里的「无风格」清除。</p>"
+                                '<div class="dv-group-label">当前加料（二选一）</div>'
+                                '<p class="dv-help" style="margin:0 0 8px">'
+                                "下面有两套独立图库：<b>LoRA</b> 与 <b>提示词风格</b>。"
+                                "点哪个用哪个；会互相替换。点卡里「无风格」或下方清除。</p>"
                             )
-                            # 共享：已选预览 + LoRA 强度
                             with gr.Row(elem_id="dv-style-selected-row"):
-                                with gr.Column(scale=1, min_width=160, elem_id="dv-style-selected-col"):
-                                    gr.HTML(
-                                        '<div class="dv-field-label">当前选用</div>'
-                                    )
+                                with gr.Column(scale=2, min_width=160):
                                     style1_preview = gr.HTML(
                                         style_preview_html("（无风格）"),
                                         elem_id="dv-style-selected",
                                     )
-                                with gr.Column(scale=1, min_width=140, elem_id="dv-style-weight-col"):
-                                    gr.HTML(
-                                        '<div class="dv-field-label">LoRA 强度</div>'
-                                        '<p class="dv-help" style="margin:0 0 6px">仅 LoRA 有效；提示词风格会自动忽略</p>'
+                                with gr.Column(scale=1, min_width=120):
+                                    style_fav_btn = gr.Button(
+                                        "收藏/取消",
+                                        variant="secondary",
+                                        elem_id="dv-style-fav",
                                     )
-                                    w1 = gr.Radio(
-                                        choices=weights,
-                                        value=default_w,
-                                        label="风格强度",
-                                        show_label=False,
-                                        elem_id="dv-style-weight",
+                                    style_clear_btn = gr.Button(
+                                        "清除选用",
+                                        variant="secondary",
+                                        elem_id="dv-style-clear",
                                     )
+                            style_manage_status = gr.HTML(
+                                "", elem_id="dv-style-manage-status"
+                            )
 
-                            with gr.Tabs(elem_id="dv-style-kind-tabs"):
-                                with gr.Tab("LoRA 风格", elem_id="dv-tab-lora"):
-                                    with gr.Row(elem_id="dv-lora-filters"):
-                                        lora_cat = gr.Dropdown(
-                                            choices=cats,
-                                            value="全部",
-                                            label="分类",
-                                            scale=2,
-                                            elem_id="dv-lora-cat",
-                                        )
-                                        lora_nsfw = gr.Checkbox(
-                                            value=show_nsfw0,
-                                            label="成人向",
-                                            elem_id="dv-lora-nsfw",
-                                        )
-                                    style_cards_lora = gr.Gallery(
-                                        value=lora_card_items,
-                                        label="LoRA · 点选（会加载模型文件）",
-                                        columns=6,
-                                        rows=2,
-                                        height=260,
-                                        object_fit="cover",
-                                        allow_preview=False,
-                                        interactive=True,
-                                        selected_index=0,
-                                        elem_id="dv-style-cards-lora",
-                                    )
-                                with gr.Tab("提示词风格", elem_id="dv-tab-prompt"):
-                                    gr.HTML(
-                                        '<p class="dv-help" style="margin:0 0 8px">'
-                                        "达芬七精选 + 开源好友墙。只注入提示词前后缀，"
-                                        "<b>不挂 LoRA</b>。封面为本地样张/精选图。</p>"
-                                    )
-                                    with gr.Row(elem_id="dv-prompt-filters"):
-                                        prompt_cat = gr.Dropdown(
-                                            choices=cats,
-                                            value="全部",
-                                            label="分类",
-                                            scale=2,
-                                            elem_id="dv-prompt-cat",
-                                        )
-                                    style_cards_prompt = gr.Gallery(
-                                        value=prompt_card_items,
-                                        label="提示词 · 点选（不加载模型）",
-                                        columns=6,
-                                        rows=2,
-                                        height=260,
-                                        object_fit="cover",
-                                        allow_preview=False,
-                                        interactive=True,
-                                        selected_index=0,
-                                        elem_id="dv-style-cards-prompt",
-                                    )
-                                    with gr.Row(elem_id="dv-style-manage-row"):
-                                        style_save_name = gr.Textbox(
-                                            value="",
-                                            label="另存名称",
-                                            placeholder="我的提示词风格名",
-                                            max_lines=1,
-                                            scale=2,
-                                            elem_id="dv-style-save-name",
-                                        )
-                                        style_save_btn = gr.Button(
-                                            "把当前提示词存为风格",
-                                            variant="secondary",
-                                            scale=2,
-                                            elem_id="dv-style-save",
-                                        )
-                                        style_del_btn = gr.Button(
-                                            "删除用户风格",
-                                            variant="secondary",
-                                            scale=1,
-                                            elem_id="dv-style-del",
-                                        )
-                                with gr.Tab("收藏", elem_id="dv-tab-fav"):
-                                    style_cards_fav = gr.Gallery(
-                                        value=fav_card_items,
-                                        label="已收藏 · LoRA 与提示词都在这",
-                                        columns=6,
-                                        rows=2,
-                                        height=260,
-                                        object_fit="cover",
-                                        allow_preview=False,
-                                        interactive=True,
-                                        selected_index=0,
-                                        elem_id="dv-style-cards-fav",
-                                    )
-                            with gr.Row():
-                                style_fav_btn = gr.Button(
-                                    "收藏 / 取消当前",
+                        # —— ① LoRA：独立分类 + 独立图库 + 强度 ——
+                        with gr.Column(elem_id="dv-lora-block", elem_classes=["dv-style-block"]):
+                            gr.HTML(
+                                '<div class="dv-group-label">① LoRA 风格</div>'
+                                '<p class="dv-help" style="margin:0 0 8px">'
+                                "会加载模型文件，吃一点显存。与下方提示词风格不是同一套库。</p>"
+                            )
+                            with gr.Row(elem_id="dv-lora-filters"):
+                                lora_cat = gr.Dropdown(
+                                    choices=cats,
+                                    value="全部",
+                                    label="LoRA 分类",
+                                    scale=2,
+                                    elem_id="dv-lora-cat",
+                                )
+                                lora_nsfw = gr.Checkbox(
+                                    value=show_nsfw0,
+                                    label="成人向",
+                                    elem_id="dv-lora-nsfw",
+                                )
+                            w1 = gr.Radio(
+                                choices=weights,
+                                value=default_w,
+                                label="LoRA 强度",
+                                elem_id="dv-style-weight",
+                            )
+                            style_cards_lora = gr.Gallery(
+                                value=lora_card_items,
+                                label="LoRA 图库 · 点选",
+                                columns=6,
+                                rows=2,
+                                height=240,
+                                object_fit="cover",
+                                allow_preview=False,
+                                interactive=True,
+                                selected_index=0,
+                                elem_id="dv-style-cards-lora",
+                            )
+
+                        # —— ② 提示词风格：独立分类 + 独立图库 ——
+                        with gr.Column(elem_id="dv-prompt-style-block", elem_classes=["dv-style-block"]):
+                            gr.HTML(
+                                '<div class="dv-group-label">② 提示词风格</div>'
+                                '<p class="dv-help" style="margin:0 0 8px">'
+                                "只改写提示词，不加载 LoRA。达芬七精选 + 好友墙。另存只进这里。</p>"
+                            )
+                            prompt_cat = gr.Dropdown(
+                                choices=cats,
+                                value="全部",
+                                label="提示词分类",
+                                elem_id="dv-prompt-cat",
+                            )
+                            style_cards_prompt = gr.Gallery(
+                                value=prompt_card_items,
+                                label="提示词风格图库 · 点选",
+                                columns=6,
+                                rows=2,
+                                height=240,
+                                object_fit="cover",
+                                allow_preview=False,
+                                interactive=True,
+                                selected_index=0,
+                                elem_id="dv-style-cards-prompt",
+                            )
+                            with gr.Row(elem_id="dv-style-manage-row"):
+                                style_save_name = gr.Textbox(
+                                    value="",
+                                    label="另存名称",
+                                    placeholder="我的提示词风格名",
+                                    max_lines=1,
+                                    scale=2,
+                                    elem_id="dv-style-save-name",
+                                )
+                                style_save_btn = gr.Button(
+                                    "把当前提示词存为风格",
+                                    variant="secondary",
+                                    scale=2,
+                                    elem_id="dv-style-save",
+                                )
+                                style_del_btn = gr.Button(
+                                    "删除用户风格",
                                     variant="secondary",
                                     scale=1,
-                                    elem_id="dv-style-fav",
+                                    elem_id="dv-style-del",
                                 )
-                                style_clear_btn = gr.Button(
-                                    "清除选用",
-                                    variant="secondary",
-                                    scale=1,
-                                    elem_id="dv-style-clear",
-                                )
-                            style_manage_status = gr.HTML("", elem_id="dv-style-manage-status")
+
+                        # —— 收藏：折叠，不占主导航 ——
+                        with gr.Accordion(
+                            "我的风格收藏（可选）",
+                            open=False,
+                            elem_id="dv-style-fav-box",
+                        ):
+                            style_cards_fav = gr.Gallery(
+                                value=fav_card_items,
+                                label="收藏 · 点选回用",
+                                columns=6,
+                                rows=1,
+                                height=140,
+                                object_fit="cover",
+                                allow_preview=False,
+                                interactive=True,
+                                elem_id="dv-style-cards-fav",
+                            )
 
                         # 兼容图库回填；生成时忽略第二风格
                         style2 = gr.Dropdown(
