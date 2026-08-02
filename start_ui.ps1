@@ -46,11 +46,21 @@ if (-not $OwnsLauncherMutex) {
   exit 1
 }
 
-$Host.UI.RawUI.WindowTitle = "达芬七 Z-Image"
+$UiVersion = "?"
+try {
+  $linksPath = Join-Path $PackRoot "app\brand\links.yaml"
+  if (Test-Path $linksPath) {
+    $m = Select-String -Path $linksPath -Pattern '^\s*version:\s*["'']?([^"''\r\n]+)' | Select-Object -First 1
+    if ($m) { $UiVersion = $m.Matches[0].Groups[1].Value.Trim() }
+  }
+} catch {}
+$Host.UI.RawUI.WindowTitle = "达芬七 Z-Image  v$UiVersion"
 
 SayBlank
 Say "================================================================"
 Say "  达芬七 · Z-Image  /  Davinci Seven  Z-Image"
+Say "  UI version: v$UiVersion"
+Say "  Pack: $PackRoot"
 Say "  https://x.com/davinci_seven"
 Say "================================================================"
 SayBlank

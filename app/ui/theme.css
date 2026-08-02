@@ -326,6 +326,28 @@ div:has(> #dv-stats-pills) {
 #dv-style-selected-panel {
   margin-bottom: 4px !important;
 }
+/* 风格灵感：明示将注入的中文提示词 */
+.dv-prompt-inject {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--bg-deep);
+  border: 1px solid var(--line);
+}
+.dv-prompt-inject-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+.dv-prompt-inject-block {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 4px 0;
+  word-break: break-word;
+}
 
 /* 兼容旧 id（若某处仍注入） */
 #dv-sticky {

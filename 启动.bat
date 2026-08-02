@@ -9,6 +9,17 @@ echo   Davinci Seven  Z-Image
 echo   https://x.com/davinci_seven
 echo ================================================================
 echo.
+REM version from links.yaml (ASCII-safe parse)
+set "DV_VER=?"
+for /f "usebackq tokens=2 delims=: " %%A in (`findstr /i /c:"version:" "app\brand\links.yaml" 2^>nul`) do (
+  set "DV_VER=%%~A"
+  goto :gotver
+)
+:gotver
+set "DV_VER=%DV_VER:"=%"
+echo   UI version: v%DV_VER%
+echo   Pack: %CD%
+echo.
 echo Starting launcher...
 echo.
 where powershell >nul 2>&1

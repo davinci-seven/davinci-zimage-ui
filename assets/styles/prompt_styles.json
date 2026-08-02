@@ -5,21 +5,13 @@
       "name": "霓虹惊悚片",
       "kind": "prompt",
       "cover": "dv_neon_thriller.png",
-      "tags": [
-        "霓虹",
-        "惊悚",
-        "电影"
-      ],
+      "tags": ["霓虹", "惊悚", "电影"],
       "featured": true,
       "category": "达芬七精选",
-      "categories": [
-        "达芬七精选",
-        "电影",
-        "封面"
-      ],
-      "prompt_prefix": "neon noir thriller still, wet asphalt reflections, magenta and cyan rim light, tense atmosphere, cinematic grain, high contrast night city",
-      "prompt_suffix": "movie frame, anamorphic bokeh, dramatic shadows",
-      "tip": "达芬七精选气质 · 本地适配提示词，非云端同款",
+      "categories": ["达芬七精选", "电影", "封面"],
+      "prompt_prefix": "霓虹黑色电影剧照，湿漉漉的柏油路反光，品红与青色轮廓光，紧张氛围，电影颗粒，高对比夜城",
+      "prompt_suffix": "电影画幅，变形镜头虚化，戏剧性阴影",
+      "tip": "达芬七精选 · 本地适配气质，非云端同款",
       "source": {
         "credit": "达芬七",
         "url": "https://x.com/davinci_seven",
@@ -32,20 +24,13 @@
       "name": "月光剪影",
       "kind": "prompt",
       "cover": "dv_moonlight_silhouette.png",
-      "tags": [
-        "月光",
-        "剪影",
-        "安静"
-      ],
+      "tags": ["月光", "剪影", "安静"],
       "featured": true,
       "category": "达芬七精选",
-      "categories": [
-        "达芬七精选",
-        "电影"
-      ],
-      "prompt_prefix": "moonlight silhouette, single figure against pale moon, soft blue night sky, quiet narrative mood, elegant negative space",
-      "prompt_suffix": "film still, gentle haze, minimal color palette",
-      "tip": "安静叙事向 · 适合人物/情绪场景",
+      "categories": ["达芬七精选", "电影"],
+      "prompt_prefix": "月光剪影，单人立于淡月前，柔蓝夜空，安静叙事感，优雅留白",
+      "prompt_suffix": "电影静帧，薄雾，低饱和配色",
+      "tip": "安静叙事 · 人物/情绪场景",
       "source": {
         "credit": "达芬七",
         "url": "https://x.com/davinci_seven",
@@ -58,19 +43,12 @@
       "name": "新艺术彩窗",
       "kind": "prompt",
       "cover": "dv_art_nouveau_glass.png",
-      "tags": [
-        "新艺术",
-        "彩窗",
-        "装饰"
-      ],
+      "tags": ["新艺术", "彩窗", "装饰"],
       "featured": true,
       "category": "达芬七精选",
-      "categories": [
-        "达芬七精选",
-        "插画"
-      ],
-      "prompt_prefix": "art nouveau stained glass, flowing botanical lines, jewel-tone panes, decorative border, elegant illustration",
-      "prompt_suffix": "ornate frames, luminous glass texture",
+      "categories": ["达芬七精选", "插画"],
+      "prompt_prefix": "新艺术运动彩绘玻璃，流动植物曲线，宝石色玻璃块，装饰边框，优雅插画",
+      "prompt_suffix": "华丽边框，透亮玻璃质感",
       "tip": "装饰线与彩窗质感",
       "source": {
         "credit": "达芬七",
@@ -84,19 +62,12 @@
       "name": "裂纹漆金",
       "kind": "prompt",
       "cover": "dv_crackled_gold.png",
-      "tags": [
-        "裂纹",
-        "烫金",
-        "质感"
-      ],
+      "tags": ["裂纹", "烫金", "质感"],
       "featured": true,
       "category": "达芬七精选",
-      "categories": [
-        "达芬七精选",
-        "质感"
-      ],
-      "prompt_prefix": "crackle lacquer and gold leaf texture, aged varnish, luxurious still-life lighting, museum object feel",
-      "prompt_suffix": "macro detail, rich material contrast",
+      "categories": ["达芬七精选", "质感"],
+      "prompt_prefix": "裂纹漆与金箔质感，老化清漆，奢华静物布光，博物馆展品感",
+      "prompt_suffix": "微距细节，材质对比强烈",
       "tip": "静物/人像质感向",
       "source": {
         "credit": "达芬七",
@@ -110,19 +81,12 @@
       "name": "早期网页 UI",
       "kind": "prompt",
       "cover": "dv_early_web_ui.png",
-      "tags": [
-        "复古网页",
-        "像素",
-        "UI"
-      ],
+      "tags": ["复古网页", "像素", "UI"],
       "featured": true,
       "category": "达芬七精选",
-      "categories": [
-        "达芬七精选",
-        "复古"
-      ],
-      "prompt_prefix": "early 2000s web UI aesthetic, chunky pixels, beveled buttons, limited web-safe colors, nostalgic desktop screenshot vibe",
-      "prompt_suffix": "retro interface, low-res charm, not modern flat UI",
+      "categories": ["达芬七精选", "复古"],
+      "prompt_prefix": "千禧年初网页界面审美，大颗粒像素，浮雕按钮，有限网页安全色，怀旧桌面截图感",
+      "prompt_suffix": "复古界面，低分辨率魅力，非现代扁平UI",
       "tip": "复古界面感 · 文字细节勿指望完美",
       "source": {
         "credit": "达芬七",
@@ -136,20 +100,12 @@
       "name": "80 年代赛璐璐",
       "kind": "prompt",
       "cover": "dv_cel_80s.png",
-      "tags": [
-        "80s",
-        "赛璐璐",
-        "动画"
-      ],
+      "tags": ["80s", "赛璐璐", "动画"],
       "featured": true,
       "category": "达芬七精选",
-      "categories": [
-        "达芬七精选",
-        "二次元",
-        "复古"
-      ],
-      "prompt_prefix": "1980s anime cel animation look, hand-painted cels, soft airbrush gradients, vintage film scan, classic OVAs palette",
-      "prompt_suffix": "cel shading, slight dust on scan",
+      "categories": ["达芬七精选", "二次元", "复古"],
+      "prompt_prefix": "八十年代动画赛璐璐感，手绘赛璐璐，柔和喷枪渐变，老胶片扫描，经典OVA色板",
+      "prompt_suffix": "赛璐璐上色，轻微胶片尘点",
       "tip": "怀旧动画气质",
       "source": {
         "credit": "达芬七",
@@ -163,19 +119,12 @@
       "name": "PS1 低多边形",
       "kind": "prompt",
       "cover": "dv_ps1_lowpoly.png",
-      "tags": [
-        "PS1",
-        "low poly",
-        "复古游戏"
-      ],
+      "tags": ["PS1", "low poly", "复古游戏"],
       "featured": true,
       "category": "达芬七精选",
-      "categories": [
-        "达芬七精选",
-        "复古"
-      ],
-      "prompt_prefix": "PS1 era low-poly 3D, affine texture warping, limited palette, crunchy pixels, nostalgic PlayStation 1 game screenshot",
-      "prompt_suffix": "jagged edges, retro 3D, 240p vibe",
+      "categories": ["达芬七精选", "复古"],
+      "prompt_prefix": "PS1时代低多边形3D，仿射贴图扭曲，有限色板，颗粒像素，怀旧PlayStation截图感",
+      "prompt_suffix": "锯齿边缘，复古三维，约240p气质",
       "tip": "低多边形复古 3D",
       "source": {
         "credit": "达芬七",
@@ -189,19 +138,12 @@
       "name": "黏土定格",
       "kind": "prompt",
       "cover": "dv_clay_stopmotion.png",
-      "tags": [
-        "黏土",
-        "定格",
-        "手作"
-      ],
+      "tags": ["黏土", "定格", "手作"],
       "featured": true,
       "category": "达芬七精选",
-      "categories": [
-        "达芬七精选",
-        "插画"
-      ],
-      "prompt_prefix": "clay stop-motion puppet, handmade clay texture, studio softbox, tactile fingerprints in clay, charming miniature set",
-      "prompt_suffix": "stop-motion frame, practical miniature lighting",
+      "categories": ["达芬七精选", "插画"],
+      "prompt_prefix": "黏土定格偶动画，手作黏土纹理，影棚柔光箱，黏土上可见指印，可爱微缩布景",
+      "prompt_suffix": "定格动画单帧，实拍微缩光感",
       "tip": "手作黏土质感",
       "source": {
         "credit": "达芬七",
@@ -215,47 +157,33 @@
       "name": "黑白极简概念",
       "kind": "prompt",
       "cover": "friend_bw_minimal.jpg",
-      "tags": [
-        "极简",
-        "黑白",
-        "封面"
-      ],
+      "tags": ["极简", "黑白", "封面"],
       "featured": true,
       "category": "好友开源",
-      "categories": [
-        "好友开源",
-        "封面"
-      ],
-      "prompt_prefix": "black and white minimal concept cover, bold negative space, abstract geometric metaphor, editorial poster, high contrast monochrome",
-      "prompt_suffix": "clean composition, conceptual art direction",
-      "tip": "本地适配 · 灵感自 Punk-Skill 封面风格，非云端同款",
+      "categories": ["好友开源", "封面"],
+      "prompt_prefix": "黑白极简概念封面，大面积留白，抽象几何隐喻，编辑海报感，高对比单色",
+      "prompt_suffix": "干净构图，概念艺术指导",
+      "tip": "本地适配 · 灵感自开源封面风格，非云端同款",
       "source": {
         "credit": "AdrianPunk · Punk-Skill",
         "url": "https://github.com/adrianpunk/Punk-Skill",
-        "note": "风格方向灵感；Z-Image 本地小尺寸验证重适配",
+        "note": "风格方向灵感；Z-Image 本地重适配",
         "license": "见上游仓库"
       },
-      "commercial": "以 Punk-Skill / 作者说明为准；本包为适配提示词"
+      "commercial": "以上游说明为准；本包为适配提示词"
     },
     {
       "id": "friend_biz_magazine",
       "name": "商业杂志头版",
       "kind": "prompt",
       "cover": "friend_biz_magazine.jpg",
-      "tags": [
-        "杂志",
-        "商业",
-        "封面"
-      ],
+      "tags": ["杂志", "商业", "封面"],
       "featured": true,
       "category": "好友开源",
-      "categories": [
-        "好友开源",
-        "封面"
-      ],
-      "prompt_prefix": "business magazine front cover, premium editorial portrait or object, sharp studio lighting, sophisticated layout feel, tech and startup mood",
-      "prompt_suffix": "glossy print, cover story energy",
-      "tip": "本地适配 · 灵感自 Punk-Skill",
+      "categories": ["好友开源", "封面"],
+      "prompt_prefix": "商业杂志封面，高端编辑肖像或静物，锐利棚拍光，精致版式感，科技创业气质",
+      "prompt_suffix": "铜版纸光泽，封面故事张力",
+      "tip": "本地适配 · 灵感自开源封面风格",
       "source": {
         "credit": "AdrianPunk · Punk-Skill",
         "url": "https://github.com/adrianpunk/Punk-Skill",
@@ -269,20 +197,13 @@
       "name": "方块世界",
       "kind": "prompt",
       "cover": "friend_block_world.jpg",
-      "tags": [
-        "方块",
-        "教程",
-        "系统"
-      ],
+      "tags": ["方块", "教程", "系统"],
       "featured": false,
       "category": "好友开源",
-      "categories": [
-        "好友开源",
-        "封面"
-      ],
-      "prompt_prefix": "isometric block world, toy-like cubes, playful system diagram vibe, clean tutorial cover aesthetic, soft pastel blocks",
-      "prompt_suffix": "friendly tech illustration, modular building metaphor",
-      "tip": "本地适配 · 灵感自 Punk-Skill 方块世界",
+      "categories": ["好友开源", "封面"],
+      "prompt_prefix": "等距方块世界，玩具积木感，活泼系统示意图气质，干净教程封面，柔和粉彩方块",
+      "prompt_suffix": "友好科技插画，模块化搭建隐喻",
+      "tip": "本地适配 · 灵感自开源「方块世界」",
       "source": {
         "credit": "AdrianPunk · Punk-Skill",
         "url": "https://github.com/adrianpunk/Punk-Skill",
@@ -296,21 +217,13 @@
       "name": "复古手撕拼贴",
       "kind": "prompt",
       "cover": "friend_torn_collage.jpg",
-      "tags": [
-        "拼贴",
-        "复古",
-        "街头"
-      ],
+      "tags": ["拼贴", "复古", "街头"],
       "featured": false,
       "category": "好友开源",
-      "categories": [
-        "好友开源",
-        "封面",
-        "复古"
-      ],
-      "prompt_prefix": "retro torn paper collage, ripped magazine edges, halftone dots, street zine energy, mixed media layers",
-      "prompt_suffix": "analog cut-and-paste, vintage print texture",
-      "tip": "本地适配 · 灵感自 Punk-Skill",
+      "categories": ["好友开源", "封面", "复古"],
+      "prompt_prefix": "复古手撕纸拼贴，撕边杂志纸，网点印刷，街头zine能量，混合媒介层叠",
+      "prompt_suffix": "模拟剪贴，老印刷纹理",
+      "tip": "本地适配 · 灵感自开源拼贴向",
       "source": {
         "credit": "AdrianPunk · Punk-Skill",
         "url": "https://github.com/adrianpunk/Punk-Skill",
@@ -324,20 +237,13 @@
       "name": "黑白灰先锋几何",
       "kind": "prompt",
       "cover": "friend_bw_geometry.jpg",
-      "tags": [
-        "几何",
-        "先锋",
-        "封面"
-      ],
+      "tags": ["几何", "先锋", "封面"],
       "featured": false,
       "category": "好友开源",
-      "categories": [
-        "好友开源",
-        "封面"
-      ],
-      "prompt_prefix": "avant-garde black white gray geometry poster, bold shapes, modernist composition, experimental editorial design",
-      "prompt_suffix": "strong contrast, abstract structure",
-      "tip": "本地适配 · 灵感自 Punk-Skill",
+      "categories": ["好友开源", "封面"],
+      "prompt_prefix": "先锋黑白灰几何海报，大胆色块，现代主义构图，实验编辑设计",
+      "prompt_suffix": "强对比，抽象结构",
+      "tip": "本地适配 · 灵感自开源几何封面",
       "source": {
         "credit": "AdrianPunk · Punk-Skill",
         "url": "https://github.com/adrianpunk/Punk-Skill",
@@ -351,20 +257,13 @@
       "name": "黑红剪影",
       "kind": "prompt",
       "cover": "friend_red_silhouette.jpg",
-      "tags": [
-        "剪影",
-        "黑红",
-        "速度感"
-      ],
+      "tags": ["剪影", "黑红", "速度感"],
       "featured": false,
       "category": "好友开源",
-      "categories": [
-        "好友开源",
-        "封面"
-      ],
-      "prompt_prefix": "black and red silhouette cover, sharp cutout figure, kinetic energy, cinematic poster, limited two-color palette",
-      "prompt_suffix": "bold graphic design, high impact",
-      "tip": "本地适配 · 灵感自 Punk-Skill",
+      "categories": ["好友开源", "封面"],
+      "prompt_prefix": "黑红剪影封面，锋利剪影人形，动感能量，电影海报，双色限定",
+      "prompt_suffix": "大胆平面设计，强冲击",
+      "tip": "本地适配 · 灵感自开源剪影封面",
       "source": {
         "credit": "AdrianPunk · Punk-Skill",
         "url": "https://github.com/adrianpunk/Punk-Skill",
@@ -378,20 +277,13 @@
       "name": "研究风极简编辑",
       "kind": "prompt",
       "cover": "friend_research_minimal.jpg",
-      "tags": [
-        "研究",
-        "极简",
-        "AI"
-      ],
+      "tags": ["研究", "极简", "AI"],
       "featured": false,
       "category": "好友开源",
-      "categories": [
-        "好友开源",
-        "封面"
-      ],
-      "prompt_prefix": "minimal research editorial cover, soft paper texture, quiet academic modern layout, restrained palette, knowledge system metaphor",
-      "prompt_suffix": "clean typography feel, thoughtful whitespace",
-      "tip": "本地适配 · 灵感自 Punk-Skill Anthropic Research 向",
+      "categories": ["好友开源", "封面"],
+      "prompt_prefix": "极简研究编辑封面，柔和纸感，安静学术现代版式，克制配色，知识系统隐喻",
+      "prompt_suffix": "干净排版感，理性留白",
+      "tip": "本地适配 · 灵感自研究风封面",
       "source": {
         "credit": "AdrianPunk · Punk-Skill",
         "url": "https://github.com/adrianpunk/Punk-Skill",
@@ -402,27 +294,20 @@
     },
     {
       "id": "friend_formula_craft",
-      "name": "配方工作室 工艺感",
+      "name": "配方感工艺板",
       "kind": "prompt",
       "cover": "friend_formula_craft.jpg",
-      "tags": [
-        "配方",
-        "工艺",
-        "系统"
-      ],
+      "tags": ["配方", "工艺", "系统"],
       "featured": false,
       "category": "好友开源",
-      "categories": [
-        "好友开源",
-        "封面"
-      ],
-      "prompt_prefix": "crafted visual formula board, annotated process steps as abstract diagrams, maker bench lighting, systematic creative workflow mood",
-      "prompt_suffix": "clear modules, thoughtful craft aesthetic",
-      "tip": "本地适配 · 灵感自开源配方/长文作者生态，非原文复制",
+      "categories": ["好友开源", "封面"],
+      "prompt_prefix": "手作配方板视觉，抽象流程步骤图，工匠工作台布光，系统化创作工作流气质",
+      "prompt_suffix": "模块清晰，手作工艺审美",
+      "tip": "本地适配 · 灵感自开源配方作者生态，非原文复制",
       "source": {
         "credit": "Formulasearch 等开源配方作者",
         "url": "https://x.com/Formulasearch/articles",
-        "note": "配方与风格叙述灵感；本包为本地提示词重写",
+        "note": "配方与风格叙述灵感；本包为本地中文提示词重写",
         "license": "以原作者页面为准"
       },
       "commercial": "以原作者说明为准"
@@ -432,24 +317,17 @@
       "name": "开源暖调桌面",
       "kind": "prompt",
       "cover": "friend_open_source_warm.jpg",
-      "tags": [
-        "开源",
-        "桌面",
-        "协作"
-      ],
+      "tags": ["开源", "桌面", "协作"],
       "featured": false,
       "category": "好友开源",
-      "categories": [
-        "好友开源",
-        "封面"
-      ],
-      "prompt_prefix": "warm open-source creator desk, soft window light, laptop and sticky notes, collaborative indie hacker mood, honest documentary photo style",
-      "prompt_suffix": "lived-in workspace, friendly community energy",
-      "tip": "好友墙占位气质 · 欢迎更多开源作者投稿署名风格",
+      "categories": ["好友开源", "封面"],
+      "prompt_prefix": "温暖开源创作者桌面，柔和窗光，笔记本与便签，独立开发者纪录片摄影感，真实生活痕迹",
+      "prompt_suffix": "有人气的工作台，友好社区能量",
+      "tip": "好友墙气质 · 欢迎更多开源作者共建署名风格",
       "source": {
         "credit": "开源社区好友墙",
         "url": "https://x.com/davinci_seven",
-        "note": "达芬七整理的开源友好向预设，欢迎共建",
+        "note": "达芬七整理的开源友好向预设",
         "license": "本包预设"
       },
       "commercial": "本包预设"

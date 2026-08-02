@@ -6,5 +6,5 @@ x_url: "https://x.com/davinci_seven"
 x_handle: "@davinci_seven"
 website: ""
 # 每次可见改动 +1 末位，方便确认是否加载到新 UI
-# 1.4.5-dev.5 = 提示词风格上移到灵感区；与 LoRA 双轨可同开
-version: "1.4.5-dev.5"
+# 1.4.5-dev.6 = 改名「风格灵感」；中文提示词明示；启动显示版本
+version: "1.4.5-dev.6"

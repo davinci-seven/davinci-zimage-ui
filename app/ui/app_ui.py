@@ -223,22 +223,27 @@ def style_preview_html(label: str) -> str:
     )
     tags = " · ".join(style.tags[:3])
     if style.is_prompt():
-        badge = " · 提示词风格"
-        head = (style.prompt_prefix or "")[:90]
+        badge = " · 风格灵感"
+        pre = (style.prompt_prefix or "").strip()
+        suf = (style.prompt_suffix or "").strip()
+        pre_esc = html_lib.escape(pre) if pre else "（无）"
+        suf_esc = html_lib.escape(suf) if suf else "（无）"
         detail = (
-            f"注入：{html_lib.escape(head + ('…' if len(style.prompt_prefix or '') > 90 else ''))}"
-            if head
-            else "注入：（空前缀）"
+            f'<div class="dv-prompt-inject">'
+            f'<div class="dv-prompt-inject-label">出图时会拼进提示词（中文）</div>'
+            f'<div class="dv-prompt-inject-block"><b>前缀</b>：{pre_esc}</div>'
+            f'<div class="dv-prompt-inject-block"><b>后缀</b>：{suf_esc}</div>'
+            f'<div class="dv-help" style="margin-top:6px">不加载 LoRA · 几乎不额外占显存</div>'
+            f"</div>"
         )
-        detail += " · 不加载 LoRA"
     else:
-        badge = " · NSFW" if style.nsfw else " · LoRA"
+        badge = " · NSFW" if style.nsfw else " · LoRA 模型"
         trig = (
             html_lib.escape(style.trigger[:90] + ("…" if len(style.trigger) > 90 else ""))
             if style.trigger
             else "（无额外触发词，靠 LoRA 权重）"
         )
-        detail = f"触发词：{trig}"
+        detail = f"<p>触发词：{trig}</p>"
     url = style.source_url() or style.civitai_url
     credit = style.source_credit()
     if url:
@@ -256,7 +261,7 @@ def style_preview_html(label: str) -> str:
         f"<div><strong>{html_lib.escape(style.name)}</strong>{badge}{star}</div>"
         f"<span>{html_lib.escape(' / '.join(style.cats()))} · {html_lib.escape(tags)}</span>"
         f"<p>{html_lib.escape(style.tip or '')}</p>"
-        f"<p>{detail}</p>"
+        f"{detail}"
         f"<p>出处：{link} · {html_lib.escape(style.commercial)}</p>"
         f"</div></div>"
     )
@@ -282,7 +287,7 @@ def gallery_html(
             continue
         src = _thumb_uri(s.cover_path)
         if s.is_prompt():
-            badge = '<span class="dv-badge">提示词</span>'
+            badge = '<span class="dv-badge">风格灵感</span>'
         elif s.nsfw:
             badge = '<span class="dv-badge nsfw">NSFW</span>'
         elif s.featured:
@@ -602,10 +607,11 @@ def build_demo() -> gr.Blocks:
                             elem_classes=["dv-style-block"],
                         ):
                             gr.HTML(
-                                '<div class="dv-group-label">提示词风格 · 纯文本引导</div>'
+                                '<div class="dv-group-label">风格灵感 · 纯文本引导</div>'
                                 '<p class="dv-help" style="margin:0 0 8px">'
-                                "和「灵感预设」同类：只改提示词话术，<b>不加载模型、几乎不占显存</b>。"
-                                "可与下方 LoRA <b>同时开启</b>。点「无风格」清除本项。</p>"
+                                "和「灵感预设」同类：注入<strong>中文</strong>风格话术，"
+                                "<b>不加载模型、几乎不占显存</b>。选中后会显示「将拼进提示词的前缀/后缀」。"
+                                "可与下方 LoRA <b>同时开启</b>。</p>"
                             )
                             with gr.Row():
                                 prompt_style_preview = gr.HTML(
@@ -613,7 +619,7 @@ def build_demo() -> gr.Blocks:
                                     elem_id="dv-prompt-style-preview",
                                 )
                                 prompt_style_clear = gr.Button(
-                                    "清除提示词风格",
+                                    "清除风格灵感",
                                     variant="secondary",
                                     scale=0,
                                     min_width=120,
@@ -627,7 +633,7 @@ def build_demo() -> gr.Blocks:
                             )
                             style_cards_prompt = gr.Gallery(
                                 value=prompt_card_items,
-                                label="提示词风格 · 点选（可与 LoRA 同开）",
+                                label="风格灵感 · 点选（可与 LoRA 同开）",
                                 columns=6,
                                 rows=2,
                                 height=200,
@@ -641,19 +647,19 @@ def build_demo() -> gr.Blocks:
                                 style_save_name = gr.Textbox(
                                     value="",
                                     label="另存名称",
-                                    placeholder="我的提示词风格名",
+                                    placeholder="我的风格灵感名",
                                     max_lines=1,
                                     scale=2,
                                     elem_id="dv-style-save-name",
                                 )
                                 style_save_btn = gr.Button(
-                                    "把当前提示词存为风格",
+                                    "把当前提示词存为灵感",
                                     variant="secondary",
                                     scale=2,
                                     elem_id="dv-style-save",
                                 )
                                 style_del_btn = gr.Button(
-                                    "删除用户风格",
+                                    "删除用户灵感",
                                     variant="secondary",
                                     scale=1,
                                     elem_id="dv-style-del",
@@ -669,7 +675,7 @@ def build_demo() -> gr.Blocks:
                             gr.HTML(
                                 '<div class="dv-group-label">LoRA · 模型风格</div>'
                                 '<p class="dv-help" style="margin:0 0 8px">'
-                                "加载风格模型文件，<b>会占显存</b>。与上方提示词风格分开选，可叠加。"
+                                "加载风格模型文件，<b>会占显存</b>。与上方「风格灵感」分开选，可叠加。"
                                 "8G 建议只挂 1 个 LoRA。</p>"
                             )
                             with gr.Row():
@@ -1262,7 +1268,7 @@ def build_demo() -> gr.Blocks:
                     st = resolve_style_name(lab)
                     if not st:
                         return (
-                            '<div class="dv-status err">请先选择要删除的用户提示词风格</div>',
+                            '<div class="dv-status err">请先选择要删除的用户风格灵感</div>',
                             gr.skip(),
                             gr.skip(),
                             gr.skip(),
@@ -1341,7 +1347,7 @@ def build_demo() -> gr.Blocks:
                         "（无）",
                         gr.update(value="（无）"),
                         style_preview_html("（无）"),
-                        '<div class="dv-status">已清除提示词风格</div>',
+                        '<div class="dv-status">已清除风格灵感</div>',
                     ),
                     outputs=[
                         prompt_style_state,
@@ -1592,7 +1598,7 @@ def build_demo() -> gr.Blocks:
                     if st:
                         applied.append(f"LoRA:{st.name}")
                     if pst:
-                        applied.append(f"提示词:{pst.name}")
+                        applied.append(f"灵感:{pst.name}")
                     extra = (
                         (" · " + " + ".join(applied)) if applied else " · 无加料"
                     )
@@ -1858,13 +1864,13 @@ def build_demo() -> gr.Blocks:
                     outputs=gal_lora,
                 )
 
-            # ========== 提示词风格（浏览）==========
-            with gr.Tab("提示词风格"):
+            # ========== 风格灵感（浏览）==========
+            with gr.Tab("风格灵感"):
                 gr.HTML(
-                    '<div class="dv-section-head"><span class="eyebrow">PROMPT STYLE</span>'
-                    "<h2>提示词风格 · 纯文本引导</h2>"
-                    "<p><b>性质：</b>不加载任何 LoRA，只把风格话术拼进提示词，几乎不额外占显存。"
-                    "含达芬七精选与开源好友墙（均注明出处）。"
+                    '<div class="dv-section-head"><span class="eyebrow">STYLE INSPO</span>'
+                    "<h2>风格灵感 · 纯文本引导</h2>"
+                    "<p><b>性质：</b>不加载任何 LoRA，只把中文风格话术拼进提示词，几乎不额外占显存。"
+                    "页面会明示「将注入的前缀/后缀」。含达芬七精选与开源好友墙（均注明出处）。"
                     "在「文生图」里点卡选用；本页浏览说明与来源。</p></div>"
                 )
                 cat_prompt_browse = gr.Dropdown(
