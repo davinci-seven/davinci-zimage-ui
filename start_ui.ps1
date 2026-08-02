@@ -142,72 +142,78 @@ Say "[0/3] 检查端口 / checking ports..."
 $uiPid = Get-ListenPid $GradioPort
 $comfyPid = Get-ListenPid $ComfyPort
 
+# 说明：关浏览器 ≠ 关后台。引擎 Comfy 用隐藏 python 跑在 7777，
+# 只关网页 / 点窗口 X 时，若脚本没跑完清理，7777 会一直占着。
+function Stop-PortOwners {
+  param([int]$Ui, [int]$Comfy)
+  if ($Ui) {
+    try { Stop-Process -Id $Ui -Force -ErrorAction SilentlyContinue } catch {}
+  }
+  if ($Comfy) {
+    try { Stop-Process -Id $Comfy -Force -ErrorAction SilentlyContinue } catch {}
+  }
+  Start-Sleep -Seconds 2
+}
+
 if ($uiPid -or $comfyPid) {
   SayBlank
-  Say "  ------------------------------------------------"
-  Say "  端口已被占用 / Ports already in use:"
-  Say "  ------------------------------------------------"
-  if ($uiPid) { Show-Port $GradioPort $uiPid }
-  if ($comfyPid) { Show-Port $ComfyPort $comfyPid }
-  SayBlank
-  Say "  请选择 / Choose one:"
-  SayBlank
-  Say "  [K] 结束占用进程并重新启动"
-  Say "      Kill those processes and start fresh"
-  SayBlank
-  Say "  [R] 复用已在运行的引擎（仅当界面端口空闲）"
-  Say "      Reuse running engine (only if UI port is free)"
-  SayBlank
-  Say "  [Q] 退出，自己去关掉"
-  Say "      Quit and close them yourself"
-  SayBlank
-
-  $choice = Read-Host "请输入 K / R / Q  —  Type K / R / Q"
-  $choice = ($choice | ForEach-Object { $_.Trim().ToUpperInvariant() })
-
-  if ($choice -eq "Q") {
-    Say "已取消 / Cancelled. Nothing was closed."
+  # 最常见：只剩引擎（界面已关）→ 自动复用，不再打断用户
+  if ((-not $uiPid) -and $comfyPid) {
+    Say "  [提示] 检测到引擎还在后台（端口 $ComfyPort / PID $comfyPid）。"
+    Say "  关浏览器或关窗口不会关掉引擎——这是正常现象，不是假关失败。"
+    Say "  将自动复用该引擎，直接开新界面（更快）。"
+    Say "  若要彻底重开引擎，请下次启动时选 K，或先结束 PID $comfyPid。"
     SayBlank
-    Read-Host "按回车退出 / Press Enter to exit"
-    exit 0
+    Say "[1/3] 复用引擎 / reusing engine on $ComfyPort"
+    $Reused = $true
   }
+  # 界面还占着，引擎可能也在 → 问用户
+  elseif ($uiPid) {
+    Say "  ------------------------------------------------"
+    Say "  端口已被占用（上次可能没关干净）"
+    Say "  ------------------------------------------------"
+    if ($uiPid) { Show-Port $GradioPort $uiPid }
+    if ($comfyPid) { Show-Port $ComfyPort $comfyPid }
+    SayBlank
+    Say "  说明：关浏览器 ≠ 关后台。引擎是隐藏的 python 进程。"
+    SayBlank
+    Say "  [K] 全部杀掉并重新启动（推荐，改代码后必选）"
+    Say "  [R] 只复用引擎（界面端口必须空闲；当前界面仍占用时不可用）"
+    Say "  [Q] 退出"
+    SayBlank
 
-  if ($choice -eq "R") {
-    if ($uiPid) {
-      Say "[错误 ERROR] 界面端口 $GradioPort 仍被占用，无法复用。"
-      Say "UI port busy — cannot reuse. Close it or choose K."
-      SayBlank
+    $choice = Read-Host "请输入 K / R / Q（直接回车 = K）"
+    $choice = ($choice | ForEach-Object { $_.Trim().ToUpperInvariant() })
+    if (-not $choice) { $choice = "K" }
+
+    if ($choice -eq "Q") {
+      Say "已取消。"
       Read-Host "按回车退出 / Press Enter to exit"
-      exit 1
+      exit 0
     }
-    if ($comfyPid) {
+
+    if ($choice -eq "R") {
+      if ($uiPid) {
+        Say "[错误] 界面端口 $GradioPort 仍被占用，无法只复用引擎。请选 K。"
+        Read-Host "按回车退出 / Press Enter to exit"
+        exit 1
+      }
       Say "[1/3] 复用引擎 / reusing engine on $ComfyPort"
       $Reused = $true
+    } else {
+      Say "[0/3] 正在结束占用进程..."
+      Stop-PortOwners -Ui $uiPid -Comfy $comfyPid
+      $uiStillBusy = Get-ListenPid $GradioPort
+      $comfyStillBusy = Get-ListenPid $ComfyPort
+      if ($uiStillBusy -or $comfyStillBusy) {
+        Say "[错误] 无法结束占用进程。请打开任务管理器结束 python，或重启电脑。"
+        if ($uiStillBusy) { Show-Port $GradioPort $uiStillBusy }
+        if ($comfyStillBusy) { Show-Port $ComfyPort $comfyStillBusy }
+        Read-Host "按回车退出 / Press Enter to exit"
+        exit 1
+      }
+      $Reused = $false
     }
-  } else {
-    # default K
-    Say "[0/3] 正在结束占用进程 / closing them..."
-    if ($uiPid) {
-      try { Stop-Process -Id $uiPid -Force -ErrorAction SilentlyContinue } catch {}
-    }
-    if ($comfyPid) {
-      try { Stop-Process -Id $comfyPid -Force -ErrorAction SilentlyContinue } catch {}
-    }
-    Start-Sleep -Seconds 2
-    $uiStillBusy = Get-ListenPid $GradioPort
-    $comfyStillBusy = Get-ListenPid $ComfyPort
-    if ($uiStillBusy -or $comfyStillBusy) {
-      SayBlank
-      Say "[错误 ERROR] 无法结束占用端口的进程，可能属于另一个Windows用户。"
-      Say "Could not stop the port owner. It may belong to another Windows user."
-      if ($uiStillBusy) { Show-Port $GradioPort $uiStillBusy }
-      if ($comfyStillBusy) { Show-Port $ComfyPort $comfyStillBusy }
-      Say "请以管理员身份打开任务管理器结束该PID，或者重启电脑后再启动本包。"
-      Say "Use Task Manager as administrator to end that PID, or restart Windows."
-      Read-Host "按回车退出 / Press Enter to exit"
-      exit 1
-    }
-    $Reused = $false
   }
 }
 
@@ -265,17 +271,32 @@ if ($env:DAVINCI_NO_BROWSER -ne "1") {
 }
 
 $uiArgs = @($UiMain, "--server_port", "$GradioPort", "--server_name", "127.0.0.1")
-& $PythonExe @uiArgs
-$ec = $LASTEXITCODE
-
-SayBlank
-Say "界面已关闭 / UI closed."
-
-if (-not $Reused) {
-  Say "正在清理引擎 / cleaning Comfy on $ComfyPort ..."
-  $left = Get-ListenPid $ComfyPort
-  if ($left) {
-    try { Stop-Process -Id $left -Force -ErrorAction SilentlyContinue } catch {}
+$ec = 0
+try {
+  & $PythonExe @uiArgs
+  $ec = $LASTEXITCODE
+} finally {
+  SayBlank
+  Say "界面已关闭 / UI closed."
+  # 本会话自己拉起的引擎：尽量收掉。若启动时选了复用(R/自动复用)，默认保留引擎，
+  # 方便下次秒开；若要连引擎一起关，设环境变量 DAVINCI_KILL_ENGINE_ON_EXIT=1
+  $killEngine = ($env:DAVINCI_KILL_ENGINE_ON_EXIT -eq "1") -or (-not $Reused)
+  if ($killEngine) {
+    Say "正在清理引擎 / cleaning Comfy on $ComfyPort ..."
+    $left = Get-ListenPid $ComfyPort
+    if ($left) {
+      try { Stop-Process -Id $left -Force -ErrorAction SilentlyContinue } catch {}
+    }
+    Start-Sleep -Seconds 1
+    $still = Get-ListenPid $ComfyPort
+    if ($still) {
+      Say "  [提示] 引擎可能仍在 PID $still（关黑窗口 X 时有时杀不干净）。"
+      Say "  下次启动会自动处理，或任务管理器结束 python。"
+    } else {
+      Say "  引擎已结束。"
+    }
+  } else {
+    Say "  已保留后台引擎（复用模式）。关浏览器不会关引擎，下次启动会直接复用。"
   }
 }
 

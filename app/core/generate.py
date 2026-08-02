@@ -315,6 +315,8 @@ def txt2img(
     custom_size: bool = False,
     custom_width: Optional[int] = None,
     custom_height: Optional[int] = None,
+    prompt_style: Optional[Style] = None,
+    prompt_style_label: str = "（无）",
 ) -> Path:
     defaults = load_defaults()
     mode = get_model_mode(model_mode_label)
@@ -335,24 +337,40 @@ def txt2img(
     ):
         q = {**q, "long_edge": 1024}
 
-    # 单槽：提示词风格 vs LoRA 风格互斥（提示词不挂 safetensors）
-    prompt_style: Optional[Style] = None
+    # 双轨可同时开：
+    # - prompt_style / style2(若是 prompt)：只改提示词
+    # - style1：仅 LoRA（若误传 prompt 则当 prompt 用）
     loras: list[tuple[Style, float]] = []
+    ps: Optional[Style] = prompt_style
+    if ps is None and style2 and style2.is_prompt():
+        ps = style2
     if style1:
         if style1.is_prompt():
-            prompt_style = style1
-            print(
-                f"[style] prompt-style id={style1.id!r} name={style1.name!r} "
-                f"credit={style1.source_credit()!r}",
-                flush=True,
-            )
+            # 兼容旧单槽：style1 若是提示词风格
+            if ps is None:
+                ps = style1
+            else:
+                print(
+                    f"[style] ignore extra prompt on style1={style1.name!r}",
+                    flush=True,
+                )
         else:
             loras.append((style1, float(weight1)))
-    if style2 and style1 and style2.id != style1.id:
+    if style2 and style2.is_lora() and (not style1 or style2.id != style1.id):
+        # 第二 LoRA 暂不启用（8G 稳优先）
         print(
-            f"[lora] ignore style2={style2.name!r} (single-style mode)",
+            f"[lora] ignore style2 lora={style2.name!r} (single-lora mode)",
             flush=True,
         )
+    if ps and not ps.is_prompt():
+        ps = None
+    if ps:
+        print(
+            f"[style] prompt-style id={ps.id!r} name={ps.name!r} "
+            f"credit={ps.source_credit()!r}",
+            flush=True,
+        )
+    prompt_style = ps
 
     # GGUF 也可挂 LoRA（用户实测可行）；路径用标准注入即可
     wf_name = mode.get("workflow") or "txt2img.json"
@@ -425,24 +443,34 @@ def txt2img(
                     model_mode=model_mode_label,
                     quality=q_label,
                     aspect=aspect_label,
-                    style1=style1.name if style1 else (style1_label or "（无风格）"),
+                    style1=(
+                        loras[0][0].name
+                        if loras
+                        else (style1_label if style1_label and not str(style1_label).startswith("（无") else "（无风格）")
+                    ),
                     weight1=weight1_label or _weight_label_from_value(weight1),
-                    style2=style2.name if style2 else (style2_label or "（无风格）"),
-                    weight2=weight2_label or _weight_label_from_value(weight2),
+                    # style2 槽位记录「提示词风格」名称，便于图库展示
+                    style2=(
+                        prompt_style.name
+                        if prompt_style
+                        else (
+                            prompt_style_label
+                            if prompt_style_label and not str(prompt_style_label).startswith("（无")
+                            else "（无）"
+                        )
+                    ),
+                    weight2="—",
                     seed=int(seed),
                     extra={
                         "width": width,
                         "height": height,
                         "custom_size": bool(custom_size),
-                        "style_kind": (
-                            "prompt"
+                        "lora_id": loras[0][0].id if loras else "",
+                        "prompt_style_id": prompt_style.id if prompt_style else "",
+                        "prompt_style": (
+                            prompt_style.name
                             if prompt_style
-                            else ("lora" if loras else "none")
-                        ),
-                        "style_id": (
-                            prompt_style.id
-                            if prompt_style
-                            else (loras[0][0].id if loras else "")
+                            else (prompt_style_label or "")
                         ),
                     },
                 ),
