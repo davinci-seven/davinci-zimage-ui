@@ -24,6 +24,7 @@ PACK_OUTPUT = USERDATA / "exports"  # Gradio 可访问的导出副本
 SETTINGS_USER = USERDATA / "settings.yaml"
 USER_STYLES_FILE = USERDATA / "styles_user.json"
 STYLE_FAVORITES_FILE = USERDATA / "style_favorites.json"
+HIDDEN_STYLES_FILE = USERDATA / "hidden_styles.json"
 USER_COVERS_DIR = USERDATA / "covers"
 
 

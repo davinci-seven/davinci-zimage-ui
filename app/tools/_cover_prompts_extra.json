@@ -10,5 +10,7 @@
   "watercolor": "VarcoterolV7 art style, watercolor painting of a quiet lakeside landscape, soft pigments, paper texture",
   "midjz": "cinematic portrait of an East Asian woman, beautiful lighting, midjourney aesthetic, half body",
   "retro90": "retro_scifi_90s, retro_artstyle, 90s anime girl half body, cyberpunk neon, cel shading nostalgia",
-  "nudeart": "fine art nude photography portrait, elegant pose, soft Rembrandt lighting, tasteful composition, museum aesthetic, beautiful skin, half body, no vulgarity"
+  "nudeart": "fine art figure study, back view of a seated woman facing away from camera, smooth back and shoulder line, soft Rembrandt side light, deep shadow, warm grey studio backdrop, sculptural and restrained, museum photography. back turned, no frontal nudity, no breasts visible, no nipples, no genitals, tasteful, artistic",
+  "oiled": "beauty close-up of a shoulder and collarbone with luminous oiled skin, water droplets and glossy sheen, strong rim light, dark background, cropped above the chest, macro skin texture study, editorial beauty photography. shoulder and neck only, no chest, no breasts, no nipples, tasteful, artistic",
+  "_note_nudeart": "nudeart 封面须不挂 LoRA 生成，否则 LoRA 会把画面拉回正面全裸"
 }

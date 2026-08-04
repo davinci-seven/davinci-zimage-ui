@@ -54,6 +54,7 @@ from core.inspirations import (
     update_user_inspiration,
 )
 from core.styles import (
+    delete_user_style,
     is_favorite,
     list_favorite_ids,
     list_lora_file_choices,
@@ -63,6 +64,7 @@ from core.styles import (
     style_categories,
     style_choices,
     toggle_favorite,
+    toggle_hidden,
 )
 from core.system_stats import (
     format_stats_html,
@@ -351,6 +353,7 @@ def _style_gallery_data(
     category: str = "全部",
     kind_filter: str = "全部",
     favorites_only: bool = False,
+    include_hidden: bool = False,
 ):
     """Return gallery items [(path, caption), ...] and parallel choice labels.
 
@@ -372,7 +375,7 @@ def _style_gallery_data(
     elif kf == "提示词":
         kind_arg = "prompt"
 
-    for s in load_styles(kind=kind_arg):
+    for s in load_styles(kind=kind_arg, include_hidden=include_hidden):
         if s.nsfw and not show_nsfw:
             continue
         if (kf == "收藏" or favorites_only or category == "收藏") and s.id not in fav_ids:
@@ -539,12 +542,15 @@ def build_demo() -> gr.Blocks:
                         )
                         inspo_state = gr.State("（无）")
 
-                        # —— 提示词灵感 ——
-                        with gr.Column(
+                        # —— 提示词灵感 ——（可折叠，收起后直接看到下面的 LoRA）
+                        with gr.Accordion(
+                            "提示词灵感（点开挑图卡 · 收起可直达 LoRA）",
+                            open=True,
+                            elem_id="dv-inspo-acc",
+                        ), gr.Column(
                             elem_id="dv-inspo-block", elem_classes=["dv-style-block"]
                         ):
                             gr.HTML(
-                                '<div class="dv-group-label">提示词灵感</div>'
                                 '<p class="dv-help" style="margin:0 0 8px">'
                                 "点选图卡 → 提示词写入<strong>上方输入框</strong>（全文不重复显示）。"
                                 "可分类、收藏、自建/编辑。与下方 LoRA 可同开。</p>"
@@ -640,12 +646,15 @@ def build_demo() -> gr.Blocks:
                                     )
                             inspo_status = gr.HTML("", elem_id="dv-inspo-status")
 
-                        # —— LoRA：模型风格 ——
-                        with gr.Column(
+                        # —— LoRA：模型风格 ——（同样可折叠）
+                        with gr.Accordion(
+                            "LoRA · 模型风格（会占显存）",
+                            open=True,
+                            elem_id="dv-lora-acc",
+                        ), gr.Column(
                             elem_id="dv-lora-block", elem_classes=["dv-style-block"]
                         ):
                             gr.HTML(
-                                '<div class="dv-group-label">LoRA · 模型风格</div>'
                                 '<p class="dv-help" style="margin:0 0 8px">'
                                 "加载风格模型文件，<b>会占显存</b>。"
                                 "与上方提示词灵感分开选，可叠加。8G 建议只挂 1 个。</p>"
@@ -1351,6 +1360,7 @@ def build_demo() -> gr.Blocks:
                         cat_f or "全部",
                         "LoRA",
                         favorites_only=bool(only_fav),
+                        include_hidden=bool(show_hidden),
                     )
                     return (
                         f'<div class="dv-status ok">{html_lib.escape(msg)}</div>',
@@ -2004,6 +2014,7 @@ def build_demo() -> gr.Blocks:
                     )
                     br_lora_nsfw = gr.Checkbox(value=False, label="成人向")
                     br_lora_only_fav = gr.Checkbox(value=False, label="只看收藏")
+                    lora_show_hidden = gr.Checkbox(value=False, label="显示已隐藏")
                 br_lora_preview = gr.HTML(
                     style_preview_html("（无风格）"), elem_id="dv-br-lora-preview"
                 )
@@ -2012,7 +2023,7 @@ def build_demo() -> gr.Blocks:
                     br_lora_status = gr.HTML("")
                 br_lora_gal = gr.Gallery(
                     value=_style_gallery_data(False, "全部", "LoRA")[0],
-                    label="LoRA 图库 · 点选后可收藏",
+                    label="LoRA 图库 · 点选后可收藏 / 编辑 / 隐藏",
                     columns=6,
                     rows=3,
                     height=360,
@@ -2022,22 +2033,25 @@ def build_demo() -> gr.Blocks:
                     elem_id="dv-br-lora-gal",
                 )
 
-                def _br_lora_refresh(cat_f, nsfw_f, only_fav):
+                def _br_lora_refresh(cat_f, nsfw_f, only_fav, show_hidden=False):
                     items, _ = _style_gallery_data(
                         bool(nsfw_f),
                         cat_f or "全部",
                         "LoRA",
                         favorites_only=bool(only_fav),
+                        include_hidden=bool(show_hidden),
                     )
                     return gr.update(value=items)
 
-                def _br_lora_pick(evt: gr.SelectData, cat_f, nsfw_f, only_fav):
+                def _br_lora_pick(evt: gr.SelectData, cat_f, nsfw_f, only_fav, show_hidden=False):
                     idx = _gallery_idx(evt)
+                    # 这份 labels 必须和画廊当前渲染的是同一份，否则点 A 选中 B
                     _, labels = _style_gallery_data(
                         bool(nsfw_f),
                         cat_f or "全部",
                         "LoRA",
                         favorites_only=bool(only_fav),
+                        include_hidden=bool(show_hidden),
                     )
                     empty = "（无风格）"
                     if idx < 0 or idx >= len(labels):
@@ -2045,7 +2059,7 @@ def build_demo() -> gr.Blocks:
                     chosen = labels[idx]
                     return chosen, style_preview_html(chosen)
 
-                def _br_lora_fav(lab, cat_f, nsfw_f, only_fav):
+                def _br_lora_fav(lab, cat_f, nsfw_f, only_fav, show_hidden=False):
                     st = resolve_style_name(lab)
                     if not st:
                         return (
@@ -2059,6 +2073,7 @@ def build_demo() -> gr.Blocks:
                         cat_f or "全部",
                         "LoRA",
                         favorites_only=bool(only_fav),
+                        include_hidden=bool(show_hidden),
                     )
                     return (
                         f'<div class="dv-status ok">{html_lib.escape(msg)}</div>',
@@ -2066,21 +2081,132 @@ def build_demo() -> gr.Blocks:
                         gr.update(value=items),
                     )
 
-                for w in (br_lora_cat, br_lora_nsfw, br_lora_only_fav):
+                for w in (br_lora_cat, br_lora_nsfw, br_lora_only_fav, lora_show_hidden):
                     w.change(
                         fn=_br_lora_refresh,
-                        inputs=[br_lora_cat, br_lora_nsfw, br_lora_only_fav],
+                        inputs=[br_lora_cat, br_lora_nsfw, br_lora_only_fav, lora_show_hidden],
                         outputs=br_lora_gal,
                     )
                 br_lora_gal.select(
                     fn=_br_lora_pick,
-                    inputs=[br_lora_cat, br_lora_nsfw, br_lora_only_fav],
+                    inputs=[br_lora_cat, br_lora_nsfw, br_lora_only_fav, lora_show_hidden],
                     outputs=[br_lora_state, br_lora_preview],
                 )
                 br_lora_fav_btn.click(
                     fn=_br_lora_fav,
-                    inputs=[br_lora_state, br_lora_cat, br_lora_nsfw, br_lora_only_fav],
+                    inputs=[br_lora_state, br_lora_cat, br_lora_nsfw, br_lora_only_fav, lora_show_hidden],
                     outputs=[br_lora_status, br_lora_preview, br_lora_gal],
+                )
+
+                # —— 自建 / 编辑 LoRA（和「提示词灵感」那边同一套操作）——
+                with gr.Accordion("自建 / 编辑 LoRA", open=False):
+                    gr.HTML(
+                        '<p class="dv-help">把 <code>models/loras</code> 里的文件登记成风格卡。'
+                        "内置风格不能改也不能删，但可以<strong>隐藏</strong>，隐藏后不出现在出图页的列表里。</p>"
+                    )
+                    with gr.Row():
+                        lora_edit_name = gr.Textbox(
+                            label="风格名称", placeholder="例如：胶片人像", max_lines=1
+                        )
+                        lora_edit_file = gr.Dropdown(
+                            choices=list_lora_file_choices(),
+                            label="LoRA 文件",
+                            allow_custom_value=True,
+                        )
+                    with gr.Row():
+                        lora_edit_trigger = gr.Textbox(
+                            label="触发词（可空）",
+                            placeholder="出图时自动加到提示词最前面",
+                            max_lines=1,
+                        )
+                        lora_edit_weight = gr.Slider(
+                            0.1, 1.5, value=0.85, step=0.05, label="默认强度"
+                        )
+                        lora_edit_cat = gr.Textbox(label="分类", value="我的", max_lines=1)
+                    lora_edit_cover = gr.Image(
+                        label="封面（可选，不传就用默认卡）",
+                        type="filepath",
+                        height=120,
+                        sources=["upload"],
+                    )
+                    lora_edit_id = gr.State("")
+                    with gr.Row():
+                        lora_save_btn = gr.Button("保存到「我的」", variant="primary")
+                        lora_del_btn = gr.Button("删除（仅我的）", variant="secondary")
+                        lora_hide_btn = gr.Button("隐藏 / 取消隐藏", variant="secondary")
+
+                def _lora_gallery(cat_f, nsfw_f, only_fav, show_hidden=False):
+                    return _style_gallery_data(
+                        bool(nsfw_f),
+                        cat_f or "全部",
+                        "LoRA",
+                        favorites_only=bool(only_fav),
+                        include_hidden=bool(show_hidden),
+                    )
+
+                def _lora_save(name, lora_file, trig, weight, cat, cover, sid,
+                               cat_f, nsfw_f, only_fav, show_hidden):
+                    ok, msg, st = save_user_lora_style(
+                        name=name or "",
+                        lora_file=lora_file or "",
+                        trigger=trig or "",
+                        default_weight=float(weight or 0.85),
+                        category=cat or "我的",
+                        cover_path=cover,
+                        style_id=sid or "",
+                    )
+                    items, _ = _lora_gallery(cat_f, nsfw_f, only_fav, show_hidden)
+                    cls = "ok" if ok else "err"
+                    return (
+                        f'<div class="dv-status {cls}">{html_lib.escape(msg)}</div>',
+                        gr.update(value=items),
+                        (st.id if (ok and st) else (sid or "")),
+                    )
+
+                def _lora_delete(lab, cat_f, nsfw_f, only_fav, show_hidden):
+                    st = resolve_style_name(lab)
+                    if not st:
+                        return ('<div class="dv-status err">请先在下面点选一个风格</div>',
+                                gr.skip(), "")
+                    ok, msg = delete_user_style(st.id)
+                    items, _ = _lora_gallery(cat_f, nsfw_f, only_fav, show_hidden)
+                    cls = "ok" if ok else "err"
+                    return (
+                        f'<div class="dv-status {cls}">{html_lib.escape(msg)}</div>',
+                        gr.update(value=items),
+                        "",
+                    )
+
+                def _lora_hide(lab, cat_f, nsfw_f, only_fav, show_hidden):
+                    st = resolve_style_name(lab)
+                    if not st:
+                        return ('<div class="dv-status err">请先在下面点选一个风格</div>',
+                                gr.skip())
+                    _now, msg = toggle_hidden(st.id)
+                    items, _ = _lora_gallery(cat_f, nsfw_f, only_fav, show_hidden)
+                    return (
+                        f'<div class="dv-status ok">{html_lib.escape(msg)}</div>',
+                        gr.update(value=items),
+                    )
+
+                lora_save_btn.click(
+                    fn=_lora_save,
+                    inputs=[lora_edit_name, lora_edit_file, lora_edit_trigger,
+                            lora_edit_weight, lora_edit_cat, lora_edit_cover, lora_edit_id,
+                            br_lora_cat, br_lora_nsfw, br_lora_only_fav, lora_show_hidden],
+                    outputs=[br_lora_status, br_lora_gal, lora_edit_id],
+                )
+                lora_del_btn.click(
+                    fn=_lora_delete,
+                    inputs=[br_lora_state, br_lora_cat, br_lora_nsfw,
+                            br_lora_only_fav, lora_show_hidden],
+                    outputs=[br_lora_status, br_lora_gal, lora_edit_id],
+                )
+                lora_hide_btn.click(
+                    fn=_lora_hide,
+                    inputs=[br_lora_state, br_lora_cat, br_lora_nsfw,
+                            br_lora_only_fav, lora_show_hidden],
+                    outputs=[br_lora_status, br_lora_gal],
                 )
 
             # ========== 提示词灵感（浏览 + 收藏/自建）==========

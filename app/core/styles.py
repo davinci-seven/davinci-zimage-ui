@@ -14,6 +14,7 @@ from .paths import (
     COVERS_DIR,
     LORAS_DIR,
     PROMPT_STYLES_FILE,
+    HIDDEN_STYLES_FILE,
     STYLE_FAVORITES_FILE,
     STYLES_FILE,
     USER_COVERS_DIR,
@@ -253,6 +254,7 @@ def _load_user_styles() -> list[Style]:
 def load_styles(
     include_missing: bool = False,
     kind: Optional[str] = None,
+    include_hidden: bool = False,
 ) -> list[Style]:
     """Merge builtin LoRA + builtin prompt + user. User id wins over builtin."""
     by_id: dict[str, Style] = {}
@@ -265,8 +267,11 @@ def load_styles(
     if kind in (KIND_LORA, KIND_PROMPT):
         styles = [s for s in styles if (s.kind or KIND_LORA) == kind]
 
+    hidden = set() if include_hidden else set(_load_hidden_ids())
     filtered: list[Style] = []
     for s in styles:
+        if s.id in hidden:
+            continue
         if include_missing or s.exists():
             filtered.append(s)
 
@@ -281,7 +286,8 @@ def load_styles(
 
 
 def styles_by_id() -> dict[str, Style]:
-    return {s.id: s for s in load_styles(include_missing=True)}
+    # 查找要能查到隐藏项，否则图库回填一条被隐藏的风格会解析不到
+    return {s.id: s for s in load_styles(include_missing=True, include_hidden=True)}
 
 
 def style_choices(
@@ -336,7 +342,7 @@ def resolve_style_name(label: str) -> Optional[Style]:
     if not label or str(label).startswith("（无"):
         return None
     clean = _strip_label(label)
-    for s in load_styles(include_missing=True):
+    for s in load_styles(include_missing=True, include_hidden=True):
         if s.name == clean or s.id == clean or s.label() == str(label).strip():
             return s
         if _strip_label(s.label()) == clean:
@@ -493,6 +499,27 @@ def list_lora_file_choices(limit: int = 200) -> list[str]:
     return out
 
 
+def _save_style_cover(sid: str, cover_path: str | None) -> str:
+    """把用户上传的封面存进 userdata/covers，返回文件名；没传就返回空。"""
+    if not cover_path:
+        return ""
+    try:
+        from PIL import Image
+
+        src = Path(cover_path)
+        if not (src.exists() and src.is_file()):
+            return ""
+        ensure_runtime_dirs()
+        name = f"{sid}.jpg"
+        im = Image.open(src).convert("RGB")
+        im.thumbnail((768, 768))
+        im.save(USER_COVERS_DIR / name, quality=88)
+        return name
+    except Exception as e:
+        print("[style] cover save failed:", e, flush=True)
+        return ""
+
+
 def save_user_lora_style(
     name: str,
     lora_file: str,
@@ -500,8 +527,10 @@ def save_user_lora_style(
     default_weight: float = 0.85,
     category: str = "我的",
     tip: str = "",
+    cover_path: str | None = None,
+    style_id: str = "",
 ) -> tuple[bool, str, Optional[Style]]:
-    """高级：把本地 LoRA 文件登记为我的风格。"""
+    """把本地 LoRA 文件登记为我的风格。传 style_id 则是编辑已有项。"""
     name = (name or "").strip()
     lora_file = (lora_file or "").strip().replace("/", "\\")
     if not name:
@@ -514,14 +543,19 @@ def save_user_lora_style(
     w = float(default_weight or 0.85)
     w = max(0.1, min(1.5, w))
     items = _load_user_raw()
-    sid = f"user_lora_{uuid.uuid4().hex[:8]}"
+    sid = (style_id or "").strip() or f"user_lora_{uuid.uuid4().hex[:8]}"
+    old_entry = next((x for x in items if x.get("id") == sid), None)
+    if style_id and old_entry is None:
+        return False, "只能编辑「我的」里自建的风格，内置风格不可改", None
+    cover_name = _save_style_cover(sid, cover_path) or (old_entry or {}).get("cover", "")
+    items = [x for x in items if x.get("id") != sid]
     entry = {
         "id": sid,
         "name": name,
         "kind": "lora",
         "user": True,
         "file": lora_file,
-        "cover": "",
+        "cover": cover_name,
         "tags": ["我的", "自定义"],
         "default_weight": w,
         "trigger": (trigger or "").strip(),
@@ -535,7 +569,8 @@ def save_user_lora_style(
     }
     items.insert(0, entry)
     _save_user_raw(items[:200])
-    return True, f"已添加：{name}", _style_from_raw(entry, default_kind=KIND_LORA, user=True)
+    verb = "已更新" if old_entry else "已添加"
+    return True, f"{verb}：{name}", _style_from_raw(entry, default_kind=KIND_LORA, user=True)
 
 
 def catalog_summary() -> dict[str, Any]:
@@ -585,3 +620,42 @@ def friend_credits_markdown() -> str:
         else:
             lines.append(f"- **{credit}**")
     return "\n".join(lines) if lines else "- （暂无外源提示词风格）"
+
+
+# ----- 隐藏（内置风格不能删，但可以藏起来）-----
+def _load_hidden_ids() -> list[str]:
+    try:
+        if HIDDEN_STYLES_FILE.exists():
+            data = json.loads(HIDDEN_STYLES_FILE.read_text(encoding="utf-8"))
+            ids = data.get("ids") if isinstance(data, dict) else data
+            return [str(x) for x in (ids or [])]
+    except Exception:
+        pass
+    return []
+
+
+def _save_hidden_ids(ids: list[str]) -> None:
+    ensure_runtime_dirs()
+    HIDDEN_STYLES_FILE.write_text(
+        json.dumps({"ids": ids}, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+
+
+def list_hidden_ids() -> list[str]:
+    return _load_hidden_ids()
+
+
+def is_hidden(style_id: str) -> bool:
+    return style_id in _load_hidden_ids()
+
+
+def toggle_hidden(style_id: str) -> tuple[bool, str]:
+    """返回 (隐藏后是否处于隐藏状态, 提示文案)。"""
+    ids = _load_hidden_ids()
+    if style_id in ids:
+        ids = [i for i in ids if i != style_id]
+        _save_hidden_ids(ids)
+        return False, "已取消隐藏"
+    ids.append(style_id)
+    _save_hidden_ids(ids)
+    return True, "已隐藏（在「显示已隐藏」里可找回）"
