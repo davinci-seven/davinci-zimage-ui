@@ -12,20 +12,37 @@
 param(
   [switch]$IncludeEngine,   # 兼容旧参数
   [switch]$FullBundle,      # 推荐：完整一键出图包
+  [switch]$Patch,           # 补丁包：只更新程序与素材，绝不碰用户 userdata
   [switch]$Zip,             # 完整包默认不 zip；加此开关才压
   [string]$OutRoot = ""
 )
 
 $ErrorActionPreference = "Stop"
 $PackRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
-$Version = "1.4.0"
+# 版本只有一个真相：links.yaml。别在这里硬编码，会和界面显示对不上。
+$Version = "0.0.0"
+$linksYaml = Join-Path $PackRoot "app\brand\links.yaml"
+if (Test-Path $linksYaml) {
+  $m = Select-String -Path $linksYaml -Pattern '^\s*version:\s*"([^"]+)"' | Select-Object -First 1
+  if ($m) { $Version = $m.Matches[0].Groups[1].Value }
+}
+if ($Version -eq "0.0.0") {
+  Write-Host "[ERROR] 读不到 links.yaml 里的版本号"
+  exit 1
+}
 $Stamp = Get-Date -Format "yyyyMMdd"
 if (-not $OutRoot) {
   $OutRoot = Join-Path (Split-Path $PackRoot -Parent) "release"
 }
 $wantEngine = $FullBundle -or $IncludeEngine
+if ($wantEngine -and $Patch) {
+  Write-Host "[ERROR] -Patch 和 -FullBundle 不能一起用"
+  exit 1
+}
 if ($wantEngine) {
   $DestName = "达芬七-ZImage-一键出图包-v$Version"
+} elseif ($Patch) {
+  $DestName = "达芬七-ZImage-补丁-v$Version"
 } else {
   $DestName = "达芬七-ZImage-UI-v$Version"
 }
@@ -77,7 +94,23 @@ function Copy-Tree($src, $dst) {
 Copy-Tree (Join-Path $PackRoot "app") (Join-Path $Dest "app")
 Copy-Tree (Join-Path $PackRoot "assets") (Join-Path $Dest "assets")
 
-Copy-Item (Join-Path $PackRoot "启动.bat") $Dest -Force
+# 启动链：启动.bat 只是壳，真正跑的是 start_ui.ps1；少一个包就打不开
+$runtimeFiles = @(
+  "启动.bat",
+  "start_ui.ps1",
+  "导出诊断信息.bat",
+  "diagnostics.ps1",
+  "THIRD_PARTY.md"
+)
+foreach ($f in $runtimeFiles) {
+  $src = Join-Path $PackRoot $f
+  if (Test-Path $src) {
+    Copy-Item $src $Dest -Force
+  } elseif ($f -in @("启动.bat", "start_ui.ps1")) {
+    Write-Host "[ERROR] 启动必需文件缺失: $f"
+    exit 1
+  }
+}
 if (Test-Path (Join-Path $PackRoot "THIRD_PARTY.md")) {
   Copy-Item (Join-Path $PackRoot "THIRD_PARTY.md") $Dest -Force
 }
@@ -108,7 +141,9 @@ if (Test-Path $toolsDir) {
   Write-Host "[strip] tools\ (dev only)"
   Remove-Item -LiteralPath $toolsDir -Recurse -Force
 }
-foreach ($devDoc in @("QA_CHECKLIST.md", "RELEASE_NOTES.txt", "打包发行说明.md", "生态与更新笔记.md")) {
+foreach ($devDoc in @("QA_CHECKLIST.md", "RELEASE_NOTES.txt", "打包发行说明.md", "生态与更新笔记.md",
+                      "OPEN-SOURCE.md", "RELEASE-1.4.5.md", "README.md",
+                      "UPGRADE-BACKLOG-v1.5.md", "COMMENT-FEEDBACK-v1.5.md")) {
   $p = Join-Path $Dest $devDoc
   if (Test-Path $p) {
     Write-Host "[strip] $devDoc"
@@ -129,6 +164,16 @@ if (Test-Path $stylesJson) {
     [void]$needed.Add("$($s.id).jpg")
   }
 }
+# 提示词灵感的封面和 LoRA 封面放在同一个目录，漏掉这段会把灵感库图全删光
+$inspoJson = Join-Path $Dest "assets\prompts\inspirations.json"
+if (Test-Path $inspoJson) {
+  $inspos = (Get-Content $inspoJson -Raw -Encoding UTF8 | ConvertFrom-Json).inspirations
+  foreach ($i in $inspos) {
+    if ($i.cover) { [void]$needed.Add([IO.Path]::GetFileName($i.cover)) }
+    [void]$needed.Add("$($i.id).jpg")
+  }
+  Write-Host "[covers] keep $($inspos.Count) inspiration covers"
+}
 Get-ChildItem $coversDir -File -ErrorAction SilentlyContinue | ForEach-Object {
   if (-not $needed.Contains($_.Name)) {
     Write-Host "[strip cover] $($_.Name)"
@@ -141,8 +186,42 @@ if (Test-Path $legacyPrompt) {
   Remove-Item $legacyPrompt -Force
 }
 
+# 补丁包不带 userdata：用户的图库/收藏/设置都在那儿，覆盖过去就没了
+if ($Patch) {
+  $udPatch = Join-Path $Dest "userdata"
+  if (Test-Path $udPatch) { Remove-Item -LiteralPath $udPatch -Recurse -Force }
+  $outPatch = Join-Path $Dest "output"
+  if (Test-Path $outPatch) { Remove-Item -LiteralPath $outPatch -Recurse -Force }
+  @(
+    "========================================",
+    "  达芬七 - Z-Image  补丁 v$Version",
+    "========================================",
+    "",
+    "适用：已经装过旧版一键出图包的人。只更新程序和素材，不含引擎和模型。",
+    "",
+    "怎么用",
+    "----------------------------------------",
+    "1. 先关掉正在运行的 Z-Image（黑窗口一并关掉）",
+    "2. 把本文件夹里的所有内容，复制粘贴到你原来的包目录，选「替换目标中的文件」",
+    "3. 双击「启动.bat」",
+    "",
+    "会被替换：app\ 、assets\ 、启动.bat 、start_ui.ps1 等程序文件",
+    "不会动：userdata\（你的图库、收藏、设置）、engine\（引擎和模型）",
+    "",
+    "所以出过的图和收藏都还在。想更保险，可以先把 userdata 文件夹复制一份备份。",
+    "",
+    "本次更新看 RELEASE-1.4.5.md",
+    "",
+    "========================================",
+    "问题反馈 -> X @davinci_seven",
+    "========================================"
+  ) | Set-Content (Join-Path $Dest "补丁使用说明.txt") -Encoding UTF8
+  Write-Host "[patch] userdata/output 已排除；已写入 补丁使用说明.txt"
+}
+
 # empty runtime dirs — no secrets / no user history
 $ud = Join-Path $Dest "userdata"
+if (-not $Patch) {
 New-Item -ItemType Directory -Force -Path (Join-Path $ud "gallery") | Out-Null
 New-Item -ItemType Directory -Force -Path (Join-Path $ud "exports") | Out-Null
 @(
@@ -152,6 +231,46 @@ New-Item -ItemType Directory -Force -Path (Join-Path $ud "exports") | Out-Null
   "· settings.yaml / favorites.json 首次使用后自动生成",
   "· 设置里可改文件名前缀（默认 davincilab）"
 ) | Set-Content (Join-Path $ud "README.txt") -Encoding UTF8
+}
+
+# 面向用户的更新说明（开发文档不进包）
+$whatsNew = @"
+========================================
+  达芬七 - Z-Image  v$Version  更新说明
+========================================
+
+这次主要在「好用」和「好看」上：
+
+提示词灵感
+----------------------------------------
+- 100 条灵感卡，封面全部是本机实际出图，不是网上搬的成片
+- 名字、封面、提示词三者逐条人眼核对过：卡片上写什么，画面就是什么
+- 清掉了裸露内容和一批「名字和图对不上」的条目
+- 点一张卡，提示词直接填进输入框，可以再改
+
+界面
+----------------------------------------
+- 7 套皮肤：杂志 / 影院 / 美术馆 / 紫调 / 蓝晒 / 青绿 / 暗房
+- 顶部留白收紧，内容往上提
+- 出图进度条走真实步数，不再是估算
+
+出图
+----------------------------------------
+- 结果按任务号认领，多开也不会拿错图
+- 引擎报错会翻译成人话，显存不足会直接告诉你该降哪一档
+- 图库记录用相对路径，整个文件夹换个盘也不会丢图
+
+其它
+----------------------------------------
+- 分辨率档从 512 到 2048，6G 显卡固定用 512
+- 启动时端口被占用，会让你选，不会直接杀别人的程序
+- 出问题双击「导出诊断信息.bat」，生成的 TXT 可以直接交给 AI 排查
+
+========================================
+更新与提示词分享 -> X @davinci_seven
+========================================
+"@
+[System.IO.File]::WriteAllText((Join-Path $Dest "更新说明.txt"), $whatsNew, [System.Text.UTF8Encoding]::new($false))
 
 # ---------- 5) README ----------
 if ($wantEngine) {

@@ -22,8 +22,9 @@
   --title-h: 48px;
   --stats-h: 30px;
   --tabs-h: 34px;
-  /* 默认顶距；运行时由 JS 按 Tab 底边实测覆盖 */
-  --chrome-h: 118px;
+  /* 顶距 = 真正固定住的那两条（标题栏 + 状态栏）+ 5px 呼吸位。
+     Tab 行在 Gradio 6 的标记里是随流的，不占固定层，别再给它预留高度。 */
+  --chrome-h: calc(var(--title-h) + var(--stats-h) + 5px);
 }
 
 /* Gradio 自带主题变量接到我们的皮肤上。少了这一层，深色皮肤下
@@ -2113,4 +2114,21 @@ input[type="range"] {
   #dv-gen-row > .form, #dv-gen-row.form {
     grid-template-columns: minmax(0, 1fr) !important;
   }
+}
+
+/* 顶部那列是 flex + gap:16px，里面 4 个零高度的注入宿主（css/标题/状态）
+   每个仍会吃掉一个 gap，白白多出 60 多像素。这里只压这一列，不影响页面其它间距。 */
+.gradio-container .column:has(> #dv-main-tabs),
+.gradio-container > .wrap .column:has(> #dv-main-tabs) {
+  gap: 0 !important;
+  row-gap: 0 !important;
+}
+#dv-base-css-host,
+#dv-theme-css-host,
+#dv-title-host,
+#dv-stats-shell-host {
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }

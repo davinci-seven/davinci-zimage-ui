@@ -6,5 +6,5 @@ x_url: "https://x.com/davinci_seven"
 x_handle: "@davinci_seven"
 website: ""
 # 每次可见改动 +1 末位，方便确认是否加载到新 UI
-# 1.4.5-dev.8 = 去多余收藏；512 省显存；OOM/超时明确报错+释放；灵感封面脚本
-version: "1.4.5-dev.8"
+# 1.4.5 正式版 = 灵感库人眼校准（名/图/提示词对齐）+ 去裸露
+version: "1.4.5"

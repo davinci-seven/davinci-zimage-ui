@@ -1,0 +1,983 @@
+{
+  "inspirations": [
+    {
+      "id": "insp_holographic_foil",
+      "name": "全息箔闪片",
+      "kind": "inspiration",
+      "cover": "insp_holographic_foil.jpg",
+      "tags": [
+        "材质质感",
+        "全息箔闪片"
+      ],
+      "featured": true,
+      "category": "材质质感",
+      "categories": [
+        "材质质感"
+      ],
+      "prompt": "a striking fashion model woman with long black hair, three-quarter portrait, soft gaze, holographic foil fashion editorial, prismatic reflections, high fashion studio, upper body portrait, looking at viewer, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 精选（144）· 点选填入",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/material/holographic-foil"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mercury_glass",
+      "name": "水银玻璃反光",
+      "kind": "inspiration",
+      "cover": "insp_mercury_glass.jpg",
+      "tags": [
+        "材质质感",
+        "水银玻璃反光"
+      ],
+      "featured": true,
+      "category": "材质质感",
+      "categories": [
+        "材质质感"
+      ],
+      "prompt": "a radiant woman with sunlit skin and wind-touched hair, outdoor beauty portrait, mercury glass mirror surface, antique silvered reflections, soft candle key light, strong visual contrast, waist-up three-quarter turn, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 精选（130）· 点选填入",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/material/mercury-glass"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_wet_latex_editorial",
+      "name": "湿润漆皮大片",
+      "kind": "inspiration",
+      "cover": "insp_wet_latex_editorial.jpg",
+      "tags": [
+        "材质质感",
+        "湿润漆皮大片"
+      ],
+      "featured": true,
+      "category": "材质质感",
+      "categories": [
+        "材质质感"
+      ],
+      "prompt": "a beautiful woman with twin tails and playful expression, anime-adjacent beauty portrait, high-gloss wet latex fashion editorial, specular highlights, controlled studio strobes, subtle film grain, upper body portrait, looking at viewer, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 精选（132）· 点选填入",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/material/wet-latex-editorial"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_medieval_pharmacy",
+      "name": "中世纪药铺插画",
+      "kind": "inspiration",
+      "cover": "insp_medieval_pharmacy.jpg",
+      "tags": [
+        "印刷纸艺",
+        "中世纪药铺插画"
+      ],
+      "featured": true,
+      "category": "印刷纸艺",
+      "categories": [
+        "印刷纸艺"
+      ],
+      "prompt": "a beautiful woman with natural curly hair and soft smile, portrait crop, medieval pharmacy label parchment tone, hand-inked botanical border suggestion, aged vellum, subtle film grain, fashion editorial half-body pose, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 精选（153）· 点选填入",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/print_paper/medieval-pharmacy"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_risograph_punk",
+      "name": "孔版印刷朋克",
+      "kind": "inspiration",
+      "cover": "insp_risograph_punk.jpg",
+      "tags": [
+        "印刷纸艺",
+        "孔版印刷朋克"
+      ],
+      "featured": true,
+      "category": "印刷纸艺",
+      "categories": [
+        "印刷纸艺"
+      ],
+      "prompt": "a mysterious woman with dark lipstick and sharp eyeliner, cinematic bust portrait, risograph xerox punk flyer, two-tone spot color, halftone dots, misregistration, tight bust crop, eye contact, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 精选（170）· 点选填入",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/print_paper/risograph-punk"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_newspaper_halftone",
+      "name": "报纸网点肖像",
+      "kind": "inspiration",
+      "cover": "insp_newspaper_halftone.jpg",
+      "tags": [
+        "印刷纸艺",
+        "报纸网点肖像"
+      ],
+      "featured": true,
+      "category": "印刷纸艺",
+      "categories": [
+        "印刷纸艺"
+      ],
+      "prompt": "an elegant woman with pearl earrings and updo, refined upper-body portrait, newspaper halftone ad portrait, CMYK rosette dots, pulpy newsprint texture, magazine cover energy without text, waist-up three-quarter turn, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 精选（196）· 点选填入",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/print_paper/newspaper-halftone"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_sumi_e_ink",
+      "name": "水墨余白人影",
+      "kind": "inspiration",
+      "cover": "insp_sumi_e_ink.jpg",
+      "tags": [
+        "印刷纸艺",
+        "水墨余白人影"
+      ],
+      "featured": true,
+      "category": "印刷纸艺",
+      "categories": [
+        "印刷纸艺"
+      ],
+      "prompt": "a beautiful woman with hoop earrings and denim jacket, casual cool portrait, ink wash sumi-e background with living subject, expressive brush voids, rice paper texture, strong visual contrast, tight bust crop, eye contact, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 精选（143）· 点选填入",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/print_paper/sumi-e-ink"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_matchbox_label",
+      "name": "火柴盒标签画",
+      "kind": "inspiration",
+      "cover": "insp_matchbox_label.jpg",
+      "tags": [
+        "印刷纸艺",
+        "火柴盒标签画"
+      ],
+      "featured": true,
+      "category": "印刷纸艺",
+      "categories": [
+        "印刷纸艺"
+      ],
+      "prompt": "a beautiful woman with pink-tinted hair tips, modern beauty editorial, upper body, vintage matchbox label illustration feel, limited spot colors, charming commercial folk print, magazine cover energy without text, upper body portrait, looking at viewer, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 精选（138）· 点选填入",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/print_paper/matchbox-label"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_08_c_0002_s0_00001_",
+      "name": "小队群像",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_08_c_0002_s0_00001_.jpg",
+      "tags": [
+        "二次元",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "二次元",
+      "categories": [
+        "二次元"
+      ],
+      "prompt": "四名明确成年的原创奇幻冒险者小队，两男两女，法师、剑士、弓手、治疗师站位错开，在森林遗迹入口回头看向镜头准备出发，各自武器和服装明显不同；横版群像分镜，广角中景，纵深层次清晰，晨光穿过树叶洒下光斑，饱和奇幻色彩，日式动画质感。不出现任何可读文字、字母、数字、伪汉字、Logo和水印，人物精确数量，不复制人物，不融合脸，所有人物明确成年，不幼态化",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_07_c_0000_s0_00001_",
+      "name": "男女主双人互动",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_07_c_0000_s0_00001_.jpg",
+      "tags": [
+        "二次元",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "二次元",
+      "categories": [
+        "二次元"
+      ],
+      "prompt": "一对明确成年的原创动漫男女主角，女生短发利落、男生戴耳机，两人在黄昏天台并肩靠着栏杆分享一副耳机，女生侧头轻笑、男生望向远方城市；横版电影分镜，中景，人物前后错落，暖橙夕阳与冷蓝暮色对比，细腻二维赛璐珞动画质感，情感日常向。不出现任何可读文字、字母、数字、伪汉字、Logo和水印，人物精确数量，不复制人物，不融合脸，所有人物明确成年，不幼态化",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_00_c_0030_s0_00001_",
+      "name": "办公室紧急会议",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_00_c_0030_s0_00001_.jpg",
+      "tags": [
+        "多人叙事",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "多人叙事",
+      "categories": [
+        "多人叙事"
+      ],
+      "prompt": "五名明确成年职场人物，男女混合，深夜围在会议屏前紧急讨论，一人站立指向数据、其余神情凝重；横版叙事场景，中景略俯，屏幕冷光打在脸上与顶灯暖光混合，写实商务纪实感，人物层次分明。不出现任何可读文字、字母、数字、伪汉字、Logo和水印，人物精确数量，不复制人物，不融合脸，所有人物明确成年，不幼态化",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_10_c_0024_s0_00001_",
+      "name": "四人查看地图",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_10_c_0024_s0_00001_.jpg",
+      "tags": [
+        "多人叙事",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "多人叙事",
+      "categories": [
+        "多人叙事"
+      ],
+      "prompt": "四名明确成年团队成员，男女各半，围在越野车引擎盖展开的地图前讨论路线，一人指点、其余凝神；横版叙事场景，中景微俯，黄昏荒野暖光，尘土色调，写实户外纪实感，四人环形构图。不出现任何可读文字、字母、数字、伪汉字、Logo和水印，人物精确数量，不复制人物，不融合脸，所有人物明确成年，不幼态化",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_09_c_0028_s0_00001_",
+      "name": "车站告别",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_09_c_0028_s0_00001_.jpg",
+      "tags": [
+        "多人叙事",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "多人叙事",
+      "categories": [
+        "多人叙事"
+      ],
+      "prompt": "一对明确成年男女在月台告别，女人隔着车门贴手、男人在车内回望，列车即将启动；竖版叙事海报，中近景，冷蓝站台与暖黄车厢灯对比，写实电影质感，情绪克制，上方留标题区。不出现任何可读文字、字母、数字、伪汉字、Logo和水印，人物精确数量，不复制人物，不融合脸，所有人物明确成年，不幼态化",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_12_b_0156_s0_00001_",
+      "name": "四格漫画单格主视觉",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_12_b_0156_s0_00001_.jpg",
+      "tags": [
+        "绘本",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "绘本",
+      "categories": [
+        "绘本"
+      ],
+      "prompt": "一名明确成年原创动漫上班族在雨中错过公交、表情夸张沮丧的四格漫画其中一格主视觉，漫画分镜边框、拟声空白气泡（无文字），横版单格，中景，明快漫画配色，清晰二维漫画质感。人物精确数量，不复制人物，不融合脸，所有人物明确成年，不幼态化，不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_19_b_0135_s0_00001_",
+      "name": "成人绘本雨夜咖啡馆",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_19_b_0135_s0_00001_.jpg",
+      "tags": [
+        "绘本",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "绘本",
+      "categories": [
+        "绘本"
+      ],
+      "prompt": "一名明确成年孤独旅人坐在雨夜街角咖啡馆窗边，窗外霓虹在雨中晕开，情绪温柔；竖版成人绘本跨页，冷暖交织，细腻插画质感，留白诗意。所有人物明确成年、原创、不幼态化，人数精确，不复制人物，不融合脸，整幅画面不出现任何文字、字母、数字、汉字、伪汉字、招牌字、标题、Logo和水印，需要留白处保持为纯净空白背景",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_11_b_0150_s0_00001_",
+      "name": "泥塑动物与成年角色",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_11_b_0150_s0_00001_.jpg",
+      "tags": [
+        "绘本",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "绘本",
+      "categories": [
+        "绘本"
+      ],
+      "prompt": "一名明确成年的黏土风格女性园丁与一只憨态可掬的黏土柯基在小院互动，园丁蹲下伸手、狗狗摇尾，手捏纹理清晰；横版定格泥塑，中景，暖柔光，温馨配色，黏土定格动画质感。人物精确数量，不复制人物，不融合脸，所有人物明确成年，不幼态化，不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_18_b_0129_s0_00001_",
+      "name": "泥塑猫咖",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_18_b_0129_s0_00001_.jpg",
+      "tags": [
+        "绘本",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "绘本",
+      "categories": [
+        "绘本"
+      ],
+      "prompt": "一名明确成年黏土风格女店主在黏土猫咖里为两只圆滚泥塑猫倒牛奶，猫咪抬头期待；横版定格泥塑，暖柔光，温馨配色，黏土定格动画质感。所有人物明确成年、原创、不幼态化，人数精确，不复制人物，不融合脸，整幅画面不出现任何文字、字母、数字、汉字、伪汉字、招牌字、标题、Logo和水印，需要留白处保持为纯净空白背景",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_13_b_0174_s0_00001_",
+      "name": "光构成的森林",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_13_b_0174_s0_00001_.jpg",
+      "tags": [
+        "超现实",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "超现实",
+      "categories": [
+        "超现实"
+      ],
+      "prompt": "一片由发光光丝与粒子构成的森林，光树在黑暗中静静伫立，地面倒映光晕，氛围静谧；竖版超现实概念，中景，深色背景配冷蓝暖金光，唯美概念渲染质感，主体清晰不杂乱。不出现人物、不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_03_c_0042_s0_00001_",
+      "name": "女机械师二次元",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_03_c_0042_s0_00001_.jpg",
+      "tags": [
+        "超现实",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "超现实",
+      "categories": [
+        "超现实"
+      ],
+      "prompt": "一名二十多岁明确成年女机械师，单人，在车库检修摩托车，手上有机油、抬头擦汗；竖版角色立绘，中近景，暖色工作灯，工业色调，干净二维动画质感。不出现任何可读文字、字母、数字、伪汉字、Logo和水印，人物精确数量，不复制人物，不融合脸，所有人物明确成年，不幼态化",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_17_c_0062_s0_00001_",
+      "name": "微距露珠自然",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_17_c_0062_s0_00001_.jpg",
+      "tags": [
+        "超现实",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "超现实",
+      "categories": [
+        "超现实"
+      ],
+      "prompt": "无人物的微距自然，清晨一片苔藓上挂满露珠，一根蛛丝串起水滴折射彩光；方形微距构图，浅景深，柔和逆光，青绿通透配色，真实微距摄影质感，背景奶油般虚化。不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_01_c_0034_s0_00001_",
+      "name": "成熟女建筑师全身",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_01_c_0034_s0_00001_.jpg",
+      "tags": [
+        "超现实",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "超现实",
+      "categories": [
+        "超现实"
+      ],
+      "prompt": "一名五十岁左右明确成年女建筑师，单人，站在自己设计的清水混凝土大厅里手持图纸，自信从容；竖版全身环境肖像，广角略仰，天窗自然光，冷灰建筑色调，写实商务摄影质感。不出现任何可读文字、字母、数字、伪汉字、Logo和水印，人物精确数量，不复制人物，不融合脸，所有人物明确成年，不幼态化",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_16_c_0060_s0_00001_",
+      "name": "极光冻湖写实",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_16_c_0060_s0_00001_.jpg",
+      "tags": [
+        "超现实",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "超现实",
+      "categories": [
+        "超现实"
+      ],
+      "prompt": "无人出现的极光冻湖夜景，绿紫极光在星空舞动并倒映于冰面，前景冰裂纹路；横版广角，低机位，冷调极光色与深蓝夜色，真实长曝光摄影质感。不出现建筑、人物、不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_06_c_0052_s0_00001_",
+      "name": "海岸暴风写实",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_06_c_0052_s0_00001_.jpg",
+      "tags": [
+        "超现实",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "超现实",
+      "categories": [
+        "超现实"
+      ],
+      "prompt": "无人出现的海岸暴风，巨浪拍击黑色礁石激起水雾，乌云压顶透出一线冷光；横版广角，低机位，青灰与墨蓝色调，真实自然摄影质感，浪花动感凝固。不出现船只、人物、不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_05_c_0058_s0_00001_",
+      "name": "火山地貌游戏概念",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_05_c_0058_s0_00001_.jpg",
+      "tags": [
+        "超现实",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "超现实",
+      "categories": [
+        "超现实"
+      ],
+      "prompt": "无人出现的火山地貌，熔岩裂缝在黑色玄武岩间发出橙红光，远处火山口冒烟；横版游戏环境概念，广角，暗调中的炽热光源，戏剧化写实概念美术质感，纵深压迫感。不出现人物、不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_04_c_0046_s0_00001_",
+      "name": "登山向导动作肖像",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_04_c_0046_s0_00001_.jpg",
+      "tags": [
+        "超现实",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "超现实",
+      "categories": [
+        "超现实"
+      ],
+      "prompt": "一名三十多岁明确成年男登山向导，不同肤色，单人，在雪线附近回头招呼队伍，脸颊被风吹红、冰镐在手；横版动作肖像，广角，高原强逆光，冷蓝雪色，写实户外摄影质感。不出现任何可读文字、字母、数字、伪汉字、Logo和水印，人物精确数量，不复制人物，不融合脸，所有人物明确成年，不幼态化",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_02_c_0036_s0_00001_",
+      "name": "老年男木匠动作肖像",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_02_c_0036_s0_00001_.jpg",
+      "tags": [
+        "超现实",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "超现实",
+      "categories": [
+        "超现实"
+      ],
+      "prompt": "一名六十岁左右明确成年男木匠，单人，在木工坊俯身刨木，木屑飞扬、皱纹与老茧清晰；横版动作肖像，中景侧光，暖木色调，写实纪实摄影质感，手部动作真实。不出现任何可读文字、字母、数字、伪汉字、Logo和水印，人物精确数量，不复制人物，不融合脸，所有人物明确成年，不幼态化",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_14_b_0180_s0_00001_",
+      "name": "岩彩重彩自然",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_14_b_0180_s0_00001_.jpg",
+      "tags": [
+        "东方视觉",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "东方视觉",
+      "categories": [
+        "东方视觉"
+      ],
+      "prompt": "一幅岩彩重彩风格的深山飞瀑，矿物颜料的石青、石绿与金箔层层堆叠，质感厚重斑驳；竖版东方绘画，中景，浓郁矿物色，传统岩彩质感，装饰性与自然并存。不出现人物、可读文字、不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mv_bh_15_b_0192_s0_00001_",
+      "name": "敦煌飞天现代",
+      "kind": "inspiration",
+      "cover": "insp_mv_bh_15_b_0192_s0_00001_.jpg",
+      "tags": [
+        "东方视觉",
+        "黑马"
+      ],
+      "featured": true,
+      "category": "东方视觉",
+      "categories": [
+        "东方视觉"
+      ],
+      "prompt": "以敦煌飞天为灵感的现代插画，一位明确成年飘带飞天女神在藻井图案间飞舞，矿物色与金线；竖版东方插画，青绿朱金，装饰性国风质感。所有人物明确成年、原创、不幼态化，人数精确，不复制人物，不融合脸，整幅画面不出现任何文字、字母、数字、汉字、伪汉字、招牌字、标题、Logo和水印，需要留白处保持为纯净空白背景",
+      "tip": "好看灵感 · Multiverse 黑马",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "20_blackhorse"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_ps1_lowpoly_mood",
+      "name": "初代主机雾夜",
+      "kind": "inspiration",
+      "cover": "insp_ps1_lowpoly_mood.jpg",
+      "tags": [
+        "画面气质",
+        "初代主机雾夜"
+      ],
+      "featured": false,
+      "category": "画面气质",
+      "categories": [
+        "画面气质"
+      ],
+      "prompt": "an elegant woman with short black bob and minimal makeup, waist-up portrait, PlayStation 1 low-poly horror mood adapted to beauty portrait, faceted light, foggy CRT softness, subtle film grain, fashion editorial half-body pose, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 精选（93）· 点选填入",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/era_medium/ps1-lowpoly-mood"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_museum_object",
+      "name": "展柜里的静物",
+      "kind": "inspiration",
+      "cover": "insp_museum_object.jpg",
+      "tags": [
+        "画面气质",
+        "展柜里的静物"
+      ],
+      "featured": false,
+      "category": "画面气质",
+      "categories": [
+        "画面气质"
+      ],
+      "prompt": "a graceful woman with lavender-toned hair, ethereal upper-body portrait, museum object photo lighting on a person, even softbox, neutral gray cyclorama, strong visual contrast, tight bust crop, eye contact, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 精选（111）· 点选填入",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/era_medium/museum-object"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_golden_hour_side",
+      "name": "黄金时刻侧光",
+      "kind": "inspiration",
+      "cover": "insp_golden_hour_side.jpg",
+      "tags": [
+        "光影氛围",
+        "黄金时刻侧光"
+      ],
+      "featured": false,
+      "category": "光影氛围",
+      "categories": [
+        "光影氛围"
+      ],
+      "prompt": "a beautiful woman with wet hair after rain, close bust portrait, looking at camera, golden hour side light, long soft shadows, wind in hair, rooftop air, magazine cover energy without text, close beauty portrait, soft expression, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 精选（108）· 点选填入",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/light_mood/golden-hour-side"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_y2k_frosted_plastic",
+      "name": "千禧磨砂塑料",
+      "kind": "inspiration",
+      "cover": "insp_y2k_frosted_plastic.jpg",
+      "tags": [
+        "材质质感",
+        "千禧磨砂塑料"
+      ],
+      "featured": false,
+      "category": "材质质感",
+      "categories": [
+        "材质质感"
+      ],
+      "prompt": "a soft-featured woman in a cream knit sweater, warm eye contact, upper body, Y2K frosted translucent plastic, iridescent sheen, early 2000s tech aesthetic, subtle film grain, close beauty portrait, soft expression, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 精选（121）· 点选填入",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/material/y2k-frosted-plastic"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_cracked_lacquer",
+      "name": "裂纹漆金美人",
+      "kind": "inspiration",
+      "cover": "insp_cracked_lacquer.jpg",
+      "tags": [
+        "材质质感",
+        "裂纹漆金美人"
+      ],
+      "featured": false,
+      "category": "材质质感",
+      "categories": [
+        "材质质感"
+      ],
+      "prompt": "a serene woman with long straight brown hair, quiet smile, looking at viewer, cracked lacquer and gold leaf surface aesthetic, museum object lighting, precious decay, magazine cover energy without text, fashion editorial half-body pose, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 精选（124）· 点选填入",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/material/cracked-lacquer"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_medieval_pharmacy_b",
+      "name": "中世纪药铺插画 · 其二",
+      "kind": "inspiration",
+      "cover": "insp_medieval_pharmacy_b.jpg",
+      "tags": [
+        "印刷纸艺"
+      ],
+      "featured": false,
+      "category": "印刷纸艺",
+      "categories": [
+        "印刷纸艺"
+      ],
+      "prompt": "a beautiful woman half-turned over shoulder, three-quarter profile portrait, medieval pharmacy label parchment tone, hand-inked botanical border suggestion, aged vellum, strong visual contrast, waist-up three-quarter turn, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 变体（150）",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/print_paper/medieval-pharmacy#2"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_art_nouveau_glass_b",
+      "name": "新艺术彩窗人 · 其二",
+      "kind": "inspiration",
+      "cover": "insp_art_nouveau_glass_b.jpg",
+      "tags": [
+        "印刷纸艺"
+      ],
+      "featured": false,
+      "category": "印刷纸艺",
+      "categories": [
+        "印刷纸艺"
+      ],
+      "prompt": "a glamorous woman with platinum blonde hair, high-fashion bust portrait, art nouveau stained glass, ornate organic linework, jewel tones, lead came, subtle film grain, waist-up three-quarter turn, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 变体（166）",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/print_paper/art-nouveau-glass#2"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_art_deco_poster_b",
+      "name": "装饰艺术海报感 · 其二",
+      "kind": "inspiration",
+      "cover": "insp_art_deco_poster_b.jpg",
+      "tags": [
+        "印刷纸艺"
+      ],
+      "featured": false,
+      "category": "印刷纸艺",
+      "categories": [
+        "印刷纸艺"
+      ],
+      "prompt": "a beautiful elegant East Asian woman, upper body portrait, looking at viewer, art deco poster geometry, fan motifs, metallic gold and black, 1920s glamour, magazine cover energy without text, upper body portrait, looking at viewer, clear silhouette, strong visual identity, highly detailed, masterpiece, best quality, sharp focus, no text, no watermark, no logo",
+      "tip": "好看灵感 · RSE 变体（160）",
+      "source": {
+        "credit": "RSE-24h 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "curated/print_paper/art-deco-poster#2"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mvcat_03_occupation",
+      "name": "雪山日出写实摄影",
+      "kind": "inspiration",
+      "cover": "insp_mvcat_03_occupation.jpg",
+      "tags": [
+        "职业人像"
+      ],
+      "featured": false,
+      "category": "职业人像",
+      "categories": [
+        "职业人像"
+      ],
+      "prompt": "无人出现的雪山日出，前景冰川裂纹延伸至远处金色山脊，低角度广角，晨雾贴地，第一束阳光点亮峰顶，冷蓝冰面与暖金山尖对比，真实自然摄影质感，动态范围自然。不出现建筑、道路、人物、不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · 职业人像",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "60_categorized/03_occupation"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mvcat_02_multi_person",
+      "name": "两名女性协作",
+      "kind": "inspiration",
+      "cover": "insp_mvcat_02_multi_person.jpg",
+      "tags": [
+        "多人叙事"
+      ],
+      "featured": false,
+      "category": "多人叙事",
+      "categories": [
+        "多人叙事"
+      ],
+      "prompt": "两名明确成年女性，一位科研人员和一位工程师，共同俯身查看实验台上的设备，一人指向屏幕、一人拧动旋钮，配合默契；横版叙事场景，中景略俯，冷白实验室光，克制的青蓝配色，写实摄影质感。不出现任何可读文字、字母、数字、伪汉字、Logo和水印，人物精确数量，不复制人物，不融合脸，所有人物明确成年，不幼态化",
+      "tip": "好看灵感 · 多人叙事",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "60_categorized/02_multi_person"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mvcat_04_nature",
+      "name": "博物馆展厅",
+      "kind": "inspiration",
+      "cover": "insp_mvcat_04_nature.jpg",
+      "tags": [
+        "自然风光"
+      ],
+      "featured": false,
+      "category": "自然风光",
+      "categories": [
+        "自然风光"
+      ],
+      "prompt": "无人物的现代博物馆展厅，聚光灯打在空展台上，深色墙面与浅色地面对比，纵深走廊延伸；竖版建筑内景，中景，戏剧化聚光与暗调环境，写实建筑摄影质感，仪式感强。不出现人物、不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · 自然风光",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "60_categorized/04_nature"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mvcat_05_city_arch",
+      "name": "老城雨巷",
+      "kind": "inspiration",
+      "cover": "insp_mvcat_05_city_arch.jpg",
+      "tags": [
+        "城市建筑"
+      ],
+      "featured": false,
+      "category": "城市建筑",
+      "categories": [
+        "城市建筑"
+      ],
+      "prompt": "无人物的老城雨巷夜景，青石板反射暖黄店招灯与湿漉墙面，晾衣绳横跨窄巷；竖版氛围图，中景，暖冷交织的怀旧色调，写实电影摄影质感，纵深引导视线至巷尾。不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · 城市建筑",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "60_categorized/05_city_arch"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mvcat_06_ecommerce_white",
+      "name": "香水纯色底",
+      "kind": "inspiration",
+      "cover": "insp_mvcat_06_ecommerce_white.jpg",
+      "tags": [
+        "产品商业"
+      ],
+      "featured": false,
+      "category": "产品商业",
+      "categories": [
+        "产品商业"
+      ],
+      "prompt": "一瓶无品牌透明玻璃香水作为唯一主产品，竖直立于饱和莫兰迪绿纯色背景，瓶体、瓶盖、喷头结构完整，玻璃厚度与液体折射可信，侧光勾勒轮廓；竖版电商主图，产品居中偏下，上方留标题区。不生成品牌文字、伪Logo、额外瓶子，不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · 产品商业",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "60_categorized/06_ecommerce_white"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mvcat_08_food",
+      "name": "碳酸饮料超现实",
+      "kind": "inspiration",
+      "cover": "insp_mvcat_08_food.jpg",
+      "tags": [
+        "美食"
+      ],
+      "featured": false,
+      "category": "美食",
+      "categories": [
+        "美食"
+      ],
+      "prompt": "一罐无品牌碳酸饮料被飞溅的气泡与水花包裹漂浮，果实碎片环绕悬停，背景鲜亮渐变；竖版超现实食物视觉，产品居中，高饱和撞色，写实与超现实结合的广告质感。不生成品牌文字、伪Logo、不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · 美食",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "60_categorized/08_food"
+      },
+      "commercial": "本地精选"
+    },
+    {
+      "id": "insp_mvcat_09_poster",
+      "name": "抽象几何海报",
+      "kind": "inspiration",
+      "cover": "insp_mvcat_09_poster.jpg",
+      "tags": [
+        "海报平面"
+      ],
+      "featured": false,
+      "category": "海报平面",
+      "categories": [
+        "海报平面"
+      ],
+      "prompt": "以重复的同心圆与错位条块构成节奏感抽象几何海报，欧普艺术式视错觉，主体满版，预留中央标题负空间，黑白配一抹亮黄，实验平面设计。不出现人物、可读文字，不出现任何可读文字、字母、数字、伪汉字、Logo和水印",
+      "tip": "好看灵感 · 海报平面",
+      "source": {
+        "credit": "Multiverse 精选",
+        "url": "https://x.com/davinci_seven",
+        "note": "60_categorized/09_poster"
+      },
+      "commercial": "本地精选"
+    }
+  ]
+}

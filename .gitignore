@@ -10,8 +10,12 @@ userdata/gallery/
 userdata/exports/
 userdata/logs/
 userdata/civitai_api_token.txt
+_dev_tools/civitai_api_token.txt
+**/civitai_api_token.txt
 userdata/styles_user.json
 userdata/style_favorites.json
+userdata/inspiration_favorites.json
+userdata/inspirations_user.json
 userdata/favorites.json
 userdata/settings.yaml
 userdata/covers/

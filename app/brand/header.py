@@ -36,6 +36,12 @@ def header_html(theme: str = "editorial") -> str:
 def about_markdown() -> str:
     b = load_brand()
     cat = catalog_summary()
+    try:
+        from core.inspirations import load_inspirations
+
+        insp_n = len(load_inspirations())
+    except Exception:
+        insp_n = 0
     by = cat.get("by_category") or {}
     cat_lines = "\n".join(f"- **{k}**：{v} 个" for k, v in by.items()) or "- （暂无）"
     return f"""
@@ -49,9 +55,9 @@ def about_markdown() -> str:
 ### 它能做什么
 
 1. **文生图**：中文提示词直接画，可选预设与收藏  
-2. **提示词灵感**：图卡选中文完整提示词（可分类/收藏/自建），写入输入框  
-3. **LoRA · 模型风格**：加载风格文件，占显存；可与提示词灵感同开  
-4. **收藏 / 自建**：提示词与 LoRA 均可收藏；可把当前提示词存成灵感  
+2. **提示词灵感**：图卡选提示词（可分类/收藏/自建/编辑），写入输入框  
+3. **LoRA · 模型风格**：加载风格文件，占显存；可收藏；可与提示词灵感同开  
+4. **收藏 / 自建**：灵感与 LoRA 均可收藏；浏览页与文生图均可操作  
 5. **模型档位**：标准 FP8 / 极低显存 GGUF / 高质量 BF16  
 6. **图库**：自动保存参数，支持一键回填  
 7. **设置**：界面皮肤会记住  
@@ -67,11 +73,11 @@ def about_markdown() -> str:
 
 ### 风格库（当前）
 
-- LoRA：**{cat.get('lora_count', 0)}** · 提示词灵感见「文生图」图卡（达芬七中文预设）
+- LoRA：**{cat.get('lora_count', 0)}** 个 · 提示词灵感：**{insp_n}** 条（封面均为本地实际出图）
 
 {cat_lines}
 
-成人向默认隐藏，可在文生图勾选显示。提示词灵感为达芬七中文预设（含精选气质），点选即填入。
+成人向默认隐藏，可在文生图勾选显示。提示词灵感默认「全部」，点选即填入；丑图不进库。
 
 ### 怎么用
 
@@ -99,10 +105,9 @@ def about_markdown() -> str:
 | [Z-Image-Turbo](https://huggingface.co/Tongyi-MAI/Z-Image-Turbo) | 基础模型 |
 | Gradio | 本界面框架 |
 | 第三方 LoRA | 版权归作者；「风格」页有 Civitai 链接 |
-| Punk-Skill 等 | 提示词灵感见上表致谢 |
 
 完整清单见包内 `THIRD_PARTY.md`。成人向内容仅供本地合法使用。  
-前端开源共建说明见 `OPEN-SOURCE.md`（若随包提供）。
+界面源码：[github.com/davinci-seven/davinci-zimage-ui](https://github.com/davinci-seven/davinci-zimage-ui)
 
 ### 反馈
 

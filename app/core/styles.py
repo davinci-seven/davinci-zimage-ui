@@ -79,10 +79,12 @@ class Style:
     def in_category(self, category: str | None) -> bool:
         if not category or category in ("全部", ""):
             return True
-        if category == "推荐":
-            return self.featured
+        if category == "推荐":  # 兼容旧入口 → 等同全部
+            return True
         if category == "我的":
             return self.user
+        if category == "收藏":
+            return is_favorite(self.id)
         return category in self.cats()
 
     def is_prompt(self) -> bool:
@@ -309,7 +311,7 @@ def style_categories(show_nsfw: bool = True) -> list[str]:
             found.add(c)
     ordered = [c for c in CATEGORY_ORDER if c in found]
     rest = sorted(found - set(ordered))
-    base = ["推荐", "全部"]
+    base = ["全部", "收藏"]
     if has_user and "我的" not in ordered:
         base.append("我的")
     return base + ordered + rest
@@ -470,6 +472,70 @@ def delete_user_style(style_id: str) -> tuple[bool, str]:
     favs = [x for x in _load_fav_ids() if x != sid]
     _save_fav_ids(favs)
     return True, "已删除用户风格"
+
+
+def list_lora_file_choices(limit: int = 200) -> list[str]:
+    """Relative paths under models/loras for advanced custom LoRA."""
+    if not LORAS_DIR.exists():
+        return []
+    out: list[str] = []
+    for p in sorted(LORAS_DIR.rglob("*.safetensors")):
+        try:
+            rel = str(p.relative_to(LORAS_DIR)).replace("/", "\\")
+        except ValueError:
+            continue
+        # 优先 zimage 子目录
+        out.append(rel)
+        if len(out) >= limit:
+            break
+    # put zimage\\ first
+    out.sort(key=lambda s: (0 if s.lower().startswith("zimage") else 1, s.lower()))
+    return out
+
+
+def save_user_lora_style(
+    name: str,
+    lora_file: str,
+    trigger: str = "",
+    default_weight: float = 0.85,
+    category: str = "我的",
+    tip: str = "",
+) -> tuple[bool, str, Optional[Style]]:
+    """高级：把本地 LoRA 文件登记为我的风格。"""
+    name = (name or "").strip()
+    lora_file = (lora_file or "").strip().replace("/", "\\")
+    if not name:
+        return False, "请填写风格名称", None
+    if not lora_file:
+        return False, "请选择 LoRA 文件", None
+    path = LORAS_DIR / Path(lora_file.replace("\\", "/"))
+    if not path.exists():
+        return False, f"找不到文件：{lora_file}", None
+    w = float(default_weight or 0.85)
+    w = max(0.1, min(1.5, w))
+    items = _load_user_raw()
+    sid = f"user_lora_{uuid.uuid4().hex[:8]}"
+    entry = {
+        "id": sid,
+        "name": name,
+        "kind": "lora",
+        "user": True,
+        "file": lora_file,
+        "cover": "",
+        "tags": ["我的", "自定义"],
+        "default_weight": w,
+        "trigger": (trigger or "").strip(),
+        "nsfw": False,
+        "tip": tip or "用户自定义 LoRA",
+        "featured": False,
+        "category": category or "我的",
+        "categories": [category or "我的", "我的"],
+        "source": {"credit": "我的", "url": "", "note": "用户添加"},
+        "commercial": "用户自建",
+    }
+    items.insert(0, entry)
+    _save_user_raw(items[:200])
+    return True, f"已添加：{name}", _style_from_raw(entry, default_kind=KIND_LORA, user=True)
 
 
 def catalog_summary() -> dict[str, Any]:

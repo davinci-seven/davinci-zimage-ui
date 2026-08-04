@@ -283,19 +283,29 @@
       if (!force && gapLocked) return;
       if (window.scrollY > 8) return;
       crushChromeHosts();
-      var tab =
-        document.querySelector("#dv-main-tabs [role='tablist']") ||
-        document.querySelector(".gradio-container [role='tablist']") ||
-        document.querySelector(".tab-nav");
+      /* 只认固定住的主导航。以前这里会 fallback 到嵌套子 Tab 的 tablist，
+         而那个是随流布局的：量它的底边 → 设成 padding-top → 它又被推下去，
+         下一轮量到更大的值，一路涨到上限，顶部就空出一大块。 */
+      var tab = null;
+      var tabCands = document.querySelectorAll(
+        "#dv-main-tabs > .tab-nav, #dv-main-tabs > div:first-child > .tab-nav, #dv-main-tabs [role='tablist']"
+      );
+      for (var ti = 0; ti < tabCands.length; ti++) {
+        if (getComputedStyle(tabCands[ti]).position === "fixed") {
+          tab = tabCands[ti];
+          break;
+        }
+      }
+      if (!tab) return;
       var box =
         document.querySelector(".gradio-container") ||
         document.querySelector(".main");
       var tabsRoot = document.getElementById("dv-main-tabs");
       if (!tab || !box) return;
 
-      var chromeBottom = Math.round(tab.getBoundingClientRect().bottom);
-      if (chromeBottom < 60) chromeBottom = 110;
-      if (chromeBottom > 200) chromeBottom = 140;
+      /* 固定栏底边 + 5px 呼吸位，就是内容该从哪儿开始 */
+      var chromeBottom = Math.round(tab.getBoundingClientRect().bottom) + 5;
+      if (chromeBottom < 60 || chromeBottom > 160) return;
 
       if (chromeBottom !== lastPad) {
         box.style.setProperty("padding-top", chromeBottom + "px", "important");
@@ -316,7 +326,7 @@
         content.getBoundingClientRect().top - tab.getBoundingClientRect().bottom;
       var nextMargin = null;
       if (gap > 10) {
-        nextMargin = -(gap - 6) + "px";
+        nextMargin = -(gap - 5) + "px";
       } else if (gap < -4 && gap > -100) {
         nextMargin = "0";
       }
