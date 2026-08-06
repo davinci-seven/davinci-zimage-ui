@@ -33,7 +33,7 @@ from core.history import (
     parse_choice_id,
     resolve_image,
 )
-from core.paths import GALLERY_DIR, PROMPTS_FILE, ensure_runtime_dirs
+from core.paths import GALLERY_DIR, LORAS_DIR, PROMPTS_FILE, ensure_runtime_dirs
 from core.settings import (
     get_filename_prefix,
     get_theme,
@@ -59,6 +59,7 @@ from core.styles import (
     list_favorite_ids,
     list_lora_file_choices,
     load_styles,
+    is_hidden,
     resolve_style_name,
     save_user_lora_style,
     style_categories,
@@ -2087,7 +2088,7 @@ def build_demo() -> gr.Blocks:
                         inputs=[br_lora_cat, br_lora_nsfw, br_lora_only_fav, lora_show_hidden],
                         outputs=br_lora_gal,
                     )
-                br_lora_gal.select(
+                br_lora_sel_ev = br_lora_gal.select(
                     fn=_br_lora_pick,
                     inputs=[br_lora_cat, br_lora_nsfw, br_lora_only_fav, lora_show_hidden],
                     outputs=[br_lora_state, br_lora_preview],
@@ -2101,8 +2102,15 @@ def build_demo() -> gr.Blocks:
                 # —— 自建 / 编辑 LoRA（和「提示词灵感」那边同一套操作）——
                 with gr.Accordion("自建 / 编辑 LoRA", open=False):
                     gr.HTML(
-                        '<p class="dv-help">把 <code>models/loras</code> 里的文件登记成风格卡。'
+                        '<p class="dv-help">把 LoRA 文件放到下面这个目录，再点「刷新列表」就能选到：<br>'
+                        f"<code>{html_lib.escape(str(LORAS_DIR))}</code><br>"
+                        "只认 <code>.safetensors</code>，可以放子文件夹。"
                         "内置风格不能改也不能删，但可以<strong>隐藏</strong>，隐藏后不出现在出图页的列表里。</p>"
+                    )
+                    lora_sel_hint = gr.HTML(
+                        '<div class="dv-status">当前选中：<b>（无）</b> · '
+                        "在下方图库点一张卡即可选中；删除 / 隐藏都只作用于选中的这一个。</div>",
+                        elem_id="dv-lora-sel-hint",
                     )
                     with gr.Row():
                         lora_edit_name = gr.Textbox(
@@ -2112,7 +2120,9 @@ def build_demo() -> gr.Blocks:
                             choices=list_lora_file_choices(),
                             label="LoRA 文件",
                             allow_custom_value=True,
+                            scale=3,
                         )
+                        lora_file_refresh = gr.Button("刷新列表", scale=1)
                     with gr.Row():
                         lora_edit_trigger = gr.Textbox(
                             label="触发词（可空）",
@@ -2132,8 +2142,8 @@ def build_demo() -> gr.Blocks:
                     lora_edit_id = gr.State("")
                     with gr.Row():
                         lora_save_btn = gr.Button("保存到「我的」", variant="primary")
-                        lora_del_btn = gr.Button("删除（仅我的）", variant="secondary")
-                        lora_hide_btn = gr.Button("隐藏 / 取消隐藏", variant="secondary")
+                        lora_del_btn = gr.Button("删除选中（仅我的）", variant="secondary")
+                        lora_hide_btn = gr.Button("隐藏 / 取消隐藏选中", variant="secondary")
 
                 def _lora_gallery(cat_f, nsfw_f, only_fav, show_hidden=False):
                     return _style_gallery_data(
@@ -2196,17 +2206,78 @@ def build_demo() -> gr.Blocks:
                             br_lora_cat, br_lora_nsfw, br_lora_only_fav, lora_show_hidden],
                     outputs=[br_lora_status, br_lora_gal, lora_edit_id],
                 )
-                lora_del_btn.click(
+                _lora_del_ev = lora_del_btn.click(
                     fn=_lora_delete,
                     inputs=[br_lora_state, br_lora_cat, br_lora_nsfw,
                             br_lora_only_fav, lora_show_hidden],
                     outputs=[br_lora_status, br_lora_gal, lora_edit_id],
                 )
-                lora_hide_btn.click(
+                _lora_hide_ev = lora_hide_btn.click(
                     fn=_lora_hide,
                     inputs=[br_lora_state, br_lora_cat, br_lora_nsfw,
                             br_lora_only_fav, lora_show_hidden],
                     outputs=[br_lora_status, br_lora_gal],
+                )
+
+                def _lora_files_refresh():
+                    """用户刚往 models/loras 里丢了文件，不重启也能选到。"""
+                    files = list_lora_file_choices()
+                    if not files:
+                        return (
+                            gr.update(choices=[], value=None),
+                            f'<div class="dv-status err">{html_lib.escape(str(LORAS_DIR))}'
+                            " 里没找到 .safetensors 文件</div>",
+                        )
+                    return (
+                        gr.update(choices=files),
+                        f'<div class="dv-status ok">已刷新，共 {len(files)} 个 LoRA 文件</div>',
+                    )
+
+                lora_file_refresh.click(
+                    fn=_lora_files_refresh,
+                    outputs=[lora_edit_file, br_lora_status],
+                )
+
+                def _lora_sel_hint(lab):
+                    """点选之后，把「删除/隐藏动的是哪一个」写清楚，并把编辑框填好。"""
+                    st = resolve_style_name(lab)
+                    if not st:
+                        return (
+                            '<div class="dv-status">当前选中：<b>（无）</b> · '
+                            "在下方图库点一张卡即可选中；删除 / 隐藏都只作用于选中的这一个。</div>",
+                            gr.skip(), gr.skip(), gr.skip(), gr.skip(), gr.skip(), "",
+                        )
+                    tags = []
+                    tags.append("我的（可改可删）" if st.user else "内置（只能隐藏）")
+                    if is_hidden(st.id):
+                        tags.append("已隐藏")
+                    hint = (
+                        f'<div class="dv-status ok">当前选中：<b>{html_lib.escape(st.name)}</b>'
+                        f'　{html_lib.escape(" · ".join(tags))}'
+                        f'　<code>{html_lib.escape(st.file or "（无文件）")}</code></div>'
+                    )
+                    return (
+                        hint,
+                        st.name,
+                        st.file or None,
+                        st.trigger or "",
+                        float(st.default_weight or 0.85),
+                        (st.cats() or ["我的"])[0],
+                        st.id if st.user else "",  # 内置风格不给编辑 id，免得「保存」把它改了
+                    )
+
+                _hint_outputs = [lora_sel_hint, lora_edit_name, lora_edit_file,
+                                 lora_edit_trigger, lora_edit_weight, lora_edit_cat,
+                                 lora_edit_id]
+                # 必须挂在点选事件的 .then 上：直接再绑一次 select 会读到上一次的 state
+                br_lora_sel_ev.then(
+                    fn=_lora_sel_hint, inputs=[br_lora_state], outputs=_hint_outputs
+                )
+                _lora_hide_ev.then(
+                    fn=_lora_sel_hint, inputs=[br_lora_state], outputs=_hint_outputs
+                )
+                _lora_del_ev.then(
+                    fn=_lora_sel_hint, inputs=[br_lora_state], outputs=_hint_outputs
                 )
 
             # ========== 提示词灵感（浏览 + 收藏/自建）==========
