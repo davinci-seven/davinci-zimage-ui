@@ -375,7 +375,9 @@ if ($wantEngine) {
   Write-Host "[engine] robocopy from $engineSrc (large copy, please wait)..."
   $eng = Join-Path $Dest "engine"
   New-Item -ItemType Directory -Force -Path $eng | Out-Null
-  & robocopy $engineSrc $eng /E /COPY:DAT /R:2 /W:3 /XD output temp user .cache __pycache__ .pytest_cache .vscode .git .github .launcher screenshots tests tests-unit /XF *.log *.pyc *.pyo *.map /NFL /NDL /NP
+  & robocopy $engineSrc $eng /E /COPY:DAT /R:2 /W:3 /XD output temp user .cache __pycache__ .pytest_cache .vscode .git .github .launcher screenshots /XF *.log *.pyc *.pyo *.map /NFL /NDL /NP
+  # 注意：别再排除 tests / tests-unit。那会连 site-packages\numpy\_core\tests 一起删掉，
+  # numpy.testing 导入即失败，整合包的引擎根本起不来（1.4.5 发版前踩到过）。
   $rc = $LASTEXITCODE
   Write-Host "[engine] robocopy exit $rc (0-7 = success bands)"
   if ($rc -ge 8) {
@@ -421,6 +423,14 @@ if ($wantEngine) {
       Write-Host "[strip unused] $rel"
       Remove-Item -LiteralPath $p -Recurse -Force
     }
+  }
+
+  # 裁掉与 Z-Image 无关的大模型（本机 models 是全套，不裁整合包会到 97GB）
+  $slimModels = Join-Path $PackRoot "_dev_tools\slim_engine_models.ps1"
+  if (Test-Path $slimModels) {
+    Write-Host "[engine] slim models..."
+    & powershell -NoProfile -ExecutionPolicy Bypass -File $slimModels -EngineRoot $eng
+    if ($LASTEXITCODE -ne 0) { Write-Host "[ERROR] 模型裁剪失败"; exit 1 }
   }
 
   # 精简 custom_nodes（提示词小助手 / 视频 / ControlNet 等）
